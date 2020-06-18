@@ -1,0 +1,49 @@
+.MainSidebar-menu {
+  border-radius: 0 !important;
+  height: 100vh;
+  background-color: #394b59 !important;
+}
+
+.MainSidebar {
+  width: 12.5rem;
+}
+
+.MainSidebar-menu-logo {
+  font-size: 1.5rem !important;
+  font-weight: bold;
+  padding: 5px 7px;
+  cursor: pointer;
+  -webkit-user-select: none; /* Chrome/Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+
+  /* Rules below not implemented in browsers yet */
+  -o-user-select: none;
+  user-select: none;
+}
+
+.MainSidebar-menu-input {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.MainSidebar-menu-button {
+  margin-right: 0.5rem;
+}
+
+.MainSidebar-menu-override {
+  width: 100% !important;
+}
+
+.MainSidebar-menu-form {
+  padding: 0.5rem;
+}
+
+.MainSidebar-menu-popover .bp3-popover-target {
+  display: block;
+  width: 100% !important;
+}
+
+.MainSidebar-menu-popover .bp3-popover-target li {
+  width: 100% !important;
+}

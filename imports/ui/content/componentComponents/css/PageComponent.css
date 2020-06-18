@@ -1,0 +1,14 @@
+.PageComponent {
+  position: relative;
+}
+
+.PageComponent-edit-button {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 0;
+}
+
+.PageComponent-edit-button {
+  opacity: 0.75;  
+}
