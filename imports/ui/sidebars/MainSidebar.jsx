@@ -194,8 +194,8 @@ export default withTracker(() => {
   Meteor.subscribe("planets.sidebar.following");
 
   return {
-    memberPlanets: Planets.find({owner: Meteor.userId()}, {sort: {createdAt: -1}}).fetch(),
-    followingPlanets: Planets.find({followers: Meteor.userId()}, {sort: {createdAt: -1}}).fetch(),
+    memberPlanets: Planets.find({owner: Meteor.userId()}, {sort: {name: 1}}).fetch(),
+    followingPlanets: Planets.find({followers: Meteor.userId()}, {sort: {name: 1}}).fetch(),
     currentUser: Meteor.user()
   };
 })(MainSidebar);

@@ -1,0 +1,16 @@
+.InfoStrip {
+  font-size: 0.9rem;
+  font-weight: normal;
+  display: flex;
+  flex-direction: row;
+}
+
+.InfoStrip-username {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.InfoStrip-followers {
+  margin-top: auto;
+  margin-bottom: auto;
+}

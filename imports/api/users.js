@@ -2,6 +2,14 @@ import {Meteor} from 'meteor/meteor'
 import {Accounts} from 'meteor/accounts-base'
 import {check} from 'meteor/check'
 
+if(Meteor.isServer) {
+  Meteor.publish('users.findId', function findUserById(userId) {
+    check(userId, String)
+
+    return Meteor.users.find({_id: userId}, {fields: {username: 1}})
+  })
+}
+
 Meteor.methods({
   'users.insert'(user) {
     check(user, {

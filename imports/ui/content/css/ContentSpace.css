@@ -14,8 +14,8 @@
   padding-bottom: 1rem;
   font-size: 3rem;
   font-weight: bold;
-  min-height: 7rem;
-  max-height: 7rem;
+  min-height: 9rem;
+  max-height: 9rem;
   background-color: #30404d;
 }
 
@@ -37,4 +37,8 @@
   width: 75vw;
   margin-left: auto;
   margin-right: auto;
+}
+
+.ContentSpace-navbar-add-content {
+  padding: 0.5rem;
 }

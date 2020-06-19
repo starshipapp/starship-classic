@@ -49,6 +49,7 @@ class PageComponent extends React.Component {
         {(this.props.page[0] && Meteor.userId() === this.props.planet.owner) && (!this.state.isEditing ? <Button
           icon="edit"
           onClick={this.startEditing}
+          minimal={true}
           className="PageComponent-edit PageComponent-edit-button"
         /> : <Button
           icon="saved"

@@ -19,9 +19,9 @@ if (Meteor.isServer) {
   Meteor.publish('planets.sidebar.following', function planetsPublication() {
     return Planets.find({
       $or: [
-        {owner: this.userId}
+        {followers: this.userId}
       ]
-    }, {fields: {name: 1, following: 1}});
+    }, {fields: {name: 1, followers: 1}});
   });
   Meteor.publish('planets.planet', function findPlanet(planetId) {
     check(planetId, String)
@@ -45,16 +45,18 @@ Meteor.methods({
       components: []
     })
   },
-  'planets.addcomponent'(name, planetId, type, componentId) {
+  'planets.addcomponent'(name, planetId, type) {
     check(name, String)
-    check(componentId, String)
+    check(planetId, String)
     check(type, String)
 
-    if(FindComponent(type, componentId)) {
-      const planet = Planets.findOne(planetId)
+    const planet = Planets.findOne(planetId)
 
-      if (planet.owner === this.userId) {
-        planet.update({$push: {components: {name: name, componentId: componentId, type: type}}})
+    if (planet.owner === this.userId) {
+      if(Object.keys(Index).includes(type)) {
+        CreateComponent(type, planetId, this.userId, (a, documentId) => {
+          Planets.update(planetId, {$push: {components: {name: name, componentId: documentId, type: type}}})
+        })
       }
     }
   },
@@ -69,6 +71,19 @@ Meteor.methods({
         CreateComponent(type, planetId, this.userId, (a, documentId) => {
           Planets.update(planetId,{$set: {homeComponent: {componentId: documentId, type: type}}})
         })
+      }
+    }
+  },
+  'planets.togglefollow'(planetId) {
+    check(planetId, String)
+
+    const planet = Planets.findOne(planetId);
+
+    if(planet){
+      if(planet.followers.includes(this.userId)) {
+        Planets.update({_id: planetId}, {$pull: {followers: this.userId}})
+      } else {
+        Planets.update({_id: planetId}, {$push: {followers: this.userId}})
       }
     }
   }
