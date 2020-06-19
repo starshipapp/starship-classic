@@ -25,7 +25,7 @@ if (Meteor.isServer) {
   });
   Meteor.publish('planets.planet', function findPlanet(planetId) {
     check(planetId, String)
-    const planet = Planets.find({_id: planetId}, {reactive: false}).fetch()[0];
+    const planet = Planets.findOne(planetId);
     if(planet && (planet.private && planet.owner == this.userId) || !planet.private) {
       return Planets.find({_id: planetId})
     }

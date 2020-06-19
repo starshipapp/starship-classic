@@ -47,3 +47,8 @@
 .MainSidebar-menu-popover .bp3-popover-target li {
   width: 100% !important;
 }
+
+.MainSidebar-version {
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+}

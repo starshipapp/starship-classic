@@ -23,7 +23,7 @@ class ContentSpace extends React.Component {
         <Navbar className="ContentSpace-navbar">
           <div className="ContentSpace-navbar-content">
             <Navbar.Group align={Alignment.LEFT}>
-              <Button className="bp3-minimal" icon="home" text="Home"/>
+              <Button className="bp3-minimal" outlined="true" icon="home" text="Home"/>
               <Button className="bp3-minimal" icon="document" text="Files" />
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>

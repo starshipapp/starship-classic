@@ -103,7 +103,8 @@ class MainSidebar extends React.Component {
     Meteor.logout();
   }
 
-  createPlanet() {
+  createPlanet(e) {
+    e.preventDefault();
     const planetText = ReactDOM.findDOMNode(this.refs.planetNameInput).value.trim();
 
     if(planetText === "") {
@@ -122,7 +123,7 @@ class MainSidebar extends React.Component {
     return (
       <div className="MainSidebar">
         <Menu className="MainSidebar-menu">
-          <div className="MainSidebar-menu-logo" onClick={() => {FlowRouter.go('Home', {})}}>starship</div>
+          <div className="MainSidebar-menu-logo" onClick={() => {FlowRouter.go('Home', {})}}>starship<span className="MainSidebar-version">alpha</span></div>
           {Meteor.userId() && <div>
             <Menu.Divider title="MY PLANETS"/>
             {this.props.memberPlanets.map((value) => (<Menu.Item key={value._id} icon="control" onClick={() => this.goToPlanet(value._id)} text={value.name}/>))}
@@ -130,7 +131,7 @@ class MainSidebar extends React.Component {
               <Menu.Item icon="plus" onClick={this.addPlanet} text="New Planet"/>
               <form className="MainSidebar-menu-form" onSubmit={this.createPlanet}>
                 <input
-                  className="MainSidebar-menu-input"
+                  className="MainSidebar-menu-input bp3-input"
                   placeholder="Name"
                   ref="planetNameInput"
                 />
@@ -153,25 +154,25 @@ class MainSidebar extends React.Component {
               <Menu.Item className="MainSidebar-menu-override" icon="log-in" text="Login"/>
               <form className="MainSidebar-menu-form" onSubmit={this.isSigningUp ? this.signUp : this.signIn}>
                 <input
-                  className="MainSidebar-menu-input"
+                  className="MainSidebar-menu-input bp3-input"
                   placeholder="Username"
                   ref="usernameInput"
                 />
                 <input
-                  className="MainSidebar-menu-input"
+                  className="MainSidebar-menu-input bp3-input"
                   placeholder="Password"
                   type="password"
                   ref="passwordInput"
                 />
                 {this.state.isSigningUp && <div>
                   <input
-                    className="MainSidebar-menu-input"
+                    className="MainSidebar-menu-input bp3-input"
                     placeholder="Confirm Password"
                     type="password"
                     ref="confirmPasswordInput"
                   />
                   <input
-                    className="MainSidebar-menu-input"
+                    className="MainSidebar-menu-input bp3-input"
                     placeholder="Email"
                     ref="emailInput"
                   />

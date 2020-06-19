@@ -12,7 +12,7 @@ if (Meteor.isServer) {
     if(page) {
       const planet = Planets.findOne(page.planet);
 
-      if((planet.private && planet.owner == this.userId) || !planet.private) {
+      if(planet && ((planet.private && planet.owner == this.userId) || !planet.private)) {
         return Pages.find({_id: pageId});
       }
     }
@@ -25,9 +25,9 @@ Meteor.methods({
     check(id, String);
 
     const page = Pages.findOne(id);
-    const planet = Planets.find({_id: page.planet}, {reactive: false}).fetch()[0];
+    const planet = Planets.findOne(page.planet);
 
-    if(planet.owner == this.userId) {
+    if(planet && planet.owner == this.userId) {
       Pages.update(id, {$set: {content: newContent}})
     }
   }
