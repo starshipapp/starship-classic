@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Menu, Button, Popover, MenuItem } from "@blueprintjs/core";
+import { Menu, Button, Popover, MenuItem, Intent } from "@blueprintjs/core";
 import { Meteor } from 'meteor/meteor';
 import {ErrorToaster} from '../Toaster'
 import {withTracker} from 'meteor/react-meteor-data';
@@ -42,23 +42,23 @@ class MainSidebar extends React.Component {
       const emailText = ReactDOM.findDOMNode(this.refs.emailInput).value.trim();
 
       if(usernameText === "") {
-        ErrorToaster.show({message: "Please enter a username."})
+        ErrorToaster.show({message: "Please enter a username.", icon:"error", intent:Intent.DANGER})
         return;
       }
 
       if(passwordText === "") {
-        ErrorToaster.show({message: "Please enter a password."})
+        ErrorToaster.show({message: "Please enter a password.", icon:"error", intent:Intent.DANGER})
         return;
       }
 
       if(passwordText !== confirmPasswordText) {
-        ErrorToaster.show({message: "Password text does not match!"})
+        ErrorToaster.show({message: "Password text does not match!", icon:"error", intent:Intent.DANGER})
         return;
       }
 
 
       if(emailText == "") {
-        ErrorToaster.show({message: "Please enter an email address."})
+        ErrorToaster.show({message: "Please enter an email address.", icon:"error", intent:Intent.DANGER})
         return;
       }
 
@@ -67,9 +67,17 @@ class MainSidebar extends React.Component {
         password: passwordText,
         email: emailText,
         profile: {}
+      }, (e) => {
+        if(e) {
+          ErrorToaster.show({message: e.message.substr(1).slice(0, -1) + ".", icon:"error", intent:Intent.DANGER})
+        } else {
+          Meteor.loginWithPassword(usernameText, passwordText, function(e) {
+            if(e) {
+              ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER})
+            }
+          })
+        }
       })
-      
-      this.toggleSignUp();
     }
   }
 
@@ -82,18 +90,18 @@ class MainSidebar extends React.Component {
       const passwordText = ReactDOM.findDOMNode(this.refs.passwordInput).value.trim();
 
       if(usernameText === "") {
-        ErrorToaster.show({message: "Please enter a username."})
+        ErrorToaster.show({message: "Please enter a username.", icon:"error", intent:Intent.DANGER})
         return;
       }
 
       if(passwordText === "") {
-        ErrorToaster.show({message: "Please enter a password."})
+        ErrorToaster.show({message: "Please enter a password.", icon:"error", intent:Intent.DANGER})
         return;
       }
 
       Meteor.loginWithPassword(usernameText, passwordText, function(e) {
         if(e) {
-          console.log(e);
+          ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER})
         }
       })
     }
@@ -108,7 +116,7 @@ class MainSidebar extends React.Component {
     const planetText = ReactDOM.findDOMNode(this.refs.planetNameInput).value.trim();
 
     if(planetText === "") {
-      ErrorToaster.show({message: "Please enter a name."})
+      ErrorToaster.show({message: "Please enter a name.", icon:"error", intent:Intent.DANGER})
       return;
     }
     

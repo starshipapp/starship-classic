@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Navbar, Button, Alignment, NonIdealState, Popover, Menu, MenuItem } from "@blueprintjs/core";
+import { Navbar, Button, Alignment, NonIdealState, Popover, Menu, MenuItem, Intent } from "@blueprintjs/core";
 import './css/ContentSpace.css'
 import {withTracker} from 'meteor/react-meteor-data';
 import Planets from '../../api/planets';
 import {FlowRouter} from 'meteor/ostrio:flow-router-extra';
 import {FindComponentComponent, ComponentDataTypes} from './componentComponents/ComponentComponentsIndexer'
 import InfoStrip from './InfoStrip';
+import {ErrorToaster} from '../Toaster';
 
 class ContentSpace extends React.Component {
   constructor(props) {
@@ -24,6 +25,12 @@ class ContentSpace extends React.Component {
 
   createComponent(type) {
     const name = ReactDOM.findDOMNode(this.refs.pageNameInput).value.trim();
+
+    if(name == "") {
+      ErrorToaster.show({message: "Please enter a name.", icon:"error", intent:Intent.DANGER})
+      return
+    }
+
     Meteor.call("planets.addcomponent", name, this.props.planetId, type)
   }
 
@@ -84,15 +91,15 @@ class ContentSpace extends React.Component {
                 outlined={this.props.componentId && this.props.componentId == value.componentId}
                 onClick = {() => {this.gotoComponent(value.componentId)}}
               />))}
-              <Popover>
-                <Button className="bp3-minimal" icon="document" icon="plus"/>
+              {this.props.planet[0] && this.props.planet[0].owner && Meteor.userId() === this.props.planet[0].owner && <Popover>
+                <Button className="bp3-minimal" icon="plus"/>
                 <div className="ContentSpace-navbar-add-content">
-                  <input ref="pageNameInput" className="bp3-input"/>
+                  <input ref="pageNameInput" className="bp3-input" placeholder="name"/>
                   <Menu>
                     {Object.values(ComponentDataTypes).map((value) => (<MenuItem text={"Create new " + value.friendlyName} icon={value.icon} onClick={() => this.createComponent(value.name)}/>))}
                   </Menu>
                 </div>
-              </Popover>
+              </Popover>}
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
               <input className="bp3-input" type="text" placeholder="Search..." />

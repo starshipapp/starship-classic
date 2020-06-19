@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Button, Alignment } from "@blueprintjs/core";
+import {Button} from "@blueprintjs/core";
 import Pages from '../../../api/components/pages'
 import {withTracker} from 'meteor/react-meteor-data';
 import ReactMarkdown from 'react-markdown';

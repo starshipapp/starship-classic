@@ -22,8 +22,10 @@ class InfoStrip extends React.Component {
         {this.props.user[0] && <div className="InfoStrip-username">Created by {this.props.user[0].username}</div>}
         <Divider/>
         <div className="InfoStrip-followers">{this.props.planet.followers.length} {this.props.planet.followers.length === 1 ? "Follower" : "Followers"}</div>
-        <Divider/>
-        <Button text={this.props.planet.followers.includes(Meteor.userId()) ? "Unfollow" : "Follow"} onClick={this.toggleFollow}/>
+        {Meteor.userId() && <div className="InfoStrip">
+          <Divider/>
+          <Button text={this.props.planet.followers.includes(Meteor.userId()) ? "Unfollow" : "Follow"} onClick={this.toggleFollow}/>  
+        </div>}
       </div>
     )
   }

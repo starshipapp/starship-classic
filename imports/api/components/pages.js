@@ -9,7 +9,7 @@ export default Pages
 if (Meteor.isServer) {
   Meteor.publish('pages.page', function findPage(pageId) {
     const page = Pages.findOne(pageId);
-    if(page) {
+    if(page && this.userId) {
       const planet = Planets.findOne(page.planet);
 
       if(planet && ((planet.private && planet.owner == this.userId) || !planet.private)) {
@@ -24,11 +24,13 @@ Meteor.methods({
     check(newContent, String);
     check(id, String);
 
-    const page = Pages.findOne(id);
-    const planet = Planets.findOne(page.planet);
+    if(this.userId) {
+      const page = Pages.findOne(id);
+      const planet = Planets.findOne(page.planet);
 
-    if(planet && planet.owner == this.userId) {
-      Pages.update(id, {$set: {content: newContent}})
+      if(planet && planet.owner == this.userId) {
+        Pages.update(id, {$set: {content: newContent}})
+      }
     }
   }
 })

@@ -42,3 +42,8 @@
 .ContentSpace-navbar-add-content {
   padding: 0.5rem;
 }
+
+.ContentSpace-navbar-add-content .bp3-menu {
+  padding: 0;
+  padding-top: 0.5rem;
+}

@@ -23,11 +23,15 @@ Meteor.methods({
     const emailExists = Accounts.findUserByEmail(user.email)
 
     if(usernameExists) {
-      throw new Meteor.Error('used-username');
+      throw new Meteor.Error('That username is taken');
     }
 
-    if (emailExists) {
-      throw new Meteor.Error('used-email');
+    if(emailExists) {
+      throw new Meteor.Error('That email is taken');
+    }
+
+    if(user.password.length < 8) {
+      throw new Meteor.Error('Your password must be at least 8 characters long')
     }
 
     Accounts.createUser(user);

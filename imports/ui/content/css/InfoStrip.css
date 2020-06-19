@@ -3,6 +3,7 @@
   font-weight: normal;
   display: flex;
   flex-direction: row;
+  min-height: 30px;
 }
 
 .InfoStrip-username {

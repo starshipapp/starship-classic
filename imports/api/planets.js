@@ -10,18 +10,22 @@ export default Planets
 
 if (Meteor.isServer) {
   Meteor.publish('planets.sidebar.memberOf', function planetsPublication() {
-    return Planets.find({
-      $or: [
-        {owner: this.userId}
-      ]
-    }, {fields: {name: 1, owner: 1}});
+    if(this.userId) {
+      return Planets.find({
+        $or: [
+          {owner: this.userId}
+        ]
+      }, {fields: {name: 1, owner: 1}});
+    }
   });
   Meteor.publish('planets.sidebar.following', function planetsPublication() {
-    return Planets.find({
-      $or: [
-        {followers: this.userId}
-      ]
-    }, {fields: {name: 1, followers: 1}});
+    if(this.userId) {
+      return Planets.find({
+        $or: [
+          {followers: this.userId}
+        ]
+      }, {fields: {name: 1, followers: 1}});
+    }
   });
   Meteor.publish('planets.planet', function findPlanet(planetId) {
     check(planetId, String)
@@ -36,14 +40,16 @@ Meteor.methods({
   'planets.insert'(name) {
     check(name, String)
 
-    Planets.insert({
-      name: name,
-      createdAt: new Date(),
-      owner: this.userId,
-      private: false,
-      followers: [],
-      components: []
-    })
+    if(this.userId) {
+      Planets.insert({
+        name: name,
+        createdAt: new Date(),
+        owner: this.userId,
+        private: false,
+        followers: [],
+        components: []
+      })
+    }
   },
   'planets.addcomponent'(name, planetId, type) {
     check(name, String)
@@ -79,7 +85,7 @@ Meteor.methods({
 
     const planet = Planets.findOne(planetId);
 
-    if(planet){
+    if(planet && this.userId){
       if(planet.followers.includes(this.userId)) {
         Planets.update({_id: planetId}, {$pull: {followers: this.userId}})
       } else {
