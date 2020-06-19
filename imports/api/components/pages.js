@@ -10,6 +10,8 @@ if (Meteor.isServer) {
   Meteor.publish('pages.page', function findPage(pageId) {
     const page = Pages.findOne(pageId);
     if(page) {
+      console.log(page)
+      console.log(planet)
       const planet = Planets.findOne(page.planet);
       
       if((planet.private && planet.owner == this.userId) || !planet.private) {
@@ -25,10 +27,10 @@ Meteor.methods({
     check(id, String);
 
     const page = Pages.findOne(id);
-    const planet = Planets.findOne(page.id);
+    const planet = Planets.findOne(page.planet);
 
-    if(planet.owner = this.userId) {
-      page.update({content: newContent})
+    if(planet.owner == this.userId) {
+      Pages.update(id, {content: newContent})
     }
   }
 })

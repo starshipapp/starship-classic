@@ -32,7 +32,7 @@ class ContentSpace extends React.Component {
             </Navbar.Group>
           </div>
         </Navbar>
-        {this.props.planet[0] && !this.props.planet[0].homeComponent ? <NonIdealState
+        {this.props.planet[0] && this.props.planet[0].createdAt && !this.props.planet[0].homeComponent ? <NonIdealState
           icon="error"
           title="No home component!"
           description="This planet is missing a home component, and so there is nothing to render. If you are the owner of this planet, clicking the below button should resolve this issue."
@@ -41,6 +41,7 @@ class ContentSpace extends React.Component {
           {this.props.planet[0] && FindComponentComponent(this.props.planet[0].homeComponent.componentId, this.props.planet[0].homeComponent.type, this.props.planet[0])}
         </div>}
         {!this.props.planet[0] && <div className="bp3-skeleton ContentSpace-contentcontainer" style={{height: "100%"}}/>}
+        {this.props.planet[0] && !this.props.planet[0].createdAt && <div className="bp3-skeleton ContentSpace-contentcontainer" style={{height: "100%"}}/>}
       </div>
     );
   }

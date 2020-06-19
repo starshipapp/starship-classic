@@ -1,5 +1,6 @@
 .PageComponent {
   position: relative;
+  min-height: 100%;
 }
 
 .PageComponent-edit-button {
@@ -7,8 +8,22 @@
   z-index: 1;
   right: 0;
   top: 0;
+  opacity: 0.75; 
 }
 
-.PageComponent-edit-button {
-  opacity: 0.75;  
+.PageComponent-save-button {
+  position: absolute;
+  z-index: 1;
+  right: 0.5rem;
+  top: 0.5rem;
+}
+
+.bp3-dark .fa {
+  color: #a7b6c2;
+}
+
+.bp3-dark .PageComponent .CodeMirror {
+  color: #ffffff;
+  caret-color: #ffffff;
+  background-color: #293742;
 }

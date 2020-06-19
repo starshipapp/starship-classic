@@ -13,6 +13,9 @@ export const CreationFunctions = {
 
     const planet = Planets.findOne(planetId);
 
+    console.log(planetId)
+    console.log(planet)
+
     if(planet) {
       if(planet.owner === userId) {
         return Pages.insert({
