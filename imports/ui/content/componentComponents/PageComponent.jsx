@@ -30,6 +30,9 @@ class PageComponent extends React.Component {
 
   save() {
     Meteor.call("pages.update", this.props.id, this.state.editingContent)
+    this.setState({
+      isEditing: false
+    })
   }
 
   handleChange(value) {

@@ -34,7 +34,6 @@ class MainSidebar extends React.Component {
   signUp(e) {
     e.preventDefault();
     if(!this.state.isSigningUp) {
-      console.log("up")
       this.toggleSignUp()
     } else {
       const usernameText = ReactDOM.findDOMNode(this.refs.usernameInput).value.trim();
@@ -57,7 +56,6 @@ class MainSidebar extends React.Component {
         return;
       }
 
-      console.log(passwordText)
 
       if(emailText == "") {
         ErrorToaster.show({message: "Please enter an email address."})
@@ -69,16 +67,15 @@ class MainSidebar extends React.Component {
         password: passwordText,
         email: emailText,
         profile: {}
-      }).catch((e) => {
-        console.log(e)
       })
+      
+      this.toggleSignUp();
     }
   }
 
   signIn(e) {
     e.preventDefault();
     if(this.state.isSigningUp) {
-      console.log("in")
       this.toggleSignUp()
     } else {
       const usernameText = ReactDOM.findDOMNode(this.refs.usernameInput).value.trim();

@@ -17,7 +17,6 @@ class ContentSpace extends React.Component {
   }
 
   render() {
-    console.log(this.props.planet);
     return (
       <div className="ContentSpace bp3-dark">
         <div className={"ContentSpace-header" + (this.props.planet[0] ? "" : " bp3-skeleton")}>{this.props.planet[0] && this.props.planet[0].name}</div>
@@ -32,7 +31,7 @@ class ContentSpace extends React.Component {
             </Navbar.Group>
           </div>
         </Navbar>
-        {this.props.planet[0] && this.props.planet[0].createdAt && !this.props.planet[0].homeComponent ? <NonIdealState
+        {this.props.planet[0] && !this.props.planet[0].homeComponent ? <NonIdealState
           icon="error"
           title="No home component!"
           description="This planet is missing a home component, and so there is nothing to render. If you are the owner of this planet, clicking the below button should resolve this issue."
