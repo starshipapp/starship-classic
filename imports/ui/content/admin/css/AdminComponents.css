@@ -1,0 +1,33 @@
+.AdminComponents {
+  width: 100%;
+}
+
+.AdminComponents-table {
+  width: 100%;
+  margin-top: 0.5rem;
+  border: 1px solid #394B59;
+  border-bottom: none;
+  border-radius: 0.25rem;
+}
+
+.AdminComponents-table-type {
+  width: 7.5rem;
+}
+
+.AdminComponents-table td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #394B59;
+}
+
+.AdminComponents-table-name-icon {
+  height: 10px;
+  margin-bottom: 0.25rem !important;
+}
+
+.AdminComponents-table-name-icon svg {
+  height: 10px !important;
+}
+
+.AdminComponents-table-action {
+  width: 2rem;
+}

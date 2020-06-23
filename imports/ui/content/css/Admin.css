@@ -1,0 +1,13 @@
+.Admin-container {
+  margin-top: 1rem;
+  display: flex;
+}
+
+.Admin-sidebar {
+  width: 12.5rem;
+}
+
+.Admin-main {
+  margin-left: 1rem;
+  width: 100%;
+}

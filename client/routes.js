@@ -12,6 +12,13 @@ FlowRouter.route('/planet/:_id', {
   }
 })
 
+FlowRouter.route('/planet/admin/:_id', {
+  name: 'Planets.admin',
+  action(params, queryParams) {
+    ReactDOM.render(<App component={<ContentSpace planetId={params._id} admin={true}/>}/>, document.getElementById("react-target"))
+  }
+})
+
 FlowRouter.route('/planet/:_id/:_cid', {
   name: 'Planets.component',
   action(params, queryParams) {

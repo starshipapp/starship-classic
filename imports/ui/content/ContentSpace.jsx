@@ -8,6 +8,7 @@ import {FlowRouter} from 'meteor/ostrio:flow-router-extra';
 import {FindComponentComponent, ComponentDataTypes} from './componentComponents/ComponentComponentsIndexer'
 import InfoStrip from './InfoStrip';
 import {ErrorToaster} from '../Toaster';
+import Admin from './Admin';
 
 class ContentSpace extends React.Component {
   constructor(props) {
@@ -56,6 +57,12 @@ class ContentSpace extends React.Component {
       }
     }
 
+    if(this.props.admin && this.props.planet[0]) {
+      if(this.props.planet[0].createdAt) {
+        currentComponent = <Admin planet={this.props.planet[0]}/>
+      }
+    }
+
     if(this.props.home) {
       if(this.props.planet[0]) {
         if(this.props.planet[0].homeComponent) {
@@ -73,7 +80,6 @@ class ContentSpace extends React.Component {
       }
     }
 
-    console.log(this.props.planet[0])
     return (
       <div className="ContentSpace bp3-dark">
         <div className={"ContentSpace-header" + (this.props.planet[0] ? "" : " bp3-skeleton")}>
@@ -100,6 +106,7 @@ class ContentSpace extends React.Component {
                   </Menu>
                 </div>
               </Popover>}
+              
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
               <input className="bp3-input" type="text" placeholder="Search..." />
