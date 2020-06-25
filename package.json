@@ -23,5 +23,60 @@
       "server": "server/main.js"
     },
     "testModule": "tests/main.js"
+  },
+  "eslintConfig": {
+    "env": {
+      "es6": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "extends": [
+      "plugin:react/recommended"
+    ],
+    "rules": {
+      "jsx-quotes": [
+        "error",
+        "prefer-double"
+      ],
+      "curly": [
+        "error",
+        "multi-line"
+      ],
+      "eqeqeq": [
+        "error",
+        "always"
+      ],
+      "no-invalid-this": [
+        "error"
+      ],
+      "array-bracket-spacing": [
+        "error",
+        "never"
+      ],
+      "block-spacing": [
+        "error",
+        "never"
+      ],
+      "brace-style": [
+        "error",
+        "1tbs",
+        {
+          "allowSingleLine": true
+        }
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "no-var": "error"
+    }
+  },
+  "devDependencies": {
+    "eslint-plugin-react": "^7.20.0"
   }
 }

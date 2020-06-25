@@ -1,10 +1,9 @@
-import {Mongo} from 'meteor/mongo';
 import {Meteor} from 'meteor/meteor';
-import {check} from 'meteor/check'
+import {check} from 'meteor/check';
 
 import {Pages, Planets} from '../collectionsStandalone';
 
-export default Pages
+export default Pages;
 
 if (Meteor.isServer) {
   Meteor.publish('pages.page', function findPage(pageId) {
@@ -12,7 +11,7 @@ if (Meteor.isServer) {
     if(page && this.userId) {
       const planet = Planets.findOne(page.planet);
 
-      if(planet && ((planet.private && planet.owner == this.userId) || !planet.private)) {
+      if(planet && ((planet.private && planet.owner === this.userId) || !planet.private)) {
         return Pages.find({_id: pageId});
       }
     }
@@ -28,9 +27,9 @@ Meteor.methods({
       const page = Pages.findOne(id);
       const planet = Planets.findOne(page.planet);
 
-      if(planet && planet.owner == this.userId) {
-        Pages.update(id, {$set: {content: newContent}})
+      if(planet && planet.owner === this.userId) {
+        Pages.update(id, {$set: {content: newContent}});
       }
     }
   }
-})
+});

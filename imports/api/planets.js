@@ -1,12 +1,11 @@
-import {Mongo} from 'meteor/mongo';
 import {Meteor} from 'meteor/meteor';
-import {check} from 'meteor/check'
+import {check} from 'meteor/check';
 
-import {FindComponent, CreateComponent, Index} from './components/componentIndex'
+import {CreateComponent, Index} from './components/componentIndex';
 
 import {Planets} from './collectionsStandalone.js';
 
-export default Planets
+export default Planets;
 
 if (Meteor.isServer) {
   Meteor.publish('planets.sidebar.memberOf', function planetsPublication() {
@@ -28,17 +27,17 @@ if (Meteor.isServer) {
     }
   });
   Meteor.publish('planets.planet', function findPlanet(planetId) {
-    check(planetId, String)
+    check(planetId, String);
     const planet = Planets.findOne(planetId);
-    if(planet && (planet.private && planet.owner == this.userId) || !planet.private) {
-      return Planets.find({_id: planetId})
+    if(planet && (planet.private && planet.owner === this.userId) || !planet.private) {
+      return Planets.find({_id: planetId});
     }
   });
 }
 
 Meteor.methods({
   'planets.insert'(name) {
-    check(name, String)
+    check(name, String);
 
     if(this.userId) {
       Planets.insert({
@@ -48,49 +47,69 @@ Meteor.methods({
         private: false,
         followers: [],
         components: []
-      })
+      });
     }
   },
   'planets.addcomponent'(name, planetId, type) {
-    check(name, String)
-    check(planetId, String)
-    check(type, String)
+    check(name, String);
+    check(planetId, String);
+    check(type, String);
 
-    const planet = Planets.findOne(planetId)
+    const planet = Planets.findOne(planetId);
 
     if (planet.owner === this.userId) {
       if(Object.keys(Index).includes(type)) {
         CreateComponent(type, planetId, this.userId, (a, documentId) => {
-          Planets.update(planetId, {$push: {components: {name: name, componentId: documentId, type: type}}})
-        })
+          Planets.update(planetId, {$push: {components: {name: name, componentId: documentId, type: type}}});
+        });
       }
     }
   },
   'planets.createhome'(planetId, type) {
-    check(planetId, String)
-    check(type, String)
+    check(planetId, String);
+    check(type, String);
 
-    const planet = Planets.findOne(planetId)
+    const planet = Planets.findOne(planetId);
 
     if (planet.owner === this.userId) {
       if(Object.keys(Index).includes(type)) {
         CreateComponent(type, planetId, this.userId, (a, documentId) => {
-          Planets.update(planetId,{$set: {homeComponent: {componentId: documentId, type: type}}})
-        })
+          Planets.update(planetId,{$set: {homeComponent: {componentId: documentId, type: type}}});
+        });
       }
     }
   },
   'planets.togglefollow'(planetId) {
-    check(planetId, String)
+    check(planetId, String);
 
     const planet = Planets.findOne(planetId);
 
     if(planet && this.userId){
       if(planet.followers.includes(this.userId)) {
-        Planets.update({_id: planetId}, {$pull: {followers: this.userId}})
+        Planets.update({_id: planetId}, {$pull: {followers: this.userId}});
       } else {
-        Planets.update({_id: planetId}, {$push: {followers: this.userId}})
+        Planets.update({_id: planetId}, {$push: {followers: this.userId}});
       }
     }
+  },
+  'planets.removecomponent'(planetId, componentId) {
+    check(planetId, String);
+    check(componentId, String);
+
+    const planet = Planets.findOne(planetId);
+
+    if (planet.owner === this.userId) {
+      Planets.update({_id: planetId}, {$pull: {components: {componentId: componentId}}});
+    }
+  },
+  'planets.updatename'(planetId, name) {
+    check(planetId, String);
+    check(name, String);
+
+    const planet = Planets.findOne(planetId);
+
+    if (planet.owner === this.userId) {
+      Planets.update({_id: planetId}, {$set: {name: name}});
+    }
   }
-})
+});

@@ -3,8 +3,23 @@ import { NonIdealState, Menu } from "@blueprintjs/core";
 import {withTracker} from 'meteor/react-meteor-data';
 import './css/Admin.css'
 import AdminComponents from './admin/AdminComponents';
+import AdminGeneral from './admin/AdminGeneral';
 
 class Admin extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      tab: "general"
+    }
+  }
+
+  goToTab(tab) {
+    this.setState({
+      tab
+    })
+  }
+
   render() {
     return (
       <div className="Admin bp3-dark">
@@ -13,12 +28,13 @@ class Admin extends React.Component {
           <div className="Admin-container">
             <div className="Admin-sidebar">
               <Menu>
-                <Menu.Item icon="wrench" text="General"/>
-                <Menu.Item icon="document" text="Components"/>
+                <Menu.Item icon="wrench" text="General" onClick={() => this.goToTab("general")}/>
+                <Menu.Item icon="document" text="Components" onClick={() => this.goToTab("components")}/>
               </Menu>
             </div>
             <div className="Admin-main">
-              <AdminComponents planet={this.props.planet}/>
+              {this.state.tab === "general" && <AdminGeneral planet={this.props.planet}/>}
+              {this.state.tab === "components" && <AdminComponents planet={this.props.planet}/>}
             </div>
           </div>
         </div> : <div>
@@ -33,7 +49,7 @@ class Admin extends React.Component {
   }
 }
 
-export default withTracker((props) => {
+export default withTracker(() => {
   return {
     currentUser: Meteor.user()
   };

@@ -1,10 +1,20 @@
 import React from 'react';
-import { NonIdealState, Menu, Icon, Button } from "@blueprintjs/core";
+import { NonIdealState, Icon, Button } from "@blueprintjs/core";
 import {ComponentDataTypes} from '../componentComponents/ComponentComponentsIndexer'
 import {withTracker} from 'meteor/react-meteor-data';
 import './css/AdminComponents.css'
 
 class AdminComponents extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.deleteComponent = this.deleteComponent.bind(this);
+  }
+
+  deleteComponent(component) {
+    Meteor.call('planets.removecomponent', this.props.planet._id, component)
+  }
+
   render() {
     return (
       <div className="Admin bp3-dark">
@@ -16,7 +26,7 @@ class AdminComponents extends React.Component {
               {this.props.planet.components.map((value) => (
                 <tr>
                   <td className="AdminComponents-table-name"><Icon className="AdminComponents-table-name-icon" icon={ComponentDataTypes[value.type].icon}/> {value.name}</td>
-                  <td className="AdminComponents-table-action"><Button intent="danger" small={true} icon="trash"/></td>
+                  <td className="AdminComponents-table-action"><Button intent="danger" small={true} icon="trash" onClick={() => {this.deleteComponent(value.componentId)}}/></td>
                 </tr>
               ))}
             </tbody>
@@ -34,7 +44,7 @@ class AdminComponents extends React.Component {
   }
 }
 
-export default withTracker((props) => {
+export default withTracker(() => {
   return {
     currentUser: Meteor.user()
   };

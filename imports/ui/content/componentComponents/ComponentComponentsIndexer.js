@@ -3,7 +3,7 @@ import React from 'react';
 
 export const ComponentComponents = {
   page: PageComponent
-}
+};
 
 export const ComponentDataTypes = {
   page: {
@@ -11,9 +11,9 @@ export const ComponentDataTypes = {
     icon: "document",
     friendlyName: "Page"
   }
-}
+};
 
 export const FindComponentComponent = (id, type, planet) => {
-  const Component = ComponentComponents[type]
-  return <Component id={id} planet={planet}/>
-}
+  const Component = ComponentComponents[type];
+  return <Component id={id} planet={planet}/>;
+};

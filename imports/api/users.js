@@ -1,13 +1,13 @@
-import {Meteor} from 'meteor/meteor'
-import {Accounts} from 'meteor/accounts-base'
-import {check} from 'meteor/check'
+import {Meteor} from 'meteor/meteor';
+import {Accounts} from 'meteor/accounts-base';
+import {check} from 'meteor/check';
 
 if(Meteor.isServer) {
   Meteor.publish('users.findId', function findUserById(userId) {
-    check(userId, String)
+    check(userId, String);
 
-    return Meteor.users.find({_id: userId}, {fields: {username: 1}})
-  })
+    return Meteor.users.find({_id: userId}, {fields: {username: 1}});
+  });
 }
 
 Meteor.methods({
@@ -17,10 +17,10 @@ Meteor.methods({
       password: String,
       profile: {},
       username: String
-    })
+    });
 
-    const usernameExists = Accounts.findUserByUsername(user.username)
-    const emailExists = Accounts.findUserByEmail(user.email)
+    const usernameExists = Accounts.findUserByUsername(user.username);
+    const emailExists = Accounts.findUserByEmail(user.email);
 
     if(usernameExists) {
       throw new Meteor.Error('That username is taken');
@@ -31,9 +31,9 @@ Meteor.methods({
     }
 
     if(user.password.length < 8) {
-      throw new Meteor.Error('Your password must be at least 8 characters long')
+      throw new Meteor.Error('Your password must be at least 8 characters long');
     }
 
     Accounts.createUser(user);
   }
-})
+});
