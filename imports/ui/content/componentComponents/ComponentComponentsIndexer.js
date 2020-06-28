@@ -1,8 +1,10 @@
 import PageComponent from './PageComponent';
 import React from 'react';
+import WikiComponent from "./WikiComponent";
 
 export const ComponentComponents = {
-  page: PageComponent
+  page: PageComponent,
+  wiki: WikiComponent
 };
 
 export const ComponentDataTypes = {
@@ -10,6 +12,10 @@ export const ComponentDataTypes = {
     name: "page",
     icon: "document",
     friendlyName: "Page"
+  }, wiki: {
+    name: "wiki",
+    icon: "applications",
+    friendlyName: "Page Group"
   }
 };
 

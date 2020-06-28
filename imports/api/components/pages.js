@@ -8,7 +8,7 @@ export default Pages;
 if (Meteor.isServer) {
   Meteor.publish('pages.page', function findPage(pageId) {
     const page = Pages.findOne(pageId);
-    if(page && this.userId) {
+    if(page) {
       const planet = Planets.findOne(page.planet);
 
       if(planet && ((planet.private && planet.owner === this.userId) || !planet.private)) {

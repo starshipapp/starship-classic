@@ -1,9 +1,10 @@
-import {Pages, Planets} from '../collectionsStandalone';
+import {Pages, Planets, Wikis} from '../collectionsStandalone';
 import {check} from 'meteor/check';
 
 
 export const Index = {
-  page: Pages
+  page: Pages,
+  wiki: Wikis
 };
 
 export const CreationFunctions = {
@@ -20,6 +21,22 @@ export const CreationFunctions = {
           planet: planetId,
           updatedAt: new Date(),
           content: "This is a Page. Click the Edit icon in the top right corner to get started."
+        }, callback);
+      }
+    }
+  },
+  wiki: (planetId, userId, callback) => {
+    check(planetId, String);
+
+    const planet = Planets.findOne(planetId);
+
+    if(planet) {
+      if(planet.owner === userId) {
+        return Wikis.insert({
+          createdAt: new Date(),
+          owner: userId,
+          planet: planetId,
+          updatedAt: new Date()
         }, callback);
       }
     }
