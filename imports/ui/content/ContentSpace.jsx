@@ -53,7 +53,7 @@ class ContentSpace extends React.Component {
     if(this.props.componentId && this.props.planet[0] && this.props.planet[0].components) {
       let filteredComponents = this.props.planet[0].components.filter(value => value.componentId === this.props.componentId);
       if(filteredComponents.length === 1) {
-        currentComponent = FindComponentComponent(this.props.componentId, filteredComponents[0].type, this.props.planet[0])
+        currentComponent = FindComponentComponent(this.props.componentId, filteredComponents[0].type, this.props.planet[0], filteredComponents[0].name, this.props.subId)
       }
     }
 

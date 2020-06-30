@@ -22,7 +22,6 @@ class InfoStrip extends React.Component {
   }
 
   render() {
-    console.log(this.props.user)
     return (
       <div className="InfoStrip">
         {this.props.user[0] && <div className="InfoStrip-username">Created by {this.props.user[0].username}</div>}

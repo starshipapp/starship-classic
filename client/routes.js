@@ -26,6 +26,13 @@ FlowRouter.route('/planet/:_id/:_cid', {
   }
 });
 
+FlowRouter.route('/planet/:_id/:_cid/:_sid', {
+  name: 'Planets.component.subid',
+  action(params) {
+    ReactDOM.render(<App component={<ContentSpace planetId={params._id} home={false} componentId={params._cid} subId={params._sid}/>}/>, document.getElementById("react-target"));
+  }
+});
+
 FlowRouter.route('/', {
   name: 'Home',
   action() {

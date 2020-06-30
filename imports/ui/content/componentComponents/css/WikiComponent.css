@@ -1,0 +1,13 @@
+.WikiComponent-container {
+  margin-top: 1rem;
+  display: flex;
+}
+
+.WikiComponent-sidebar {
+  width: 15rem;
+}
+
+.WikiComponent-main {
+  margin-left: 1rem;
+  width: 100%;
+}

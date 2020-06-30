@@ -19,7 +19,7 @@ export const ComponentDataTypes = {
   }
 };
 
-export const FindComponentComponent = (id, type, planet) => {
+export const FindComponentComponent = (id, type, planet, name, subId) => {
   const Component = ComponentComponents[type];
-  return <Component id={id} planet={planet}/>;
+  return <Component id={id} planet={planet} name={name} subId={subId}/>;
 };

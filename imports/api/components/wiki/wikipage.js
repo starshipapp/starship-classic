@@ -22,7 +22,7 @@ if (Meteor.isServer) {
       const planet = Planets.findOne(wiki.planet);
 
       if(planet && ((planet.private && planet.owner === this.userId) || !planet.private)) {
-        return WikiPages.find({wikiId: wikiId});
+        return WikiPages.find({wikiId: wikiId}, {fields: {name: 1, wikiId: 1}});
       }
     }
   })
