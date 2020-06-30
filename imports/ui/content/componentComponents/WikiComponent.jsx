@@ -46,7 +46,7 @@ class WikiComponent extends React.Component {
     return (
       <div className="bp3-dark WikiComponent">
         <h1>{this.props.name}</h1>
-        {this.props.wikiPages.length === 0 && this.props.wiki.createdAt && <div>
+        {this.props.wikiPages.length === 0 && this.props.wiki && <div>
           <NonIdealState
             icon="error"
             title="No pages!"

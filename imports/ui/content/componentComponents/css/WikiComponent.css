@@ -4,10 +4,19 @@
 }
 
 .WikiComponent-sidebar {
-  width: 15rem;
+  min-width: 15rem;
+  max-width: min-content;
 }
 
 .WikiComponent-main {
   margin-left: 1rem;
   width: 100%;
+  overflow-x: hidden;
+}
+
+.WikiComponent-main code {
+  overflow-x: hidden;
+  white-space: normal;
+  word-wrap: none;
+  display: inline-block;
 }
