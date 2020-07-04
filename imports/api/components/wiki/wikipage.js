@@ -2,6 +2,7 @@ import {Meteor} from 'meteor/meteor';
 import {check} from 'meteor/check';
 
 import {WikiPages, Planets, Wikis} from '../../collectionsStandalone';
+import {checkReadPermission, checkWritePermission} from "../../../util/checkPermissions";
 
 export default WikiPages;
 
@@ -11,7 +12,7 @@ if (Meteor.isServer) {
     if(wikipage) {
       const planet = Planets.findOne(wikipage.planet);
 
-      if(planet && ((planet.private && planet.owner === this.userId) || !planet.private)) {
+      if(checkReadPermission(this.userId, planet)) {
         return WikiPages.find({_id: wikipageId});
       }
     }
@@ -21,7 +22,7 @@ if (Meteor.isServer) {
     if(wiki) {
       const planet = Planets.findOne(wiki.planet);
 
-      if(planet && ((planet.private && planet.owner === this.userId) || !planet.private)) {
+      if(checkReadPermission(this.userId, planet)) {
         return WikiPages.find({wikiId: wikiId}, {fields: {name: 1, wikiId: 1}});
       }
     }
@@ -39,7 +40,7 @@ Meteor.methods({
       if(wiki) {
         const planet = Planets.findOne(wiki.planet);
 
-        if(planet && planet.owner === this.userId) {
+        if(checkWritePermission(this.userId, planet)) {
           WikiPages.insert({
             name: name,
             wikiId: wikiId,
@@ -59,7 +60,7 @@ Meteor.methods({
       const page = WikiPages.findOne(id);
       const planet = Planets.findOne(page.planet);
 
-      if(planet && planet.owner === this.userId) {
+      if(checkWritePermission(this.userId, planet)) {
         WikiPages.update(id, {$set: {content: newContent}});
       }
     }

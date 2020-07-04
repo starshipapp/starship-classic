@@ -2,6 +2,7 @@ import {Meteor} from 'meteor/meteor';
 import {check} from 'meteor/check';
 
 import {Wikis, Planets} from '../../collectionsStandalone';
+import {checkReadPermission} from "../../../util/checkPermissions";
 
 export default Wikis;
 
@@ -13,7 +14,7 @@ if (Meteor.isServer) {
     if(wiki) {
       const planet = Planets.findOne(wiki.planet);
 
-      if(planet && ((planet.private && planet.owner === this.userId) || !planet.private)) {
+      if(checkReadPermission(this.userId, planet)) {
         return Wikis.find({_id: wikiId});
       }
     }

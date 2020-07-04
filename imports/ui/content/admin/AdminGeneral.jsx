@@ -2,6 +2,7 @@ import React from 'react';
 import { NonIdealState, Label, Classes, Button } from "@blueprintjs/core";
 import {withTracker} from 'meteor/react-meteor-data';
 import './css/AdminGeneral.css'
+import {checkWritePermission} from "../../../util/checkPermissions";
 
 class AdminGeneral extends React.Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class AdminGeneral extends React.Component {
   render() {
     return (
       <div className="Admin bp3-dark">
-        {Meteor.userId() === this.props.planet.owner ? <div>
+        {checkWritePermission(Meteor.userId(), this.props.planet) ? <div>
           <h2>General</h2>
           <div className="AdminGeneral-container">
           <Label>

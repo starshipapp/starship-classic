@@ -3,6 +3,7 @@ import { NonIdealState, Icon, Button } from "@blueprintjs/core";
 import {ComponentDataTypes} from '../componentComponents/ComponentComponentsIndexer'
 import {withTracker} from 'meteor/react-meteor-data';
 import './css/AdminComponents.css'
+import {checkWritePermission} from "../../../util/checkPermissions";
 
 class AdminComponents extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class AdminComponents extends React.Component {
   render() {
     return (
       <div className="Admin bp3-dark">
-        {Meteor.userId() === this.props.planet.owner ? <div>
+        {checkWritePermission(Meteor.userId(), this.props.planet) ? <div>
           <h2>Components</h2>
           <div className="AdminComponents-container">
           <table className="AdminComponents-table">

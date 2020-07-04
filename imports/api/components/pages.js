@@ -2,6 +2,7 @@ import {Meteor} from 'meteor/meteor';
 import {check} from 'meteor/check';
 
 import {Pages, Planets} from '../collectionsStandalone';
+import {checkReadPermission, checkWritePermission} from "../../util/checkPermissions";
 
 export default Pages;
 
@@ -11,7 +12,7 @@ if (Meteor.isServer) {
     if(page) {
       const planet = Planets.findOne(page.planet);
 
-      if(planet && ((planet.private && planet.owner === this.userId) || !planet.private)) {
+      if(checkReadPermission(this.userId, planet)) {
         return Pages.find({_id: pageId});
       }
     }
@@ -27,7 +28,7 @@ Meteor.methods({
       const page = Pages.findOne(id);
       const planet = Planets.findOne(page.planet);
 
-      if(planet && planet.owner === this.userId) {
+      if(checkWritePermission(this.userId, planet)) {
         Pages.update(id, {$set: {content: newContent}});
       }
     }
