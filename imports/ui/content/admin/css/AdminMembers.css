@@ -1,3 +1,13 @@
 .AddMemberButton-popover-container {
   padding: 0.25rem;
 }
+
+.AdminMembers-add-icon {
+  color: #a7b6c2;
+  transition: 0.2s;
+  margin-bottom: 0.125rem !important;
+}
+
+.AdminMembers-add-icon:hover {
+  color: #ffffff;
+}

@@ -2,7 +2,7 @@ import {Meteor} from 'meteor/meteor';
 import {check} from 'meteor/check';
 
 import {Invites, Planets} from './collectionsStandalone';
-import {checkWritePermission} from "../util/checkPermissions";
+import {checkReadPermission, checkWritePermission} from "../util/checkPermissions";
 
 export default Invites;
 
@@ -19,6 +19,15 @@ if (Meteor.isServer) {
 
     if(invite) {
       return Planets.find({_id: invite.planet})
+    }
+  })
+  Meteor.publish('invites.fromplanet', function findplanet(planetId) {
+    check(planetId, String);
+
+    const planet = Planets.findOne(planetId);
+
+    if(checkReadPermission(this.userId, planet)) {
+      return Invites.find({planet: planetId});
     }
   })
 }
@@ -47,6 +56,19 @@ Meteor.methods({
 
       if(planet) {
         Planets.update(invite.planet, {$push: {members: this.userId}})
+        Invites.remove(inviteId)
+      }
+    }
+  },
+  'invites.remove'(inviteId) {
+    check(inviteId, String);
+
+    const invite = Invites.findOne(inviteId);
+
+    if(invite) {
+      const planet = Planets.findOne(invite.planet)
+
+      if(planet) {
         Invites.remove(inviteId)
       }
     }

@@ -6,7 +6,6 @@
   width: 100%;
   margin-top: 0.5rem;
   border: 1px solid #394B59;
-  border-bottom: none;
   border-radius: 0.25rem;
 }
 
@@ -17,6 +16,10 @@
 .AdminComponents-table td {
   padding: 0.5rem;
   border-bottom: 1px solid #394B59;
+}
+
+.AdminComponents-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .AdminComponents-table-name-icon {
