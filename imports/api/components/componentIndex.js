@@ -1,5 +1,5 @@
-import {Pages, Planets, Wikis} from '../collectionsStandalone';
-import {check} from 'meteor/check';
+import {Pages, Planets, Wikis} from "../collectionsStandalone";
+import {check} from "meteor/check";
 
 
 export const Index = {

@@ -1,24 +1,24 @@
-import React from 'react';
+import React from "react";
 import {Button, Divider} from "@blueprintjs/core";
-import {withTracker} from 'meteor/react-meteor-data';
-import {FlowRouter} from 'meteor/ostrio:flow-router-extra';
+import {withTracker} from "meteor/react-meteor-data";
+import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 
-import "./css/InfoStrip.css"
+import "./css/InfoStrip.css";
 
 class InfoStrip extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.toggleFollow = this.toggleFollow.bind(this)
-    this.goToAdmin = this.goToAdmin.bind(this)
+    this.toggleFollow = this.toggleFollow.bind(this);
+    this.goToAdmin = this.goToAdmin.bind(this);
   }
 
   toggleFollow() {
-    Meteor.call("planets.togglefollow", this.props.planet._id)
+    Meteor.call("planets.togglefollow", this.props.planet._id);
   }
 
   goToAdmin() {
-    FlowRouter.go('Planets.admin', {_id: this.props.planet._id})
+    FlowRouter.go("Planets.admin", {_id: this.props.planet._id});
   }
 
   render() {
@@ -36,7 +36,7 @@ class InfoStrip extends React.Component {
           <Button text="Admin" icon="wrench" intent="danger" onClick={this.goToAdmin}/>  
         </div>}
       </div>
-    )
+    );
   }
 }
 

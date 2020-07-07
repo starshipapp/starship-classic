@@ -24,59 +24,12 @@
     },
     "testModule": "tests/main.js"
   },
-  "eslintConfig": {
-    "env": {
-      "es6": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module",
-      "ecmaFeatures": {
-        "jsx": true
-      }
-    },
-    "extends": [
-      "plugin:react/recommended"
-    ],
-    "rules": {
-      "jsx-quotes": [
-        "error",
-        "prefer-double"
-      ],
-      "curly": [
-        "error",
-        "multi-line"
-      ],
-      "eqeqeq": [
-        "error",
-        "always"
-      ],
-      "no-invalid-this": [
-        "error"
-      ],
-      "array-bracket-spacing": [
-        "error",
-        "never"
-      ],
-      "block-spacing": [
-        "error",
-        "never"
-      ],
-      "brace-style": [
-        "error",
-        "1tbs",
-        {
-          "allowSingleLine": true
-        }
-      ],
-      "semi": [
-        "error",
-        "always"
-      ],
-      "no-var": "error"
-    }
-  },
   "devDependencies": {
-    "eslint-plugin-react": "^7.20.0"
+    "@meteorjs/eslint-config-meteor": "^1.0.5",
+    "babel-eslint": "^7.0.0",
+    "eslint": "^3.0.0",
+    "eslint-import-resolver-meteor": "^0.3.0",
+    "eslint-plugin-meteor": "^4.0.0",
+    "eslint-plugin-react": "^6.0.0"
   }
 }

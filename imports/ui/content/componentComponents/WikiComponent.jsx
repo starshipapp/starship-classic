@@ -1,45 +1,41 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
 import {Button, Menu, NonIdealState, Popover} from "@blueprintjs/core";
-import {withTracker} from 'meteor/react-meteor-data';
-import './css/WikiComponent';
+import {withTracker} from "meteor/react-meteor-data";
+import "./css/WikiComponent";
 import "easymde/dist/easymde.min.css";
 import {WikiPages, Wikis} from "../../../api/collectionsStandalone";
-import {FlowRouter} from 'meteor/ostrio:flow-router-extra';
-import WikiPageComponent from './WikiPageComponent';
+import {FlowRouter} from "meteor/ostrio:flow-router-extra";
+import WikiPageComponent from "./WikiPageComponent";
 
 class WikiComponent extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      pageId: null
-    }
+      pageId: null,
+      pageTextbox: ""
+    };
 
-    this.createNewFirstPage = this.createNewFirstPage.bind(this);
     this.createNewPage = this.createNewPage.bind(this);
-  }
-
-  createNewFirstPage(e) {
-    if((e.keyCode && e.keyCode === 13) || !e.keyCode) {
-      e.preventDefault();
-
-      const nameText = ReactDOM.findDOMNode(this.refs.noPageTextbox).value.trim();
-      Meteor.call("wikipages.insert", this.props.id, "This is a Page. Click the Edit icon in the top right corner to get started.", nameText)
-    }
+    this.updatePageTextbox = this.updatePageTextbox.bind(this);
   }
 
   createNewPage(e) {
     if((e.keyCode && e.keyCode === 13) || !e.keyCode) {
       e.preventDefault();
-
-      const nameText = ReactDOM.findDOMNode(this.refs.pageTextbox).value.trim();
-      Meteor.call("wikipages.insert", this.props.id, "This is a Page. Click the Edit icon in the top right corner to get started.", nameText)
+      Meteor.call("wikipages.insert", this.props.id, "This is a Page. Click the Edit icon in the top right corner to get started.", this.state.pageTextbox);
+      this.setState({pageTextbox: ""});
     }
   }
 
   gotoSubComponent(componentId) {
-    FlowRouter.go('Planets.component.subid', {_id: this.props.planet._id, _cid: this.props.id, _sid: componentId})
+    FlowRouter.go("Planets.component.subid", {_id: this.props.planet._id, _cid: this.props.id, _sid: componentId});
+  }
+
+  updatePageTextbox(e) {
+    this.setState({
+      pageTextbox: e.target.value
+    });
   }
 
   render() {
@@ -54,7 +50,7 @@ class WikiComponent extends React.Component {
             action={this.props.planet.owner === Meteor.userId() && <Popover>
               <Button>Create new page</Button>
               <div className="MainSidebar-menu-form">
-                <input className="MainSidebar-menu-input bp3-input" ref="noPageTextbox" placeholder="Page Name" onKeyDown={this.createNewFirstPage}/>
+                <input className="MainSidebar-menu-input bp3-input" ref="noPageTextbox" placeholder="Page Name" onKeyDown={this.createNewPage} value={this.state.pageTextbox} onChange={this.updatePageTextbox}/>
                 <Button className="MainSidebar-menu-button" onClick={this.createNewFirstPage}>Create Page</Button>
               </div>
             </Popover>}
@@ -63,11 +59,11 @@ class WikiComponent extends React.Component {
         {this.props.wikiPages.length !== 0 && <div className="WikiComponent-container">
           <div className="WikiComponent-sidebar">
             <Menu>
-              {this.props.wikiPages.map((value) => (<Menu.Item icon="document" text={value.name} onClick={() => {this.gotoSubComponent(value._id)}}/>))}
+              {this.props.wikiPages.map((value) => (<Menu.Item icon="document" text={value.name} onClick={() => {this.gotoSubComponent(value._id);}}/>))}
               {this.props.planet.owner === Meteor.userId() && <Popover>
-                <Menu.Item icon="plus" text="New Page" onClick={this.createNewPage}/>
+                <Menu.Item icon="plus" text="New Page"/>
                 <div className="MainSidebar-menu-form">
-                  <input className="MainSidebar-menu-input bp3-input" ref="pageTextbox" placeholder="Page Name" onKeyDown={this.createNewPage}/>
+                  <input className="MainSidebar-menu-input bp3-input" ref="pageTextbox" placeholder="Page Name" value={this.state.pageTextbox} onChange={this.updatePageTextbox} onKeyDown={this.createNewPage}/>
                   <Button className="MainSidebar-menu-button" onClick={this.createNewPage}>Create Page</Button>
                 </div>
               </Popover>}

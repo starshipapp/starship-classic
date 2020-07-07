@@ -1,10 +1,9 @@
-import React from 'react';
+import React from "react";
 import {NonIdealState, Button, Icon} from "@blueprintjs/core";
-import {withTracker} from 'meteor/react-meteor-data';
-import './css/AdminMembers.css'
-import Invites from '../../../api/invites'
+import {withTracker} from "meteor/react-meteor-data";
+import "./css/AdminMembers.css";
+import Invites from "../../../api/invites";
 import {checkWritePermission} from "../../../util/checkPermissions";
-import {ComponentDataTypes} from "../componentComponents/ComponentComponentsIndexer";
 
 class AdminMembers extends React.Component {
   constructor(props) {
@@ -14,12 +13,12 @@ class AdminMembers extends React.Component {
   }
 
   createInvite() {
-    Meteor.call('invites.insert', this.props.planet._id)
+    Meteor.call("invites.insert", this.props.planet._id);
   }
 
   render() {
     const baseurl = window.location.protocol + "//" + window.location.host + "/invites/";
-    console.log(this.props.invites)
+    console.log(this.props.invites);
     return (
       <div className="Admin bp3-dark">
         {checkWritePermission(Meteor.userId(), this.props.planet) ? <div>
@@ -29,12 +28,12 @@ class AdminMembers extends React.Component {
               <h3>Invites <Icon className="AdminMembers-add-icon" icon="plus" onClick={this.createInvite}/></h3>
               <table className="AdminComponents-table">
                 <tbody>
-                {this.props.invites.map((value) => (
-                  <tr>
-                    <td className="AdminComponents-table-name"><a href={baseurl + value._id}>{baseurl + value._id}</a></td>
-                    <td className="AdminComponents-table-action"><Button intent="danger" small={true} icon="trash" onClick={() => {this.deleteComponent(value._id)}}/></td>
-                  </tr>
-                ))}
+                  {this.props.invites.map((value) => (
+                    <tr>
+                      <td className="AdminComponents-table-name"><a href={baseurl + value._id}>{baseurl + value._id}</a></td>
+                      <td className="AdminComponents-table-action"><Button intent="danger" small={true} icon="trash" onClick={() => {this.deleteComponent(value._id);}}/></td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>}
@@ -48,11 +47,11 @@ class AdminMembers extends React.Component {
             />}
           </div>
         </div> : <div>
-        <NonIdealState
-          icon="error"
-          title="403"
-          description="You aren't the admin of this planet."
-        />
+          <NonIdealState
+            icon="error"
+            title="403"
+            description="You aren't the admin of this planet."
+          />
         </div>}
       </div>
     );
@@ -60,7 +59,7 @@ class AdminMembers extends React.Component {
 }
 
 export default withTracker((props) => {
-  Meteor.subscribe('invites.fromplanet', props.planet._id)
+  Meteor.subscribe("invites.fromplanet", props.planet._id);
 
   return {
     invites: Invites.find({planet: props.planet._id}).fetch(),

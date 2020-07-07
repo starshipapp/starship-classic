@@ -1,46 +1,57 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
 import { Navbar, Button, Alignment, NonIdealState, Popover, Menu, MenuItem, Intent } from "@blueprintjs/core";
-import './css/ContentSpace.css'
-import {withTracker} from 'meteor/react-meteor-data';
-import Planets from '../../api/planets';
-import {FlowRouter} from 'meteor/ostrio:flow-router-extra';
-import {FindComponentComponent, ComponentDataTypes} from './componentComponents/ComponentComponentsIndexer'
-import InfoStrip from './InfoStrip';
-import {ErrorToaster} from '../Toaster';
-import Admin from './Admin';
+import "./css/ContentSpace.css";
+import {withTracker} from "meteor/react-meteor-data";
+import Planets from "../../api/planets";
+import {FlowRouter} from "meteor/ostrio:flow-router-extra";
+import {FindComponentComponent, ComponentDataTypes} from "./componentComponents/ComponentComponentsIndexer";
+import InfoStrip from "./InfoStrip";
+import {ErrorToaster} from "../Toaster";
+import Admin from "./Admin";
 
 class ContentSpace extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      textboxText: ""
+    };
+
     this.createHome = this.createHome.bind(this);
     this.createComponent = this.createComponent.bind(this);
     this.goHome = this.goHome.bind(this);
     this.gotoComponent = this.gotoComponent.bind(this);
+    this.updateTextbox = this.updateTextbox.bind(this);
   }
 
   createHome() {
-    Meteor.call("planets.createhome", this.props.planetId, "page")
+    Meteor.call("planets.createhome", this.props.planetId, "page");
   }
 
   createComponent(type) {
-    const name = ReactDOM.findDOMNode(this.refs.pageNameInput).value.trim();
-
-    if(name == "") {
-      ErrorToaster.show({message: "Please enter a name.", icon:"error", intent:Intent.DANGER})
-      return
+    if(this.state.textboxText === "") {
+      ErrorToaster.show({message: "Please enter a name.", icon:"error", intent:Intent.DANGER});
+      return;
     }
 
-    Meteor.call("planets.addcomponent", name, this.props.planetId, type)
+    Meteor.call("planets.addcomponent", this.state.textboxText, this.props.planetId, type);
+    this.setState({
+      textboxText: ""
+    });
   }
 
   goHome() {
-    FlowRouter.go('Planets.home', {_id: this.props.planetId})
+    FlowRouter.go("Planets.home", {_id: this.props.planetId});
   }
 
   gotoComponent(componentId) {
-    FlowRouter.go('Planets.component', {_id: this.props.planetId, _cid: componentId})
+    FlowRouter.go("Planets.component", {_id: this.props.planetId, _cid: componentId});
+  }
+
+  updateTextbox(e) {
+    this.setState({
+      textboxText: e.target.value
+    });
   }
 
   render() {
@@ -48,25 +59,25 @@ class ContentSpace extends React.Component {
       icon="error"
       title="404"
       description="We couldn't find that page in this planet."
-    />
+    />;
 
     if(this.props.componentId && this.props.planet[0] && this.props.planet[0].components) {
       let filteredComponents = this.props.planet[0].components.filter(value => value.componentId === this.props.componentId);
       if(filteredComponents.length === 1) {
-        currentComponent = FindComponentComponent(this.props.componentId, filteredComponents[0].type, this.props.planet[0], filteredComponents[0].name, this.props.subId)
+        currentComponent = FindComponentComponent(this.props.componentId, filteredComponents[0].type, this.props.planet[0], filteredComponents[0].name, this.props.subId);
       }
     }
 
     if(this.props.admin && this.props.planet[0]) {
       if(this.props.planet[0].createdAt) {
-        currentComponent = <Admin planet={this.props.planet[0]}/>
+        currentComponent = <Admin planet={this.props.planet[0]}/>;
       }
     }
 
     if(this.props.home) {
       if(this.props.planet[0]) {
         if(this.props.planet[0].homeComponent) {
-          currentComponent = FindComponentComponent(this.props.planet[0].homeComponent.componentId, this.props.planet[0].homeComponent.type, this.props.planet[0])
+          currentComponent = FindComponentComponent(this.props.planet[0].homeComponent.componentId, this.props.planet[0].homeComponent.type, this.props.planet[0]);
         } else {
           if(this.props.planet[0].createdAt) {
             currentComponent = <NonIdealState
@@ -74,7 +85,7 @@ class ContentSpace extends React.Component {
               title="No home component!"
               description="This planet is missing a home component, and so there is nothing to render. If you are the owner of this planet, clicking the below button should resolve this issue."
               action={<Button onClick={this.createHome}>Create new page</Button>}
-            />
+            />;
           }
         }
       }
@@ -94,13 +105,13 @@ class ContentSpace extends React.Component {
                 className="bp3-minimal"
                 icon={ComponentDataTypes[value.type].icon}
                 text={value.name}
-                outlined={this.props.componentId && this.props.componentId == value.componentId}
-                onClick = {() => {this.gotoComponent(value.componentId)}}
+                outlined={this.props.componentId && this.props.componentId === value.componentId}
+                onClick = {() => {this.gotoComponent(value.componentId);}}
               />))}
               {this.props.planet[0] && this.props.planet[0].owner && Meteor.userId() === this.props.planet[0].owner && <Popover>
                 <Button className="bp3-minimal" icon="plus"/>
                 <div className="ContentSpace-navbar-add-content">
-                  <input ref="pageNameInput" className="bp3-input" placeholder="name"/>
+                  <input ref="pageNameInput" className="bp3-input" placeholder="name" value={this.state.textboxText} onChange={this.updateTextbox}/>
                   <Menu>
                     {Object.values(ComponentDataTypes).map((value) => (<MenuItem text={"Create new " + value.friendlyName} icon={value.icon} onClick={() => this.createComponent(value.name)}/>))}
                   </Menu>

@@ -1,15 +1,15 @@
-import {Meteor} from 'meteor/meteor';
-import {check} from 'meteor/check';
+import {Meteor} from "meteor/meteor";
+import {check} from "meteor/check";
 
-import {CreateComponent, Index} from './components/componentIndex';
+import {CreateComponent, Index} from "./components/componentIndex";
 
-import {Planets} from './collectionsStandalone.js';
+import {Planets} from "./collectionsStandalone.js";
 import {checkReadPermission, checkWritePermission} from "../util/checkPermissions";
 
 export default Planets;
 
 if (Meteor.isServer) {
-  Meteor.publish('planets.sidebar.memberOf', function planetsPublication() {
+  Meteor.publish("planets.sidebar.memberOf", function planetsPublication() {
     if(this.userId) {
       return Planets.find({
         $or: [
@@ -18,7 +18,7 @@ if (Meteor.isServer) {
       }, {fields: {name: 1, owner: 1}});
     }
   });
-  Meteor.publish('planets.sidebar.following', function planetsPublication() {
+  Meteor.publish("planets.sidebar.following", function planetsPublication() {
     if(this.userId) {
       return Planets.find({
         $or: [
@@ -27,7 +27,7 @@ if (Meteor.isServer) {
       }, {fields: {name: 1, followers: 1}});
     }
   });
-  Meteor.publish('planets.planet', function findPlanet(planetId) {
+  Meteor.publish("planets.planet", function findPlanet(planetId) {
     check(planetId, String);
     const planet = Planets.findOne(planetId);
     if(checkReadPermission(this.userId, planet)) {
@@ -37,7 +37,7 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'planets.insert'(name) {
+  "planets.insert"(name) {
     check(name, String);
 
     if(this.userId) {
@@ -51,7 +51,7 @@ Meteor.methods({
       });
     }
   },
-  'planets.addcomponent'(name, planetId, type) {
+  "planets.addcomponent"(name, planetId, type) {
     check(name, String);
     check(planetId, String);
     check(type, String);
@@ -66,7 +66,7 @@ Meteor.methods({
       }
     }
   },
-  'planets.createhome'(planetId, type) {
+  "planets.createhome"(planetId, type) {
     check(planetId, String);
     check(type, String);
 
@@ -80,7 +80,7 @@ Meteor.methods({
       }
     }
   },
-  'planets.togglefollow'(planetId) {
+  "planets.togglefollow"(planetId) {
     check(planetId, String);
 
     const planet = Planets.findOne(planetId);
@@ -93,7 +93,7 @@ Meteor.methods({
       }
     }
   },
-  'planets.removecomponent'(planetId, componentId) {
+  "planets.removecomponent"(planetId, componentId) {
     check(planetId, String);
     check(componentId, String);
 
@@ -103,7 +103,7 @@ Meteor.methods({
       Planets.update({_id: planetId}, {$pull: {components: {componentId: componentId}}});
     }
   },
-  'planets.updatename'(planetId, name) {
+  "planets.updatename"(planetId, name) {
     check(planetId, String);
     check(name, String);
 

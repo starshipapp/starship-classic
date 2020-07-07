@@ -1,21 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
 import { Menu, Button, Popover, MenuItem, Intent } from "@blueprintjs/core";
-import { Meteor } from 'meteor/meteor';
-import {ErrorToaster} from '../Toaster'
-import {withTracker} from 'meteor/react-meteor-data';
-import {FlowRouter} from 'meteor/ostrio:flow-router-extra';
+import { Meteor } from "meteor/meteor";
+import {ErrorToaster} from "../Toaster";
+import {withTracker} from "meteor/react-meteor-data";
+import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 
-import Planets from '../../api/planets'
-import './css/MainSidebar.css'
+import Planets from "../../api/planets";
+import "./css/MainSidebar.css";
 
 class MainSidebar extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      isSigningUp: false
-    }
+      isSigningUp: false,
+      usernameText: "",
+      passwordText: "",
+      passwordConfirmText: "",
+      emailText: "",
+      planetText: ""
+    };
 
     this.toggleSignUp = this.toggleSignUp.bind(this);
     this.signUp = this.signUp.bind(this);
@@ -23,87 +27,97 @@ class MainSidebar extends React.Component {
     this.logout = this.logout.bind(this);
     this.createPlanet = this.createPlanet.bind(this);
     this.goToPlanet = this.goToPlanet.bind(this);
+
+    this.setUsernameText = this.setUsernameText.bind(this);
+    this.setPasswordText = this.setPasswordText.bind(this);
+    this.setPasswordConfirmText = this.setPasswordConfirmText.bind(this);
+    this.setEmailText = this.setEmailText.bind(this);
+    this.setPlanetText = this.setPlanetText.bind(this);
   }
 
   toggleSignUp() {
     this.setState({
       isSigningUp: !this.state.isSigningUp
-    })
+    });
   }
 
   signUp(e) {
     e.preventDefault();
     if(!this.state.isSigningUp) {
-      this.toggleSignUp()
+      this.toggleSignUp();
     } else {
-      const usernameText = ReactDOM.findDOMNode(this.refs.usernameInput).value.trim();
-      const passwordText = ReactDOM.findDOMNode(this.refs.passwordInput).value.trim();
-      const confirmPasswordText = ReactDOM.findDOMNode(this.refs.confirmPasswordInput).value.trim();
-      const emailText = ReactDOM.findDOMNode(this.refs.emailInput).value.trim();
-
-      if(usernameText === "") {
-        ErrorToaster.show({message: "Please enter a username.", icon:"error", intent:Intent.DANGER})
+      if(this.state.usernameText === "") {
+        ErrorToaster.show({message: "Please enter a username.", icon:"error", intent:Intent.DANGER});
         return;
       }
 
-      if(passwordText === "") {
-        ErrorToaster.show({message: "Please enter a password.", icon:"error", intent:Intent.DANGER})
+      if(this.state.passwordText === "") {
+        ErrorToaster.show({message: "Please enter a password.", icon:"error", intent:Intent.DANGER});
         return;
       }
 
-      if(passwordText !== confirmPasswordText) {
-        ErrorToaster.show({message: "Password text does not match!", icon:"error", intent:Intent.DANGER})
+      if(this.state.passwordText !== this.state.passwordConfirmText) {
+        ErrorToaster.show({message: "Password text does not match!", icon:"error", intent:Intent.DANGER});
         return;
       }
 
 
-      if(emailText == "") {
-        ErrorToaster.show({message: "Please enter an email address.", icon:"error", intent:Intent.DANGER})
+      if(this.state.emailText === "") {
+        ErrorToaster.show({message: "Please enter an email address.", icon:"error", intent:Intent.DANGER});
         return;
       }
 
-      Meteor.call('users.insert', {
-        username: usernameText,
-        password: passwordText,
-        email: emailText,
+      Meteor.call("users.insert", {
+        username: this.state.usernameText,
+        password: this.state.passwordText,
+        email: this.state.emailText,
         profile: {}
       }, (e) => {
         if(e) {
-          ErrorToaster.show({message: e.message.substr(1).slice(0, -1) + ".", icon:"error", intent:Intent.DANGER})
+          ErrorToaster.show({message: e.message.substr(1).slice(0, -1) + ".", icon:"error", intent:Intent.DANGER});
         } else {
-          Meteor.loginWithPassword(usernameText, passwordText, function(e) {
+          Meteor.loginWithPassword(this.state.usernameText, this.state.passwordText, function(e) {
             if(e) {
-              ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER})
+              ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER});
+            } else {
+              this.setState({
+                usernameText: "",
+                passwordText: "",
+                passwordConfirmText: "",
+                emailText: "",
+              });
             }
-          })
+          });
         }
-      })
+      });
     }
   }
 
   signIn(e) {
     e.preventDefault();
     if(this.state.isSigningUp) {
-      this.toggleSignUp()
+      this.toggleSignUp();
     } else {
-      const usernameText = ReactDOM.findDOMNode(this.refs.usernameInput).value.trim();
-      const passwordText = ReactDOM.findDOMNode(this.refs.passwordInput).value.trim();
-
-      if(usernameText === "") {
-        ErrorToaster.show({message: "Please enter a username.", icon:"error", intent:Intent.DANGER})
+      if(this.state.usernameText === "") {
+        ErrorToaster.show({message: "Please enter a username.", icon:"error", intent:Intent.DANGER});
         return;
       }
 
-      if(passwordText === "") {
-        ErrorToaster.show({message: "Please enter a password.", icon:"error", intent:Intent.DANGER})
+      if(this.state.passwordText === "") {
+        ErrorToaster.show({message: "Please enter a password.", icon:"error", intent:Intent.DANGER});
         return;
       }
 
-      Meteor.loginWithPassword(usernameText, passwordText, function(e) {
+      Meteor.loginWithPassword(this.state.usernameText, this.state.passwordText, function(e) {
         if(e) {
-          ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER})
+          ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER});
+        } else {
+          this.setState({
+            usernameText: "",
+            passwordText: ""
+          });
         }
-      })
+      }.bind(this));
     }
   }
 
@@ -113,25 +127,56 @@ class MainSidebar extends React.Component {
 
   createPlanet(e) {
     e.preventDefault();
-    const planetText = ReactDOM.findDOMNode(this.refs.planetNameInput).value.trim();
-
-    if(planetText === "") {
-      ErrorToaster.show({message: "Please enter a name.", icon:"error", intent:Intent.DANGER})
+    if(this.state.planetText === "") {
+      ErrorToaster.show({message: "Please enter a name.", icon:"error", intent:Intent.DANGER});
       return;
     }
     
-    Meteor.call('planets.insert', planetText)
+    Meteor.call("planets.insert", this.state.planetText);
+    this.setState({
+      planetText: ""
+    });
   }
 
   goToPlanet(id) {
-    FlowRouter.go('Planets.home', {_id: id})
+    FlowRouter.go("Planets.home", {_id: id});
+  }
+
+  setUsernameText(e) {
+    this.setState({
+      usernameText: e.target.value
+    });
+  }
+
+  setPasswordText(e) {
+    this.setState({
+      passwordText: e.target.value
+    });
+  }
+
+  setPasswordConfirmText(e) {
+    this.setState({
+      passwordConfirmText: e.target.value
+    });
+  }
+
+  setEmailText(e) {
+    this.setState({
+      emailText: e.target.value
+    });
+  }
+
+  setPlanetText(e) {
+    this.setState({
+      planetText: e.target.value
+    });
   }
 
   render() {
     return (
       <div className="MainSidebar">
         <Menu className="MainSidebar-menu">
-          <div className="MainSidebar-menu-logo" onClick={() => {FlowRouter.go('Home', {})}}>starship<span className="MainSidebar-version">alpha</span></div>
+          <div className="MainSidebar-menu-logo" onClick={() => {FlowRouter.go("Home", {});}}>starship<span className="MainSidebar-version">alpha</span></div>
           {Meteor.userId() && <div>
             <Menu.Divider title="MY PLANETS"/>
             {this.props.memberPlanets.map((value) => (<Menu.Item key={value._id} icon="control" onClick={() => this.goToPlanet(value._id)} text={value.name}/>))}
@@ -141,7 +186,8 @@ class MainSidebar extends React.Component {
                 <input
                   className="MainSidebar-menu-input bp3-input"
                   placeholder="Name"
-                  ref="planetNameInput"
+                  onChange={this.setPlanetText}
+                  value={this.state.planetText}
                 />
                 <Button className="MainSidebar-menu-button" onClick={this.createPlanet}>Create</Button>
               </form>
@@ -164,25 +210,29 @@ class MainSidebar extends React.Component {
                 <input
                   className="MainSidebar-menu-input bp3-input"
                   placeholder="Username"
-                  ref="usernameInput"
+                  onChange={this.setUsernameText}
+                  value={this.state.usernameText}
                 />
                 <input
                   className="MainSidebar-menu-input bp3-input"
                   placeholder="Password"
                   type="password"
-                  ref="passwordInput"
+                  onChange={this.setPasswordText}
+                  value={this.state.passwordText}
                 />
                 {this.state.isSigningUp && <div>
                   <input
                     className="MainSidebar-menu-input bp3-input"
                     placeholder="Confirm Password"
                     type="password"
-                    ref="confirmPasswordInput"
+                    onChange={this.setPasswordConfirmText}
+                    value={this.state.passwordConfirmText}
                   />
                   <input
                     className="MainSidebar-menu-input bp3-input"
                     placeholder="Email"
-                    ref="emailInput"
+                    onChange={this.setEmailText}
+                    value={this.state.emailText}
                   />
                 </div>}
                 <input type="submit" style={{display: "none"}}/>

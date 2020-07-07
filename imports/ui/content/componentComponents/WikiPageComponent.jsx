@@ -1,20 +1,20 @@
-import React from 'react';
+import React from "react";
 import {Button} from "@blueprintjs/core";
-import WikiPages from '../../../api/components/wiki/wikipage'
-import {withTracker} from 'meteor/react-meteor-data';
-import ReactMarkdown from 'react-markdown';
-import './css/PageComponent';
+import WikiPages from "../../../api/components/wiki/wikipage";
+import {withTracker} from "meteor/react-meteor-data";
+import ReactMarkdown from "react-markdown";
+import "./css/PageComponent";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 
 class WikiPageComponent extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     
     this.state = {
       isEditing: false,
       editingContent: ""
-    }
+    };
     
     this.startEditing = this.startEditing.bind(this);
     this.save = this.save.bind(this);
@@ -25,20 +25,20 @@ class WikiPageComponent extends React.Component {
     this.setState({
       isEditing: true,
       editingContent: this.props.page[0].content
-    })
+    });
   }
 
   save() {
-    Meteor.call("wikipages.update", this.props.id, this.state.editingContent)
+    Meteor.call("wikipages.update", this.props.id, this.state.editingContent);
     this.setState({
       isEditing: false
-    })
+    });
   }
 
   handleChange(value) {
     this.setState({
       editingContent: value
-    })
+    });
   }
 
   render() {

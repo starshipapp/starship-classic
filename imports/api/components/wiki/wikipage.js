@@ -1,13 +1,15 @@
-import {Meteor} from 'meteor/meteor';
-import {check} from 'meteor/check';
+import {Meteor} from "meteor/meteor";
+import {check} from "meteor/check";
 
-import {WikiPages, Planets, Wikis} from '../../collectionsStandalone';
+import {WikiPages, Planets, Wikis} from "../../collectionsStandalone";
 import {checkReadPermission, checkWritePermission} from "../../../util/checkPermissions";
 
 export default WikiPages;
 
 if (Meteor.isServer) {
-  Meteor.publish('wikipages.wikipage', function findwikipage(wikipageId) {
+  Meteor.publish("wikipages.wikipage", function findwikipage(wikipageId) {
+    check(wikipageId, String);
+
     const wikipage = WikiPages.findOne(wikipageId);
     if(wikipage) {
       const planet = Planets.findOne(wikipage.planet);
@@ -17,7 +19,8 @@ if (Meteor.isServer) {
       }
     }
   });
-  Meteor.publish('wikipages.findpages', function findwikipages(wikiId) {
+  Meteor.publish("wikipages.findpages", function findwikipages(wikiId) {
+    check(wikiId, String);
     const wiki = Wikis.findOne(wikiId);
     if(wiki) {
       const planet = Planets.findOne(wiki.planet);
@@ -26,11 +29,11 @@ if (Meteor.isServer) {
         return WikiPages.find({wikiId: wikiId}, {fields: {name: 1, wikiId: 1}});
       }
     }
-  })
+  });
 }
 
 Meteor.methods({
-  'wikipages.insert'(wikiId, content, name) {
+  "wikipages.insert"(wikiId, content, name) {
     check(wikiId, String);
     check(content, String);
     check(name, String);
@@ -47,12 +50,12 @@ Meteor.methods({
             content: content,
             planet: wiki.planet,
             createdAt: new Date()
-          })
+          });
         }
       }
     }
   },
-  'wikipages.update'(id, newContent) {
+  "wikipages.update"(id, newContent) {
     check(newContent, String);
     check(id, String);
 

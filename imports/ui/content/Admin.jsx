@@ -1,25 +1,25 @@
-import React from 'react';
+import React from "react";
 import { NonIdealState, Menu } from "@blueprintjs/core";
-import {withTracker} from 'meteor/react-meteor-data';
-import './css/Admin.css'
-import AdminComponents from './admin/AdminComponents';
-import AdminGeneral from './admin/AdminGeneral';
+import {withTracker} from "meteor/react-meteor-data";
+import "./css/Admin.css";
+import AdminComponents from "./admin/AdminComponents";
+import AdminGeneral from "./admin/AdminGeneral";
 import {checkWritePermission} from "../../util/checkPermissions";
 import AdminMembers from "./admin/AdminMembers";
 
 class Admin extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       tab: "general"
-    }
+    };
   }
 
   goToTab(tab) {
     this.setState({
       tab
-    })
+    });
   }
 
   render() {
@@ -42,11 +42,11 @@ class Admin extends React.Component {
             </div>
           </div>
         </div> : <div>
-        <NonIdealState
-          icon="error"
-          title="403"
-          description="You aren't the admin of this planet."
-        />
+          <NonIdealState
+            icon="error"
+            title="403"
+            description="You aren't the admin of this planet."
+          />
         </div>}
       </div>
     );

@@ -1,0 +1,81 @@
+{
+    "env": {
+        "browser": true,
+        "es2020": true,
+        "node": true,
+        "meteor": true,
+        "mocha": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:meteor/recommended"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 11,
+        "sourceType": "module",
+        "allowImportExportEverywhere": true
+    },
+    "plugins": [
+        "react",
+        "meteor"
+    ],
+    "settings": {
+        "import/resolver": "meteor"
+    },
+    "rules": {
+        "react/prop-types": [
+            "off"
+        ],
+        "escope": [
+            "off"
+        ],
+        "indent": [
+            "error",
+            2
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "jsx-quotes": [
+            "error",
+            "prefer-double"
+        ],
+        "curly": [
+            "error",
+            "multi-line"
+        ],
+        "eqeqeq": [
+            "error",
+            "always"
+        ],
+        "array-bracket-spacing": [
+            "error",
+            "never"
+        ],
+        "block-spacing": [
+            "error",
+            "never"
+        ],
+        "brace-style": [
+            "error",
+            "1tbs",
+            {
+                "allowSingleLine": true
+            }
+        ],
+        "no-var": "error"
+    }
+}

@@ -1,5 +1,5 @@
-import PageComponent from './PageComponent';
-import React from 'react';
+import PageComponent from "./PageComponent";
+import React from "react";
 import WikiComponent from "./WikiComponent";
 
 export const ComponentComponents = {

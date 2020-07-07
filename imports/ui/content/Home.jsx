@@ -1,6 +1,5 @@
-import React from 'react';
-import { Navbar, Button, Alignment } from "@blueprintjs/core";
-import './css/Home.css'
+import React from "react";
+import "./css/Home.css";
 
 class Home extends React.Component {
   render() {
