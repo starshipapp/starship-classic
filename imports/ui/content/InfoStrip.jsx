@@ -27,10 +27,10 @@ class InfoStrip extends React.Component {
       <div className="InfoStrip">
         {this.props.user[0] && <div className="InfoStrip-username">Created by {this.props.user[0].username}</div>}
         <Divider/>
-        <div className="InfoStrip-followers">{this.props.planet.followers.length} {this.props.planet.followers.length === 1 ? "Follower" : "Followers"}</div>
+        {this.props.planet.followerCount && <div className="InfoStrip-followers">{this.props.planet.followerCount} {this.props.planet.followerCount === 1 ? "Follower" : "Followers"}</div>}
         {Meteor.userId() && <div className="InfoStrip">
           <Divider/>
-          <Button text={this.props.planet.followers.includes(Meteor.userId()) ? "Unfollow" : "Follow"} onClick={this.toggleFollow}/>  
+          <Button text={(Meteor.user() && Meteor.user().following && Meteor.user().following.includes(this.props.planet._id) ) ? "Unfollow" : "Follow"} onClick={this.toggleFollow}/>  
         </div>}
         {checkWritePermission(Meteor.userId(), this.props.planet) && <div className="InfoStrip">
           <Divider/>
@@ -43,6 +43,7 @@ class InfoStrip extends React.Component {
 
 export default withTracker((props) => {
   Meteor.subscribe("users.findId", props.planet.owner);
+  Meteor.subscribe("user.currentUserData");
 
   return {
     user: Meteor.users.find({_id: props.planet.owner}).fetch(),

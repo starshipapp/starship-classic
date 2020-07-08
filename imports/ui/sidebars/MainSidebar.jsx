@@ -193,8 +193,8 @@ class MainSidebar extends React.Component {
               </form>
             </Popover>  
           </div>}
-          {Meteor.userId() && this.props.followingPlanets.length !== 0 && <Menu.Divider title="FOLLOWING"/>}
-          {Meteor.userId() && this.props.followingPlanets.map((value) => (<Menu.Item key={value._id} icon="control" onClick={() => this.goToPlanet(value._id)} text={value.name}/>))}
+          {Meteor.userId() && this.props.followingPlanets && this.props.followingPlanets.length !== 0 && <Menu.Divider title="FOLLOWING"/>}
+          {Meteor.userId() && this.props.followingPlanets && this.props.followingPlanets.map((value) => (<Menu.Item key={value._id} icon="control" onClick={() => this.goToPlanet(value._id)} text={value.name}/>))}
           <Menu.Divider/>
           {Meteor.userId() ? <div>
             {Meteor.user() && <MenuItem disabled={true} text={Meteor.user().username}/>}
@@ -250,10 +250,20 @@ class MainSidebar extends React.Component {
 export default withTracker(() => {
   Meteor.subscribe("planets.sidebar.memberOf");
   Meteor.subscribe("planets.sidebar.following");
+  Meteor.subscribe("user.currentUserData");
 
-  return {
-    memberPlanets: Planets.find({owner: Meteor.userId()}, {sort: {name: 1}}).fetch(),
-    followingPlanets: Planets.find({followers: Meteor.userId()}, {sort: {name: 1}}).fetch(),
+  let tracked = {
+    memberPlanets: Planets.find({$or: [
+      {owner: Meteor.userId()},
+      {members: Meteor.userId()}
+    ]}, {sort: {name: 1}}).fetch(),
     currentUser: Meteor.user()
-  };
+  }
+
+  if(Meteor.user() && Meteor.user().following) {
+    console.log(Meteor.user().following);
+    tracked.followingPlanets = Planets.find({_id: {$in: Meteor.user().following}}, {sort: {name: 1}}).fetch()
+  }
+
+  return tracked;
 })(MainSidebar);

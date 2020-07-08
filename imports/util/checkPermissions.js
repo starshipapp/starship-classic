@@ -13,17 +13,17 @@ export function checkWritePermission(userId, planet) {
 }
 
 export function checkReadPermission(userId, planet) {
-  if (userId && planet) {
+  if (planet) {
     //planet is not private
     if (!planet.private) {
       return true;
     }
     //we are a member of it
-    if (planet.members && planet.members.includes(userId)) {
+    if (userId && planet.members && planet.members.includes(userId)) {
       return true;
     }
     //we own it
-    if (planet.owner === userId) {
+    if (userId && planet.owner === userId) {
       return true;
     }
   }

@@ -1,8 +1,9 @@
 import React from "react";
-import { NonIdealState, Label, Classes, Button } from "@blueprintjs/core";
+import { NonIdealState, Label, Classes, Button, Intent } from "@blueprintjs/core";
 import {withTracker} from "meteor/react-meteor-data";
 import "./css/AdminGeneral.css";
 import {checkWritePermission} from "../../../util/checkPermissions";
+import { INTENT_DANGER } from "@blueprintjs/core/lib/esm/common/classes";
 
 class AdminGeneral extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class AdminGeneral extends React.Component {
 
     this.save = this.save.bind(this);
     this.updateNameTextbox = this.updateNameTextbox.bind(this);
+    this.setPrivate = this.setPrivate.bind(this);
   }
 
   updateNameTextbox(e) {
@@ -28,6 +30,10 @@ class AdminGeneral extends React.Component {
     }
   }
 
+  setPrivate() {
+    Meteor.call("planets.toggleprivate", this.props.planet._id)
+  }
+
   render() {
     return (
       <div className="Admin bp3-dark">
@@ -38,6 +44,7 @@ class AdminGeneral extends React.Component {
               Name
               <input className={Classes.INPUT} value={this.state.nameTextboxContents} onChange={this.updateNameTextbox} placeholder="Placeholder text" />
             </Label>
+            <Button text={this.props.planet.private ? "Make this planet public" : "Make this planet private"} onClick={this.setPrivate} intent={Intent.DANGER} className="AdminGeneral-margin-button"/>
             <Button text="Save" onClick={this.save}/>
           </div>
         </div> : <div>
