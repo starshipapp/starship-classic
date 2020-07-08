@@ -5,7 +5,7 @@ export function checkWritePermission(userId, planet) {
       return true;
     }
     //we are a member of it
-    if (planet.members && planet.members.contains(userId)) {
+    if (planet.members && planet.members.includes(userId)) {
       return true;
     }
   }
@@ -19,7 +19,7 @@ export function checkReadPermission(userId, planet) {
       return true;
     }
     //we are a member of it
-    if (planet.members && planet.members.contains(userId)) {
+    if (planet.members && planet.members.includes(userId)) {
       return true;
     }
     //we own it

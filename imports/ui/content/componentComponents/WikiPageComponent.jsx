@@ -46,7 +46,7 @@ class WikiPageComponent extends React.Component {
       <div className="bp3-dark PageComponent">
         {this.props.page[0] && !this.state.isEditing && <ReactMarkdown>{this.props.page[0].content}</ReactMarkdown>}
         {this.props.page[0] && this.state.isEditing && <SimpleMDE onChange={this.handleChange} value={this.state.editingContent}/>}
-        {(this.props.page[0] && Meteor.userId() === this.props.planet.owner) && (!this.state.isEditing ? <Button
+        {(this.props.page[0] && checkWritePermission(Meteor.userId(), this.props.planet)) && (!this.state.isEditing ? <Button
           icon="edit"
           onClick={this.startEditing}
           minimal={true}

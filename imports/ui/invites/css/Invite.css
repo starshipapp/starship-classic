@@ -1,3 +1,30 @@
 .Invite {
-  
+  background-color: #30404D;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
+}
+
+.Invite-container {
+  margin-left: 2rem;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.Invite-name {
+  font-size: 5rem;
+  font-weight: bold;
+}
+
+.Invite-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.Invite-debug {
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+  color: #5C7080;
 }

@@ -8,6 +8,7 @@ import {FindComponentComponent, ComponentDataTypes} from "./componentComponents/
 import InfoStrip from "./InfoStrip";
 import {ErrorToaster} from "../Toaster";
 import Admin from "./Admin";
+import { checkWritePermission } from "../../util/checkPermissions";
 
 class ContentSpace extends React.Component {
   constructor(props) {
@@ -108,7 +109,7 @@ class ContentSpace extends React.Component {
                 outlined={this.props.componentId && this.props.componentId === value.componentId}
                 onClick = {() => {this.gotoComponent(value.componentId);}}
               />))}
-              {this.props.planet[0] && this.props.planet[0].owner && Meteor.userId() === this.props.planet[0].owner && <Popover>
+              {this.props.planet[0] && this.props.planet[0].owner && checkWritePermission(Meteor.userId(), this.props.planet[0]) && <Popover>
                 <Button className="bp3-minimal" icon="plus"/>
                 <div className="ContentSpace-navbar-add-content">
                   <input ref="pageNameInput" className="bp3-input" placeholder="name" value={this.state.textboxText} onChange={this.updateTextbox}/>

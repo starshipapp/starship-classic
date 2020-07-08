@@ -4,6 +4,7 @@ import {withTracker} from "meteor/react-meteor-data";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 
 import "./css/InfoStrip.css";
+import { checkWritePermission } from "../../util/checkPermissions";
 
 class InfoStrip extends React.Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class InfoStrip extends React.Component {
           <Divider/>
           <Button text={this.props.planet.followers.includes(Meteor.userId()) ? "Unfollow" : "Follow"} onClick={this.toggleFollow}/>  
         </div>}
-        {Meteor.userId() === this.props.planet.owner && <div className="InfoStrip">
+        {checkWritePermission(Meteor.userId(), this.props.planet) && <div className="InfoStrip">
           <Divider/>
           <Button text="Admin" icon="wrench" intent="danger" onClick={this.goToAdmin}/>  
         </div>}

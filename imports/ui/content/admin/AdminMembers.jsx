@@ -17,8 +17,7 @@ class AdminMembers extends React.Component {
   }
 
   render() {
-    const baseurl = window.location.protocol + "//" + window.location.host + "/invites/";
-    console.log(this.props.invites);
+    const baseurl = window.location.protocol + "//" + window.location.host + "/invite/";
     return (
       <div className="Admin bp3-dark">
         {checkWritePermission(Meteor.userId(), this.props.planet) ? <div>

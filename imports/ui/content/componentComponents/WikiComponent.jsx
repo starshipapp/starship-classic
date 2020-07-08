@@ -6,6 +6,7 @@ import "easymde/dist/easymde.min.css";
 import {WikiPages, Wikis} from "../../../api/collectionsStandalone";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import WikiPageComponent from "./WikiPageComponent";
+import {checkWritePermission} from '../../../util/checkPermissions';
 
 class WikiComponent extends React.Component {
   constructor(props) {
@@ -46,8 +47,8 @@ class WikiComponent extends React.Component {
           <NonIdealState
             icon="error"
             title="No pages!"
-            description={"This page group contains no pages!" + (this.props.planet.owner === Meteor.userId() && "Create a page to get started.")}
-            action={this.props.planet.owner === Meteor.userId() && <Popover>
+            description={"This page group contains no pages!" + (checkWritePermission(Meteor.userId(), this.props.planet) && "Create a page to get started.")}
+            action={checkWritePermission(Meteor.userId(), this.props.planet) && <Popover>
               <Button>Create new page</Button>
               <div className="MainSidebar-menu-form">
                 <input className="MainSidebar-menu-input bp3-input" ref="noPageTextbox" placeholder="Page Name" onKeyDown={this.createNewPage} value={this.state.pageTextbox} onChange={this.updatePageTextbox}/>
@@ -60,7 +61,7 @@ class WikiComponent extends React.Component {
           <div className="WikiComponent-sidebar">
             <Menu>
               {this.props.wikiPages.map((value) => (<Menu.Item icon="document" text={value.name} onClick={() => {this.gotoSubComponent(value._id);}}/>))}
-              {this.props.planet.owner === Meteor.userId() && <Popover>
+              {checkWritePermission(Meteor.userId(), this.props.planet) && <Popover>
                 <Menu.Item icon="plus" text="New Page"/>
                 <div className="MainSidebar-menu-form">
                   <input className="MainSidebar-menu-input bp3-input" ref="pageTextbox" placeholder="Page Name" value={this.state.pageTextbox} onChange={this.updatePageTextbox} onKeyDown={this.createNewPage}/>

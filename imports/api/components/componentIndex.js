@@ -1,5 +1,6 @@
 import {Pages, Planets, Wikis} from "../collectionsStandalone";
 import {check} from "meteor/check";
+import { checkWritePermission } from "../../util/checkPermissions";
 
 
 export const Index = {
@@ -14,7 +15,7 @@ export const CreationFunctions = {
     const planet = Planets.findOne(planetId);
 
     if(planet) {
-      if(planet.owner === userId) {
+      if(checkWritePermission(userId, planet)) {
         return Pages.insert({
           createdAt: new Date(),
           owner: userId,
@@ -31,7 +32,7 @@ export const CreationFunctions = {
     const planet = Planets.findOne(planetId);
 
     if(planet) {
-      if(planet.owner === userId) {
+      if(checkWritePermission(userId, planet)) {
         return Wikis.insert({
           createdAt: new Date(),
           owner: userId,
