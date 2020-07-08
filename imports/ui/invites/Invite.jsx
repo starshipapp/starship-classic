@@ -6,16 +6,18 @@ class Invite extends React.Component {
   render() {
     return (
       <div className="Invite">
-        <div className="Invite-title">
-          You've been invited to become a member of
+        <div className="Invite-container">
+          <div className="Invite-title">
+            You've been invited to become a member of
+          </div>
+          <div className="Invite-name">
+            Test
+          </div>
+          <div className="Invite-user">
+            by william341
+          </div>
+          <Button className="Invite-button" text="Join"/>
         </div>
-        <div className="Invite-name">
-          Test
-        </div>
-        <div className="Invite-user">
-          by william341
-        </div>
-        <Button className="Invite-button" text="Join"/>
       </div>
     );
   }
