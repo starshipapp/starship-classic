@@ -1,10 +1,12 @@
 import PageComponent from "./PageComponent";
 import React from "react";
 import WikiComponent from "./WikiComponent";
+import FilesComponent from "./FilesComponent";
 
 export const ComponentComponents = {
   page: PageComponent,
-  wiki: WikiComponent
+  wiki: WikiComponent,
+  files: FilesComponent
 };
 
 export const ComponentDataTypes = {
@@ -12,10 +14,16 @@ export const ComponentDataTypes = {
     name: "page",
     icon: "document",
     friendlyName: "Page"
-  }, wiki: {
+  },
+  wiki: {
     name: "wiki",
     icon: "applications",
     friendlyName: "Page Group"
+  },
+  files: {
+    name: "files",
+    icon: "folder-open",
+    friendlyName: "Files"
   }
 };
 

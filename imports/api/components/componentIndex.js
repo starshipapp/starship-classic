@@ -1,11 +1,12 @@
-import {Pages, Planets, Wikis} from "../collectionsStandalone";
+import {Pages, Planets, Wikis, Files} from "../collectionsStandalone";
 import {check} from "meteor/check";
 import { checkWritePermission } from "../../util/checkPermissions";
 
 
 export const Index = {
   page: Pages,
-  wiki: Wikis
+  wiki: Wikis,
+  files: Files
 };
 
 export const CreationFunctions = {
@@ -34,6 +35,22 @@ export const CreationFunctions = {
     if(planet) {
       if(checkWritePermission(userId, planet)) {
         return Wikis.insert({
+          createdAt: new Date(),
+          owner: userId,
+          planet: planetId,
+          updatedAt: new Date()
+        }, callback);
+      }
+    }
+  },
+  files: (planetId, userId, callback) => {
+    check(planetId, String);
+
+    const planet = Planets.findOne(planetId);
+
+    if(planet) {
+      if(checkWritePermission(userId, planet)) {
+        return Files.insert({
           createdAt: new Date(),
           owner: userId,
           planet: planetId,
