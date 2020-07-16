@@ -6,7 +6,7 @@ import "easymde/dist/easymde.min.css";
 import {WikiPages, Wikis} from "../../../api/collectionsStandalone";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import WikiPageComponent from "./WikiPageComponent";
-import {checkWritePermission} from '../../../util/checkPermissions';
+import {checkWritePermission} from "../../../util/checkPermissions";
 
 class WikiComponent extends React.Component {
   constructor(props) {
@@ -60,7 +60,7 @@ class WikiComponent extends React.Component {
         {this.props.wikiPages.length !== 0 && <div className="WikiComponent-container">
           <div className="WikiComponent-sidebar">
             <Menu>
-              {this.props.wikiPages.map((value) => (<Menu.Item icon="document" text={value.name} onClick={() => {this.gotoSubComponent(value._id);}}/>))}
+              {this.props.wikiPages.map((value) => (<Menu.Item icon="document" key={value._Id} text={value.name} onClick={() => {this.gotoSubComponent(value._id);}}/>))}
               {checkWritePermission(Meteor.userId(), this.props.planet) && <Popover>
                 <Menu.Item icon="plus" text="New Page"/>
                 <div className="MainSidebar-menu-form">

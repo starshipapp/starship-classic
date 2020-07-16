@@ -2,7 +2,7 @@ import React from "react";
 import {Button} from "@blueprintjs/core";
 import "./css/Invite.css";
 import {withTracker} from "meteor/react-meteor-data";
-import Invites from '../../api/invites';
+import Invites from "../../api/invites";
 import InviteName from "./InviteName";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 

@@ -1,0 +1,30 @@
+.FilesComponent-top {
+  display: flex;
+}
+
+.FilesComponent-top-actions {
+  margin-left: auto;
+}
+
+.FilesComponent-button-container {
+  padding-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(12.5rem,1fr));
+  gap: 1rem;
+}
+
+.FilesComponent-filebutton {
+  padding: 0.65rem;
+  background-color: #202B33;
+  border-color: #182026;
+  border-radius: 0.125rem;
+}
+
+.FilesComponent-file-icon {
+  height: 14px;
+  margin-bottom: 0.2rem !important;
+}
+
+.FilesComponent-file-icon svg {
+  height: 14px !important;
+}

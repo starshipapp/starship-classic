@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import "./css/PageComponent";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
+import {checkWritePermission} from "../../../util/checkPermissions";
 
 class WikiPageComponent extends React.Component {
   constructor(props) {
