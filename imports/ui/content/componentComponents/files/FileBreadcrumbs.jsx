@@ -1,20 +1,22 @@
 import React from "react";
-import FileObjects from "../../../api/components/files/fileobjects";
+import FileObjects from "../../../../api/components/files/fileobjects";
 import {withTracker} from "meteor/react-meteor-data";
-import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import { Breadcrumbs, Breadcrumb } from "@blueprintjs/core";
 
 class FilesComponent extends React.Component {
   render() {
+    let items = [
+      {text: "Root", icon: "home", onClick: () => this.props.navigateTo("root")}
+    ];
+
+    let array = this.props.folders.slice();
+    array.sort((a, b) => this.props.path.indexOf(a._id) - this.props.path.indexOf(b._id));
+    array.map((value) => {items.push({text: value.name, icon: "folder-close", onClick: () => this.props.navigateTo(value._id)});});
+
     return (
       <Breadcrumbs
         currentBreadcrumbRenderer={this.breadcrumbRenderer}
-        items={[
-          {text: "Root", icon: "home"},
-          {text: "Folder", icon: "folder-close"},
-          {text: "Folder", icon: "folder-close"},
-          {text: "Folder", icon: "folder-close"},
-        ]}
+        items={items}
       />
     );
   }
@@ -25,7 +27,7 @@ class FilesComponent extends React.Component {
 }
 
 export default withTracker((props) => {
-  Meteor.subscribe("fileobjects.objectsList", props.path.slice(1))
+  Meteor.subscribe("fileobjects.objectslist", props.path.slice(1), props.planetId);
 
   return {
     folders: FileObjects.find({_id: {$in: props.path.slice(1)}}).fetch(),

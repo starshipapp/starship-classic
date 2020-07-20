@@ -1,5 +1,5 @@
 import {Meteor} from "meteor/meteor";
-import {check, Match} from "meteor/check";
+import {check} from "meteor/check";
 
 import {Files, FileObjects, Planets} from "../../collectionsStandalone";
 import {checkReadPermission, checkWritePermission} from "../../../util/checkPermissions";
@@ -48,28 +48,31 @@ if (Meteor.isServer) {
       }
     }
   });
+  Meteor.publish("fileobjects.objectslist", function findobjectIds(objectIds, planetId) {
+    check(objectIds, [String]);
+    check(planetId, String);
+
+    const planet = Planets.findOne(planetId);
+
+    if(checkReadPermission(this.userId, planet)) {
+      return FileObjects.find({_id: {$in: objectIds}, planet: planetId});
+    }
+  });
 }
 
 Meteor.methods({
   "fileobjects.createfolder"(path, name, componentId) {
-    Match.test(path, [String])
-    check(name, String)
-    check(componentId, String)
+    check(name, String);
+    check(componentId, String);
+    check(path, [String]);
 
     if(this.userId) {
       const component = Files.findOne(componentId);
-      console.log("a");
       if(component) {
         const planet = Planets.findOne(component.planet);
-        console.log("b");
         if(checkWritePermission(this.userId, planet) && path.length > 0) {
-          const parentObject = FileObjects.findOne(path[path.length - 1])
-          console.log("c");
-          console.log(path);
-          console.log(parentObject);
+          const parentObject = FileObjects.findOne(path[path.length - 1]);
           if(parentObject || (path.length === 1 && path[0] === "root")) {
-            console.log("d");
-            console.log(path);
             // this is a valid "enough" path, create the folder
             FileObjects.insert({
               path: path,
@@ -79,10 +82,10 @@ Meteor.methods({
               componentId: componentId,
               type: "folder",
               fileType: "starship/folder"
-            })
+            });
           }
         }
       }
     }
   }
-})
+});

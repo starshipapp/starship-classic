@@ -258,11 +258,10 @@ export default withTracker(() => {
       {members: Meteor.userId()}
     ]}, {sort: {name: 1}}).fetch(),
     currentUser: Meteor.user()
-  }
+  };
 
   if(Meteor.user() && Meteor.user().following) {
-    console.log(Meteor.user().following);
-    tracked.followingPlanets = Planets.find({_id: {$in: Meteor.user().following}}, {sort: {name: 1}}).fetch()
+    tracked.followingPlanets = Planets.find({_id: {$in: Meteor.user().following}}, {sort: {name: 1}}).fetch();
   }
 
   return tracked;

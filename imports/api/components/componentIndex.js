@@ -70,10 +70,10 @@ export const DeletionFunctions = {
     Files.remove(componentId);
     FileObjects.remove({componentId});
   },
-  Page: (componentId) => {
+  page: (componentId) => {
     Pages.remove(componentId);
   }
-}
+};
 
 export const FindComponent = function (type, id) {
   if(!Object.keys(Index).includes(type)) {

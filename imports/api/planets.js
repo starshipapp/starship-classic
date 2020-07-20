@@ -86,12 +86,12 @@ Meteor.methods({
     const planet = Planets.findOne(planetId);
 
     if(checkReadPermission(this.userId, planet)){
-      const user = Meteor.users.findOne(this.userId)
-      if(user.following && user.following.includes(this.userId)) {
-        Meteor.users.update(this.userId, {$pull: {following: planet._id}})
-        Planets.update({_id: planetId}, {$dec: {followerCount: 1}});
+      const user = Meteor.users.findOne(this.userId);
+      if(user.following && user.following.includes(planet._id)) {
+        Meteor.users.update(this.userId, {$pull: {following: planet._id}});
+        Planets.update({_id: planetId}, {$inc: {followerCount: -1}});
       } else {
-        Meteor.users.update(this.userId, {$push: {following: planet._id}})
+        Meteor.users.update(this.userId, {$push: {following: planet._id}});
         Planets.update({_id: planetId}, {$inc: {followerCount: 1}});
       }
     }
@@ -104,7 +104,7 @@ Meteor.methods({
 
     if (checkWritePermission(this.userId, planet)) {
       let filteredComponents = planet.components.filter(value => value.componentId === componentId);
-      DeletionFunctions[filteredComponents.type](componentId);
+      DeletionFunctions[filteredComponents[0].type](componentId);
       Planets.update({_id: planetId}, {$pull: {components: {componentId: componentId}}});
     }
   },
@@ -118,7 +118,7 @@ Meteor.methods({
       Planets.update({_id: planetId}, {$set: {name: name}});
     }
   },
-  'planets.toggleprivate'(planetId) {
+  "planets.toggleprivate"(planetId) {
     check(planetId, String);
 
     const planet = Planets.findOne(planetId);

@@ -8,7 +8,7 @@ import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 
 class Invite extends React.Component {
   join() {
-    Meteor.call("invites.use", this.props.inviteId)
+    Meteor.call("invites.use", this.props.inviteId);
     FlowRouter.go("Planets.home", {_id: this.props.planet});
   }
 
@@ -17,7 +17,7 @@ class Invite extends React.Component {
       <div className="Invite">
         <div className="Invite-container">
           <div className="Invite-title">
-            You've been invited to become a member of
+            You&apos;ve been invited to become a member of
           </div>
           <div className="Invite-name">
             {this.props.invite[0] && <InviteName inviteId={this.props.inviteId} planetId={this.props.invite[0].planet}/>}
@@ -27,7 +27,7 @@ class Invite extends React.Component {
         <div className="Invite-debug">
           inviteId: {this.props.inviteId}<br/>
           {this.props.invite[0] && <span>planetId: {this.props.invite[0].planet}<br/></span>}
-          (there will be more things on this page eventually, trust me, i'm debug information)
+          (there will be more things on this page eventually, trust me, i&apos;m debug information)
         </div>
       </div>
     );

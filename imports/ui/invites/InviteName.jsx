@@ -1,6 +1,6 @@
 import React from "react";
 import {withTracker} from "meteor/react-meteor-data";
-import Planets from '../../api/planets';
+import Planets from "../../api/planets";
 
 class InviteText extends React.Component {
   render() {

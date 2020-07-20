@@ -3,7 +3,6 @@ import { NonIdealState, Label, Classes, Button, Intent } from "@blueprintjs/core
 import {withTracker} from "meteor/react-meteor-data";
 import "./css/AdminGeneral.css";
 import {checkWritePermission} from "../../../util/checkPermissions";
-import { INTENT_DANGER } from "@blueprintjs/core/lib/esm/common/classes";
 
 class AdminGeneral extends React.Component {
   constructor(props) {
@@ -31,7 +30,7 @@ class AdminGeneral extends React.Component {
   }
 
   setPrivate() {
-    Meteor.call("planets.toggleprivate", this.props.planet._id)
+    Meteor.call("planets.toggleprivate", this.props.planet._id);
   }
 
   render() {

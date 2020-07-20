@@ -15,7 +15,7 @@
     "react-dom": "^16.13.0",
     "react-markdown": "^4.3.1",
     "react-simplemde-editor": "^4.1.2",
-    "rich-markdown-editor": "^10.1.1"
+    "rich-markdown-editor": "^10.4.0"
   },
   "meteor": {
     "mainModule": {
