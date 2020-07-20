@@ -1,4 +1,4 @@
-import {Pages, Planets, Wikis, Files} from "../collectionsStandalone";
+import {Pages, Planets, Wikis, Files, WikiPages, FileObjects} from "../collectionsStandalone";
 import {check} from "meteor/check";
 import { checkWritePermission } from "../../util/checkPermissions";
 
@@ -60,6 +60,20 @@ export const CreationFunctions = {
     }
   }
 };
+
+export const DeletionFunctions = {
+  wiki: (componentId) => {
+    Wikis.remove(componentId);
+    WikiPages.remove({wikiId: componentId});
+  },
+  files: (componentId) => {
+    Files.remove(componentId);
+    FileObjects.remove({componentId});
+  },
+  Page: (componentId) => {
+    Pages.remove(componentId);
+  }
+}
 
 export const FindComponent = function (type, id) {
   if(!Object.keys(Index).includes(type)) {

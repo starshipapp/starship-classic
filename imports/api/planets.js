@@ -1,7 +1,7 @@
 import {Meteor} from "meteor/meteor";
 import {check} from "meteor/check";
 
-import {CreateComponent, Index} from "./components/componentIndex";
+import {CreateComponent, Index, DeletionFunctions} from "./components/componentIndex";
 
 import {Planets} from "./collectionsStandalone.js";
 import {checkReadPermission, checkWritePermission} from "../util/checkPermissions";
@@ -103,6 +103,8 @@ Meteor.methods({
     const planet = Planets.findOne(planetId);
 
     if (checkWritePermission(this.userId, planet)) {
+      let filteredComponents = planet.components.filter(value => value.componentId === componentId);
+      DeletionFunctions[filteredComponents.type](componentId);
       Planets.update({_id: planetId}, {$pull: {components: {componentId: componentId}}});
     }
   },
