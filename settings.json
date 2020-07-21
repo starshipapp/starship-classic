@@ -1,0 +1,9 @@
+{
+  "bucket": {
+    "endpoint": "http://127.0.0.1:9000",
+    "accessKey": "123",
+    "accessKeySecret": "unsecure",
+    "bucket": "starship-dev",
+    "forcePathStyle": true
+  }
+}

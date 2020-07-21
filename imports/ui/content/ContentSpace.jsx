@@ -116,13 +116,14 @@ class ContentSpace extends React.Component {
                 text={value.name}
                 outlined={this.props.componentId && this.props.componentId === value.componentId}
                 onClick = {() => {this.gotoComponent(value.componentId);}}
+                key={value.componentId}
               />))}
               {this.props.planet[0] && this.props.planet[0].owner && checkWritePermission(Meteor.userId(), this.props.planet[0]) && <Popover>
                 <Button className="bp3-minimal" icon="plus"/>
                 <div className="ContentSpace-navbar-add-content">
-                  <input ref="pageNameInput" className="bp3-input" placeholder="name" value={this.state.textboxText} onChange={this.updateTextbox}/>
+                  <input className="bp3-input" placeholder="name" value={this.state.textboxText} onChange={this.updateTextbox}/>
                   <Menu>
-                    {Object.values(ComponentDataTypes).map((value) => (<MenuItem text={"Create new " + value.friendlyName} icon={value.icon} onClick={() => this.createComponent(value.name)}/>))}
+                    {Object.values(ComponentDataTypes).map((value) => (<MenuItem text={"Create new " + value.friendlyName} key={value.name} icon={value.icon} onClick={() => this.createComponent(value.name)}/>))}
                   </Menu>
                 </div>
               </Popover>}
