@@ -1,8 +1,8 @@
 {
   "bucket": {
     "endpoint": "http://127.0.0.1:9000",
-    "accessKey": "123",
-    "accessKeySecret": "unsecure",
+    "accessKey": "minioadmin",
+    "accessKeySecret": "minioadmin",
     "bucket": "starship-dev",
     "forcePathStyle": true
   }

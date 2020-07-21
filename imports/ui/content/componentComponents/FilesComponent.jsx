@@ -7,6 +7,7 @@ import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import { checkWritePermission } from "../../../util/checkPermissions";
 import { Button, Divider, ButtonGroup, Classes, Popover, vertical } from "@blueprintjs/core";
 import FileBreadcrumbs from "./files/FileBreadcrumbs";
+import axios from "axios";
 
 class FilesComponent extends React.Component {
   constructor(props) {
@@ -18,6 +19,9 @@ class FilesComponent extends React.Component {
     
     this.createFolder = this.createFolder.bind(this);
     this.updateTextbox = this.updateTextbox.bind(this);
+    this.onFileUploadClick = this.onFileUploadClick.bind(this);
+
+    this.fileInput = React.createRef();
   }
 
   createFolder() {
@@ -46,13 +50,28 @@ class FilesComponent extends React.Component {
     }
   }
 
+  handleChange(e) {
+
+  }
+
+  onFileUploadClick() {
+    this.fileInput.current.click();
+  }
+
   render() {
     return (
       <div className="bp3-dark FilesComponent">
         <div className="FilesComponent-top">
+          <input
+            type="file"
+            ref={this.fileInput}
+            id="upload-button"
+            style={{ display: "none" }}
+            onChange={this.handleChange}
+          />
           <FileBreadcrumbs navigateTo={(value) => this.gotoSubComponent(value)} path={this.props.currentObject[0] ? this.props.currentObject[0].path.concat([this.props.currentObject[0]._id]) : ["root"]} planetId={this.props.planet._id}/>
           {checkWritePermission(Meteor.userId(), this.props.planet) && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
-            <Button text="Upload Files" icon="upload"/>
+            <Button text="Upload Files" icon="upload" onClick={this.onFileUploadClick}/>
             <Popover>
               <Button text="New Folder" icon="folder-new"/>
               <div className="MainSidebar-menu-form">
