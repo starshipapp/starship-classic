@@ -74,7 +74,7 @@ Meteor.methods({
           const parentObject = FileObjects.findOne(path[path.length - 1]);
           if(parentObject || (path.length === 1 && path[0] === "root")) {
             // this is a valid "enough" path, create the folder
-            FileObjects.insert({
+            return FileObjects.insert({
               path: path,
               parent: path[path.length - 1],
               name: name,

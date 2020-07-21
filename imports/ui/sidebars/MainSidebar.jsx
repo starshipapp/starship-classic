@@ -132,7 +132,15 @@ class MainSidebar extends React.Component {
       return;
     }
     
-    Meteor.call("planets.insert", this.state.planetText);
+    Meteor.call("planets.insert", this.state.planetText, (error, value) => {
+      if(error) {
+        //we should do something with this eventually
+      }
+
+      if(value) {
+        FlowRouter.go("Planets.home", {_id: value});
+      }
+    });
     this.setState({
       planetText: ""
     });

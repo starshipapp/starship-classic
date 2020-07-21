@@ -22,7 +22,14 @@ class FilesComponent extends React.Component {
 
   createFolder() {
     let path = this.props.subId && this.props.currentObject[0] ? this.props.currentObject[0].path.concat(this.props.currentObject[0]._id) : ["root"];
-    Meteor.call("fileobjects.createfolder", path, this.state.newFolderTextbox, this.props.id);
+    Meteor.call("fileobjects.createfolder", path, this.state.newFolderTextbox, this.props.id, (error, value) => {
+      if(error) {
+        //error
+      }
+      if(value) {
+        this.gotoSubComponent(value);
+      }
+    });
   }
 
   updateTextbox(e) {

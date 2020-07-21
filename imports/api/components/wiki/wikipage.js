@@ -44,7 +44,7 @@ Meteor.methods({
         const planet = Planets.findOne(wiki.planet);
 
         if(checkWritePermission(this.userId, planet)) {
-          WikiPages.insert({
+          return WikiPages.insert({
             name: name,
             wikiId: wikiId,
             content: content,

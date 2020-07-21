@@ -35,7 +35,15 @@ class ContentSpace extends React.Component {
       return;
     }
 
-    Meteor.call("planets.addcomponent", this.state.textboxText, this.props.planetId, type);
+    Meteor.call("planets.addcomponent", this.state.textboxText, this.props.planetId, type, (error, value) => {
+      console.log(value);
+      if(error) {
+        //handle the error
+      }
+      if(value) {
+        this.gotoComponent(value);
+      }
+    });
     this.setState({
       textboxText: ""
     });

@@ -24,7 +24,14 @@ class WikiComponent extends React.Component {
   createNewPage(e) {
     if((e.keyCode && e.keyCode === 13) || !e.keyCode) {
       e.preventDefault();
-      Meteor.call("wikipages.insert", this.props.id, "This is a Page. Click the Edit icon in the top right corner to get started.", this.state.pageTextbox);
+      Meteor.call("wikipages.insert", this.props.id, "This is a Page. Click the Edit icon in the top right corner to get started.", this.state.pageTextbox, (error, value) => {
+        if(error) {
+          //error
+        }
+        if(value) {
+          this.gotoSubComponent(value);
+        }
+      });
       this.setState({pageTextbox: ""});
     }
   }

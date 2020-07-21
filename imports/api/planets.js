@@ -41,7 +41,7 @@ Meteor.methods({
     check(name, String);
 
     if(this.userId) {
-      Planets.insert({
+      return Planets.insert({
         name: name,
         createdAt: new Date(),
         owner: this.userId,
@@ -60,9 +60,10 @@ Meteor.methods({
 
     if (checkWritePermission(this.userId, planet)) {
       if(Object.keys(Index).includes(type)) {
-        CreateComponent(type, planetId, this.userId, (a, documentId) => {
+        let componentId = CreateComponent(type, planetId, this.userId, (a, documentId) => {
           Planets.update(planetId, {$push: {components: {name: name, componentId: documentId, type: type}}});
         });
+        return componentId;
       }
     }
   },
