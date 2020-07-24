@@ -53,23 +53,25 @@ class FilesComponent extends React.Component {
   }
 
   handleChange(e) {
-    let file = e.target.files[0];
     let folderId = this.props.subId ? this.props.subId : "root";
-    Meteor.call("aws.uploadfile", folderId, this.props.id, file.type, file.name, (error, value) => {
-      if(error) {
-        console.log(error);
-      }
-      if(value) {
-        const options = { headers: { "Content-Type": file.type } };
-        axios.put(value.url, file, options).then(function (response) {
-          // handle success
-          Meteor.call("fileobjects.completeupload", value.documentId);
-        }).catch(function (error) {
-          // handle error
+    for(let i = 0; i < e.target.files.length; i++) {
+      let file = e.target.files[i];
+      Meteor.call("aws.uploadfile", folderId, this.props.id, file.type, file.name, (error, value) => {
+        if(error) {
           console.log(error);
-        });
-      }
-    });
+        }
+        if(value) {
+          const options = { headers: { "Content-Type": file.type } };
+          axios.put(value.url, file, options).then(function () {
+            // handle success
+            Meteor.call("fileobjects.completeupload", value.documentId);
+          }).catch(function (error) {
+            // handle error
+            console.log(error);
+          });
+        }
+      });
+    }
   }
 
   onFileUploadClick() {
@@ -86,6 +88,7 @@ class FilesComponent extends React.Component {
             id="upload-button"
             style={{ display: "none" }}
             onChange={this.handleChange}
+            multiple
           />
           <FileBreadcrumbs navigateTo={(value) => this.gotoSubComponent(value)} path={this.props.currentObject[0] ? this.props.currentObject[0].path.concat([this.props.currentObject[0]._id]) : ["root"]} planetId={this.props.planet._id}/>
           {checkWritePermission(Meteor.userId(), this.props.planet) && (!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
