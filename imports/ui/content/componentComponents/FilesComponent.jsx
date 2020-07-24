@@ -5,10 +5,11 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/FilesComponent";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import { checkWritePermission } from "../../../util/checkPermissions";
-import { Button, Divider, ButtonGroup, Classes, Popover, vertical, Text } from "@blueprintjs/core";
+import { Button, Divider, ButtonGroup, Classes, Popover, vertical} from "@blueprintjs/core";
 import FileBreadcrumbs from "./files/FileBreadcrumbs";
 import axios from "axios";
 import FileView from "./files/FileView";
+import FileButton from "./files/FileButton";
 
 class FilesComponent extends React.Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class FilesComponent extends React.Component {
     this.updateTextbox = this.updateTextbox.bind(this);
     this.onFileUploadClick = this.onFileUploadClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.gotoSubComponent = this.gotoSubComponent.bind(this);
 
     this.fileInput = React.createRef();
   }
@@ -105,8 +107,8 @@ class FilesComponent extends React.Component {
           </ButtonGroup>}
         </div>
         {(!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <div className="FilesComponent-button-container">
-          {this.props.folders.map((value) => (<Button alignText="left" key={value._id} large={true} className={"FilesComponent-filebutton"} icon="folder-close" text={value.name} onClick={(() => this.gotoSubComponent(value._id))}/>))}
-          {this.props.files.map((value) => (<Button alignText="left" key={value._id} large={true} className={"FilesComponent-filebutton"} icon="document"  onClick={(() => this.gotoSubComponent(value._id))}><Text>{value.name}</Text></Button>))}
+          {this.props.folders.map((value) => (<FileButton planet={this.props.planet} key={value._id} object={value} gotoSubComponent={this.gotoSubComponent}/>))}
+          {this.props.files.map((value) => (<FileButton planet={this.props.planet} key={value._id} object={value} gotoSubComponent={this.gotoSubComponent}/>))}
         </div>}
         {this.props.currentObject[0] && this.props.currentObject[0].type === "file" && <FileView file={this.props.currentObject[0]}/>}
       </div>

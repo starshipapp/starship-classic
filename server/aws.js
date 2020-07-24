@@ -4,7 +4,7 @@ import {check} from "meteor/check";
 
 import {FileObjects, Files, Planets} from "../imports/api/collectionsStandalone";
 import { checkWritePermission, checkReadPermission } from "../imports/util/checkPermissions";
-import AWS from "aws-sdk";
+import AWS, { S3 } from "aws-sdk";
 
 const spacesEndpoint = new AWS.Endpoint(Meteor.settings.bucket.endpoint);
 AWS.config.update({
@@ -17,7 +17,7 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 Meteor.methods({
-  "aws.uploadfile"(folderId, filesId, type, name) {
+  "aws.uploadfile"(folderId, type, name, filesId) {
     check(folderId, String);
     check(type, String);
     check(name, String);
@@ -62,14 +62,11 @@ Meteor.methods({
   },
   "aws.downloadfile"(fileId) {
     check(fileId, String);
-    console.log("c");
     const file = FileObjects.findOne(fileId);
     
     if(file && file.type === "file") {
-      console.log("a");
       const planet = Planets.findOne(file.planet);
       if(checkReadPermission(this.userId, planet)) {
-        console.log("b");
         const url = s3.getSignedUrl("getObject", {
           Bucket: Meteor.settings.bucket.bucket,
           Key: file.key,
@@ -77,6 +74,22 @@ Meteor.methods({
           ResponseContentDisposition: "attachment; filename=\"" + file.name + "\""
         });
         return url;
+      }
+    }
+  },
+  "aws.deletefile"(documentId) {
+    check(documentId, String);
+    let file = FileObjects.findOne(documentId);
+    if(file) {
+      let planet = Planets.findOne(file.planet);
+      if(checkWritePermission(this.userId, planet)) {
+        if(file.key) {
+          s3.deleteObject({Bucket: Meteor.settings.bucket.bucket, Key: file.key});
+        }
+        if(file.type === "folder") {
+          FileObjects.remove({path: file._id});
+        }
+        FileObjects.remove(file._id);
       }
     }
   }

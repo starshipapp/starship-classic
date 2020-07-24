@@ -25,6 +25,7 @@
 }
 
 .FilesComponent-filebutton .bp3-button-text {
+  position: relative;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -34,6 +35,11 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.FilesComponent-filebutton .bp3-button-text .bp3-popover-wrapper {
+  position: absolute;
+  left: 0
 }
 
 .FilesComponent-file-icon {

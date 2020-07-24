@@ -92,9 +92,22 @@ Meteor.methods({
   "fileobjects.completeupload"(documentId) {
     check(documentId, String);
 
-    let file = FileObjects.find(documentId);
+    let file = FileObjects.findOne(documentId);
     if(file && file.owner === this.owner) {
       FileObjects.update(documentId, {$set: {finishedUploading: true}});
+    }
+  },
+  "fileobjects.renamefile"(documentId, newName) {
+    check(documentId, String);
+    check(newName, String);
+
+    let file = FileObjects.findOne(documentId);
+    if(file) {
+      let planet = Planets.findOne(file.planet);
+      if(checkWritePermission(this.userId, planet)) {
+        let name = newName.replace(/[/\\?%*:|"<>]/g, "-");
+        FileObjects.update(documentId, {$set: {name}});
+      }
     }
   }
 });
