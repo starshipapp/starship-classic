@@ -1,0 +1,25 @@
+.FileView {
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.FileView-container {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.FileView-icon {
+  margin: auto;
+}
+
+.FileView-name {
+  margin: 0.5rem auto;
+  font-size: 1.25rem;
+}
+
+.FileView-button {
+  margin: auto;
+  width: min-content;
+}

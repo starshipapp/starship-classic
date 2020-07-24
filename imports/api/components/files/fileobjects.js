@@ -17,7 +17,7 @@ if (Meteor.isServer) {
       const planet = Planets.findOne(fileComponent.planet);
 
       if(checkReadPermission(this.userId, planet)) {
-        return FileObjects.find({componentId: componentId, parent: parent, type: "file"});
+        return FileObjects.find({componentId: componentId, parent: parent, type: "file", finishedUploading: true});
       }
     }
   });
@@ -79,6 +79,7 @@ Meteor.methods({
               parent: path[path.length - 1],
               name: name,
               planet: planet._id,
+              owner: this.userId,
               componentId: componentId,
               type: "folder",
               fileType: "starship/folder"
@@ -86,6 +87,14 @@ Meteor.methods({
           }
         }
       }
+    }
+  },
+  "fileobjects.completeupload"(documentId) {
+    check(documentId, String);
+
+    let file = FileObjects.find(documentId);
+    if(file && file.owner === this.owner) {
+      FileObjects.update(documentId, {$set: {finishedUploading: true}});
     }
   }
 });

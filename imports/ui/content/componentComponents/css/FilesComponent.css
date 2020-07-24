@@ -1,3 +1,9 @@
+.FilesComponent {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
 .FilesComponent-top {
   display: flex;
 }
@@ -11,6 +17,23 @@
   display: grid;
   grid-template-columns: repeat(auto-fill,minmax(12.5rem,1fr));
   gap: 1rem;
+}
+
+.FilesComponent-filebutton {
+  max-height: 2.5rem;
+  overflow: hidden;
+}
+
+.FilesComponent-filebutton .bp3-button-text {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.FilesComponent-filebutton .bp3-button-text div {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .FilesComponent-file-icon {

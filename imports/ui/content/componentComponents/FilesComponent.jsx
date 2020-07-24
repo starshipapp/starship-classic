@@ -5,9 +5,10 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/FilesComponent";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import { checkWritePermission } from "../../../util/checkPermissions";
-import { Button, Divider, ButtonGroup, Classes, Popover, vertical } from "@blueprintjs/core";
+import { Button, Divider, ButtonGroup, Classes, Popover, vertical, Text } from "@blueprintjs/core";
 import FileBreadcrumbs from "./files/FileBreadcrumbs";
 import axios from "axios";
+import FileView from "./files/FileView";
 
 class FilesComponent extends React.Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class FilesComponent extends React.Component {
     this.createFolder = this.createFolder.bind(this);
     this.updateTextbox = this.updateTextbox.bind(this);
     this.onFileUploadClick = this.onFileUploadClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
 
     this.fileInput = React.createRef();
   }
@@ -51,7 +53,23 @@ class FilesComponent extends React.Component {
   }
 
   handleChange(e) {
-
+    let file = e.target.files[0];
+    let folderId = this.props.subId ? this.props.subId : "root";
+    Meteor.call("aws.uploadfile", folderId, this.props.id, file.type, file.name, (error, value) => {
+      if(error) {
+        console.log(error);
+      }
+      if(value) {
+        const options = { headers: { "Content-Type": file.type } };
+        axios.put(value.url, file, options).then(function (response) {
+          // handle success
+          Meteor.call("fileobjects.completeupload", value.documentId);
+        }).catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+      }
+    });
   }
 
   onFileUploadClick() {
@@ -70,7 +88,7 @@ class FilesComponent extends React.Component {
             onChange={this.handleChange}
           />
           <FileBreadcrumbs navigateTo={(value) => this.gotoSubComponent(value)} path={this.props.currentObject[0] ? this.props.currentObject[0].path.concat([this.props.currentObject[0]._id]) : ["root"]} planetId={this.props.planet._id}/>
-          {checkWritePermission(Meteor.userId(), this.props.planet) && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
+          {checkWritePermission(Meteor.userId(), this.props.planet) && (!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
             <Button text="Upload Files" icon="upload" onClick={this.onFileUploadClick}/>
             <Popover>
               <Button text="New Folder" icon="folder-new"/>
@@ -83,9 +101,11 @@ class FilesComponent extends React.Component {
             <Button text="Download Folder" icon="download"/>
           </ButtonGroup>}
         </div>
-        <div className="FilesComponent-button-container">
+        {(!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <div className="FilesComponent-button-container">
           {this.props.folders.map((value) => (<Button alignText="left" key={value._id} large={true} className={"FilesComponent-filebutton"} icon="folder-close" text={value.name} onClick={(() => this.gotoSubComponent(value._id))}/>))}
-        </div>
+          {this.props.files.map((value) => (<Button alignText="left" key={value._id} large={true} className={"FilesComponent-filebutton"} icon="document"  onClick={(() => this.gotoSubComponent(value._id))}><Text>{value.name}</Text></Button>))}
+        </div>}
+        {this.props.currentObject[0] && this.props.currentObject[0].type === "file" && <FileView file={this.props.currentObject[0]}/>}
       </div>
     );
   }
@@ -96,6 +116,7 @@ export default withTracker((props) => {
 
   Meteor.subscribe("files.filecomponent", props.id);
   Meteor.subscribe("fileobjects.folders", props.id, path);
+  Meteor.subscribe("fileobjects.files", props.id, path);
   if(props.subId) {
     Meteor.subscribe("fileobjects.object", props.subId);
   }
@@ -103,6 +124,7 @@ export default withTracker((props) => {
   return {
     fileComponent: Files.find({_id: props.id}).fetch(),
     folders: FileObjects.find({componentId: props.id, parent: path, type: "folder"}).fetch(),
+    files: FileObjects.find({componentId: props.id, parent: path, type: "file", finishedUploading: true}).fetch(),
     currentObject: FileObjects.find({_id: path}).fetch(),
     currentUser: Meteor.user()
   };

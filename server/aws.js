@@ -1,8 +1,9 @@
 import {Meteor} from "meteor/meteor";
+import {WebApp} from "meteor/webapp";
 import {check} from "meteor/check";
 
-import {FileObjects, Files, Planets} from "./collectionsStandalone";
-import { checkWritePermission } from "../imports/util/checkPermissions";
+import {FileObjects, Files, Planets} from "../imports/api/collectionsStandalone";
+import { checkWritePermission, checkReadPermission } from "../imports/util/checkPermissions";
 import AWS from "aws-sdk";
 
 const spacesEndpoint = new AWS.Endpoint(Meteor.settings.bucket.endpoint);
@@ -16,27 +17,67 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 Meteor.methods({
-  "aws.generatesigned"(folderId, type, name) {
+  "aws.uploadfile"(folderId, filesId, type, name) {
     check(folderId, String);
     check(type, String);
     check(name, String);
+    check(filesId, String);
 
     const folder = FileObjects.findOne(folderId);
-    if(folder && folder.type === "folder") {
-      const fileComponent = Files.findOne(folder.componentId);
+    if(folder && folder.type === "folder" || folderId === "root") {
+      let filesComponentId = filesId;
+      if(folderId !== "root") {
+        filesComponentId = folder.componentId;
+      }
+      const fileComponent = Files.findOne(filesComponentId);
       if(fileComponent) {
         const planet = Planets.findOne(fileComponent.planet);
         if(checkWritePermission(this.userId, planet)) {
-          // upload the file
+          // generate file and signed url
+          let filename = name.replace(/[/\\?%*:|"<>]/g, "-");
+          let path = [...folder.path];
+          path.push(folder._id);
+          let documentId = FileObjects.insert({
+            path: path,
+            parent: path[path.length - 1],
+            name: filename,
+            planet: planet._id,
+            componentId: filesComponentId,
+            owner: this.userId,
+            type: "file",
+            fileType: type,
+            finishedUploading: false
+          });
           const url = s3.getSignedUrl("putObject", {
             Bucket: Meteor.settings.bucket.bucket,
-            Key: fileComponent + "/" + folder + "/" + name,
-            Expires: 60,
+            Key: fileComponent._id + "/" + folderId + "/" + documentId + "/" + filename,
+            Expires: 120,
             ContentType: type,
           });
-          return url;
+          FileObjects.update(documentId, {$set: {key: fileComponent._id + "/" + folderId + "/" + documentId + "/" + name}});
+          return {url, documentId};
         }
       }
     }
+  },
+  "aws.downloadfile"(fileId) {
+    check(fileId, String);
+    console.log("c");
+    const file = FileObjects.findOne(fileId);
+    
+    if(file && file.type === "file") {
+      console.log("a");
+      const planet = Planets.findOne(file.planet);
+      if(checkReadPermission(this.userId, planet)) {
+        console.log("b");
+        const url = s3.getSignedUrl("getObject", {
+          Bucket: Meteor.settings.bucket.bucket,
+          Key: file.key,
+          Expires: 120,
+          ResponseContentDisposition: "attachment; filename=\"" + file.name + "\""
+        });
+        return url;
+      }
+    }
   }
-})
+});

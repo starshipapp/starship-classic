@@ -9,4 +9,5 @@ import '../imports/api/components/files/fileobjects';
 
 Meteor.startup(() => {
   import '../imports/api/users';
+  import './aws';
 });

@@ -3,7 +3,7 @@ import FileObjects from "../../../../api/components/files/fileobjects";
 import {withTracker} from "meteor/react-meteor-data";
 import { Breadcrumbs, Breadcrumb } from "@blueprintjs/core";
 
-class FilesComponent extends React.Component {
+class FileBreadcrumbs extends React.Component {
   render() {
     let items = [
       {text: "Root", icon: "home", onClick: () => this.props.navigateTo("root")}
@@ -11,7 +11,7 @@ class FilesComponent extends React.Component {
 
     let array = this.props.folders.slice();
     array.sort((a, b) => this.props.path.indexOf(a._id) - this.props.path.indexOf(b._id));
-    array.map((value) => {items.push({text: value.name, icon: "folder-close", onClick: () => this.props.navigateTo(value._id)});});
+    array.map((value) => {items.push({text: value.name, icon: (value.type === "folder" ? "folder-close" : "document"), onClick: () => this.props.navigateTo(value._id)});});
 
     return (
       <Breadcrumbs
@@ -33,4 +33,4 @@ export default withTracker((props) => {
     folders: FileObjects.find({_id: {$in: props.path.slice(1)}}).fetch(),
     currentUser: Meteor.user()
   };
-})(FilesComponent);
+})(FileBreadcrumbs);
