@@ -1,10 +1,17 @@
 import {Meteor} from "meteor/meteor";
 import {WebApp} from "meteor/webapp";
 import {check} from "meteor/check";
+import fs from 'fs';
+import {join} from 'path';
+import s3Zip from 's3-zip';
+import XmlStream from 'xml-stream';
+import { uuid } from 'uuidv4';
 
 import {FileObjects, Files, Planets} from "../imports/api/collectionsStandalone";
 import { checkWritePermission, checkReadPermission } from "../imports/util/checkPermissions";
-import AWS, { S3 } from "aws-sdk";
+import AWS from "aws-sdk";
+
+let authenticatedRequests = {};
 
 const spacesEndpoint = new AWS.Endpoint(Meteor.settings.bucket.endpoint);
 AWS.config.update({
@@ -92,5 +99,40 @@ Meteor.methods({
         FileObjects.remove(file._id);
       }
     }
+  },
+  "aws.generatezipkey"(documentId) {
+    check(documentId, String);
+    let file = FileObjects.findOne(documentId);
+    if(file && file.type === "folder") {
+      let planet = Planets.findOne(file.planet);
+      if(checkWritePermission(this.userId, planet)) {
+        let currentUuid = uuid();
+        authenticatedRequests[currentUuid] = {id: documentId, name: file.name.replace(/[/\\?%*:|"<>]/g, "-") + ".zip"};
+        return currentUuid;
+      }
+    }
+  }
+});
+
+WebApp.connectHandlers.use("/aws/downloadzip/", (req, res) => {
+  let uuid = req.url.split("/")[1];
+  if(authenticatedRequests[uuid]) {
+    let files = FileObjects.find({parent: authenticatedRequests[uuid].id, type: "file"}).fetch();
+    let name = authenticatedRequests[uuid].name;
+    delete authenticatedRequests[uuid];
+    let fileKeys = [];
+    files.map((value) => {fileKeys.push(value.key);});
+    if(fileKeys.length > 0) {
+      res.setHeader("Content-Disposition", "filename=\"" + name + "\"");
+      s3Zip
+        .archive({ s3: s3, bucket: Meteor.settings.bucket.bucket, debug: true}, "", fileKeys)
+        .pipe(res);
+    } else {
+      res.writeHead(400);
+      res.end("Invalid folder (no files)");
+    }
+  } else {
+    res.writeHead(403);
+    res.end("Invalid auth UUID");
   }
 });

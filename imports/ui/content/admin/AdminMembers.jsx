@@ -28,7 +28,7 @@ class AdminMembers extends React.Component {
               <table className="AdminComponents-table">
                 <tbody>
                   {this.props.invites.map((value) => (
-                    <tr>
+                    <tr key={value._id}>
                       <td className="AdminComponents-table-name"><a href={baseurl + value._id}>{baseurl + value._id}</a></td>
                       <td className="AdminComponents-table-action"><Button intent="danger" small={true} icon="trash" onClick={() => {this.deleteComponent(value._id);}}/></td>
                     </tr>

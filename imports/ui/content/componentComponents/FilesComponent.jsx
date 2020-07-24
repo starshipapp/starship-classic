@@ -24,6 +24,7 @@ class FilesComponent extends React.Component {
     this.onFileUploadClick = this.onFileUploadClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.gotoSubComponent = this.gotoSubComponent.bind(this);
+    this.downloadZip = this.downloadZip.bind(this);
 
     this.fileInput = React.createRef();
   }
@@ -80,6 +81,18 @@ class FilesComponent extends React.Component {
     this.fileInput.current.click();
   }
 
+  downloadZip() {
+    Meteor.call("aws.generatezipkey", this.props.subId, (error, value) => {
+      if(error) {
+        console.log(error);
+      }
+      if(value && this.props.files && this.props.files.length !== 0) {
+        console.log(value);
+        window.open(window.location.protocol + "//" + window.location.host + "/aws/downloadzip/" + value,"_self");
+      }
+    });
+  }
+
   render() {
     return (
       <div className="bp3-dark FilesComponent">
@@ -103,7 +116,7 @@ class FilesComponent extends React.Component {
               </div>
             </Popover>
             <Divider/>
-            <Button text="Download Folder" icon="download"/>
+            <Button text="Download Folder" icon="download" onClick={this.downloadZip}/>
           </ButtonGroup>}
         </div>
         {(!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <div className="FilesComponent-button-container">
