@@ -41,6 +41,10 @@ class MainSidebar extends React.Component {
     });
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   signUp(e) {
     e.preventDefault();
     if(!this.state.isSigningUp) {

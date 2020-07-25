@@ -12,6 +12,10 @@ class Invite extends React.Component {
     FlowRouter.go("Planets.home", {_id: this.props.planet});
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   render() {
     return (
       <div className="Invite">

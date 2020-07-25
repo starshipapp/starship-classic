@@ -4,6 +4,10 @@ import {withTracker} from "meteor/react-meteor-data";
 import { Breadcrumbs, Breadcrumb } from "@blueprintjs/core";
 
 class FileBreadcrumbs extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   render() {
     let items = [
       {text: "Root", icon: "home", onClick: () => this.props.navigateTo("root")}
@@ -15,6 +19,7 @@ class FileBreadcrumbs extends React.Component {
 
     return (
       <Breadcrumbs
+        className="FilesComponent-breadcrumbs"
         currentBreadcrumbRenderer={this.breadcrumbRenderer}
         items={items}
       />

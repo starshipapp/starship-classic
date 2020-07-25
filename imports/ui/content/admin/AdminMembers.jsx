@@ -16,6 +16,10 @@ class AdminMembers extends React.Component {
     Meteor.call("invites.insert", this.props.planet._id);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   render() {
     const baseurl = window.location.protocol + "//" + window.location.host + "/invite/";
     return (

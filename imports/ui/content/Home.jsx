@@ -2,6 +2,10 @@ import React from "react";
 import "./css/Home.css";
 
 class Home extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   render() {
     return (
       <div className="Home bp3-dark">

@@ -29,6 +29,10 @@ class WikiPageComponent extends React.Component {
     });
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   save() {
     Meteor.call("wikipages.update", this.props.id, this.state.editingContent);
     this.setState({

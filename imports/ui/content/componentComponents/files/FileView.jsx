@@ -4,6 +4,10 @@ import "./css/FileView";
 import { Icon, Button } from "@blueprintjs/core";
 
 class FileView extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   downloadFile() {
     console.log("a");
     Meteor.call("aws.downloadfile", this.props.file._id, (error, value) => {

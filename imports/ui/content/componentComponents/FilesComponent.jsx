@@ -5,18 +5,20 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/FilesComponent";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import { checkWritePermission } from "../../../util/checkPermissions";
-import { Button, Divider, ButtonGroup, Classes, Popover, vertical} from "@blueprintjs/core";
+import { Button, Divider, ButtonGroup, Classes, Popover, vertical, ProgressBar, Icon, Intent} from "@blueprintjs/core";
 import FileBreadcrumbs from "./files/FileBreadcrumbs";
 import axios from "axios";
 import FileView from "./files/FileView";
 import FileButton from "./files/FileButton";
+import {uuid} from "uuidv4";
 
 class FilesComponent extends React.Component {
   constructor(props) {
     super(props);
     
     this.state = {
-      newFolderTextbox: ""
+      newFolderTextbox: "",
+      uploadUpdateCounter: 0
     };
     
     this.createFolder = this.createFolder.bind(this);
@@ -26,7 +28,13 @@ class FilesComponent extends React.Component {
     this.gotoSubComponent = this.gotoSubComponent.bind(this);
     this.downloadZip = this.downloadZip.bind(this);
 
+    this.uploading = {};
+
     this.fileInput = React.createRef();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
   }
 
   createFolder() {
@@ -59,12 +67,25 @@ class FilesComponent extends React.Component {
     let folderId = this.props.subId ? this.props.subId : "root";
     for(let i = 0; i < e.target.files.length; i++) {
       let file = e.target.files[i];
-      Meteor.call("aws.uploadfile", folderId, this.props.id, file.type, file.name, (error, value) => {
+      Meteor.call("aws.uploadfile", folderId, file.type, file.name, this.props.id, (error, value) => {
         if(error) {
           console.log(error);
         }
         if(value) {
-          const options = { headers: { "Content-Type": file.type } };
+          let currentIndex = uuid();
+          this.uploading[currentIndex] = {
+            name: file.name,
+            progress: 0
+          };
+          const options = { headers: { "Content-Type": file.type }, onUploadProgress: progressEvent => {
+            this.uploading[currentIndex].progress = progressEvent.loaded / progressEvent.total;
+            if(this.uploading[currentIndex].progress === 1) {
+              delete this.uploading[currentIndex];
+            }
+            this.setState({
+              uploadUpdateCounter: this.state.uploadUpdateCounter + 1
+            });
+          }};
           axios.put(value.url, file, options).then(function () {
             // handle success
             Meteor.call("fileobjects.completeupload", value.documentId);
@@ -75,6 +96,9 @@ class FilesComponent extends React.Component {
         }
       });
     }
+    this.setState({
+      uploadUpdateCounter: this.state.uploadUpdateCounter + 1
+    });
   }
 
   onFileUploadClick() {
@@ -105,7 +129,23 @@ class FilesComponent extends React.Component {
             onChange={this.handleChange}
             multiple
           />
-          <FileBreadcrumbs navigateTo={(value) => this.gotoSubComponent(value)} path={this.props.currentObject[0] ? this.props.currentObject[0].path.concat([this.props.currentObject[0]._id]) : ["root"]} planetId={this.props.planet._id}/>
+          <FileBreadcrumbs className="FilesComponent-breadcrumbs" navigateTo={(value) => this.gotoSubComponent(value)} path={this.props.currentObject[0] ? this.props.currentObject[0].path.concat([this.props.currentObject[0]._id]) : ["root"]} planetId={this.props.planet._id}/>
+          <div className="FilesComponent-uploading">
+            {Object.values(this.uploading).length !== 0 && <div className="FilesComponent-uploading-container">
+              <Icon className="FilesComponent-uploading-icon" iconSize={16} icon="upload"/>
+              <ProgressBar className="FilesComponent-uploading-progress" intent={Intent.PRIMARY}/>
+              <Popover>
+                <Icon className="FilesComponent-uploading-icon" iconSize={16} icon="chevron-down"/>
+                <div className="FilesComponent-uploading-info-container">
+                  {Object.values(this.uploading).map((value, index) => (<div key={index} className="FilesComponent-uploading-info">
+                    <div className="FilesComponent-uploading-info-name">{value.name}</div>
+                    <ProgressBar className="FilesComponent-uploading-info" value={value.progress} intent={Intent.PRIMARY}/>
+                  </div>))}
+                </div>
+              </Popover>
+            </div>}
+          </div>
+          <Divider/>
           {checkWritePermission(Meteor.userId(), this.props.planet) && (!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
             <Button text="Upload Files" icon="upload" onClick={this.onFileUploadClick}/>
             <Popover>

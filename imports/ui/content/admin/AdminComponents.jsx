@@ -15,6 +15,10 @@ class AdminComponents extends React.Component {
   deleteComponent(component) {
     Meteor.call("planets.removecomponent", this.props.planet._id, component);
   }
+  
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
 
   render() {
     return (

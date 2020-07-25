@@ -22,6 +22,10 @@ class PageComponent extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   startEditing() {
     this.setState({
       isEditing: true,

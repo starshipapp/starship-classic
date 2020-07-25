@@ -8,10 +8,6 @@
   display: flex;
 }
 
-.FilesComponent-top-actions {
-  margin-left: auto;
-}
-
 .FilesComponent-button-container {
   padding-top: 1rem;
   display: grid;
@@ -49,4 +45,47 @@
 
 .FilesComponent-file-icon svg {
   height: 14px !important;
+}
+
+.FilesComponent-uploading {
+  display: flex;
+  flex-direction: column;
+  margin-right: 0.45rem;
+}
+
+.FilesComponent-uploading-container {
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+  flex-direction: row;
+}
+
+.FilesComponent-uploading-progress {
+  width: 13rem;
+  transform: translateY(0.25rem);
+  margin-left: 0.35rem;
+  margin-right: 0.25rem;
+}
+
+.FilesComponent-uploading-icon {
+  color: #a7b6c2;
+}
+
+.FilesComponent-breadcrumbs {
+  margin-right: auto;
+}
+
+.FilesComponent-uploading-info {
+  max-width: 13.5rem;
+  min-width: 13.5rem;
+}
+
+.FilesComponent-uploading-info-name {
+  padding-bottom: 0.35rem;
+  padding-top: 0.5rem;
+}
+
+.FilesComponent-uploading-info-container {
+  padding: 0.5rem;
+  padding-top: 0;
 }

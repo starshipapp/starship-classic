@@ -23,6 +23,10 @@ class AdminGeneral extends React.Component {
     });
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   save() {
     if(this.state.nameTextboxContents !== this.props.planet.name) {
       Meteor.call("planets.updatename", this.props.planet._id, this.state.nameTextboxContents);

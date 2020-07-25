@@ -18,6 +18,10 @@ class InfoStrip extends React.Component {
     Meteor.call("planets.togglefollow", this.props.planet._id);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   goToAdmin() {
     FlowRouter.go("Planets.admin", {_id: this.props.planet._id});
   }

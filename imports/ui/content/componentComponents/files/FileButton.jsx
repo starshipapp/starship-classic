@@ -24,6 +24,10 @@ class FileButton extends React.Component {
     Meteor.call("aws.deletefile", this.props.object._id);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   rename() {
     this.setState({
       renameText: this.props.object.name,

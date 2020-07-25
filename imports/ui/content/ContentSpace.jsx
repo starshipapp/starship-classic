@@ -29,6 +29,10 @@ class ContentSpace extends React.Component {
     Meteor.call("planets.createhome", this.props.planetId, "page");
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   createComponent(type) {
     if(this.state.textboxText === "") {
       ErrorToaster.show({message: "Please enter a name.", icon:"error", intent:Intent.DANGER});

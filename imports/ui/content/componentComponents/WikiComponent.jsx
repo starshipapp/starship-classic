@@ -21,6 +21,10 @@ class WikiComponent extends React.Component {
     this.updatePageTextbox = this.updatePageTextbox.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+  
   createNewPage(e) {
     if((e.keyCode && e.keyCode === 13) || !e.keyCode) {
       e.preventDefault();

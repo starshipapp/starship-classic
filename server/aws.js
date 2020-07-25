@@ -29,7 +29,7 @@ Meteor.methods({
     check(type, String);
     check(name, String);
     check(filesId, String);
-
+    
     const folder = FileObjects.findOne(folderId);
     if(folder && folder.type === "folder" || folderId === "root") {
       let filesComponentId = filesId;
@@ -117,7 +117,7 @@ Meteor.methods({
 WebApp.connectHandlers.use("/aws/downloadzip/", (req, res) => {
   let uuid = req.url.split("/")[1];
   if(authenticatedRequests[uuid]) {
-    let files = FileObjects.find({parent: authenticatedRequests[uuid].id, type: "file"}).fetch();
+    let files = FileObjects.find({parent: authenticatedRequests[uuid].id, type: "file", finishedUploading: true}).fetch();
     let name = authenticatedRequests[uuid].name;
     delete authenticatedRequests[uuid];
     let fileKeys = [];

@@ -93,7 +93,7 @@ Meteor.methods({
     check(documentId, String);
 
     let file = FileObjects.findOne(documentId);
-    if(file && file.owner === this.owner) {
+    if(file && file.owner === this.userId) {
       FileObjects.update(documentId, {$set: {finishedUploading: true}});
     }
   },
