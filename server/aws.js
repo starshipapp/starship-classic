@@ -42,8 +42,11 @@ Meteor.methods({
         if(checkWritePermission(this.userId, planet)) {
           // generate file and signed url
           let filename = name.replace(/[/\\?%*:|"<>]/g, "-");
-          let path = [...folder.path];
-          path.push(folder._id);
+          let path = ["root"];
+          if(folder) {
+            path = [...folder.path];
+            path.push(folder._id);
+          }
           let documentId = FileObjects.insert({
             path: path,
             parent: path[path.length - 1],
