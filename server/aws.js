@@ -78,7 +78,7 @@ Meteor.methods({
         const url = s3.getSignedUrl("getObject", {
           Bucket: Meteor.settings.bucket.bucket,
           Key: file.key,
-          Expires: 120,
+          Expires: 3600,
           ResponseContentDisposition: "attachment; filename=\"" + file.name + "\""
         });
         return url;
@@ -95,7 +95,7 @@ Meteor.methods({
         const url = s3.getSignedUrl("getObject", {
           Bucket: Meteor.settings.bucket.bucket,
           Key: file.key,
-          Expires: 120
+          Expires: 3600
         });
         return url;
       }

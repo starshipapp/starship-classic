@@ -51,9 +51,9 @@ class FileView extends React.Component {
       <div className="FileView">
         {MimeTypes.previewTypes.includes(this.props.file.fileType) ? <div className="FileView-container">
           {this.props.user[0] && <div className="FileView-upload-info">Uploaded at {fileDate} by {this.props.user[0].username}</div>}
-          {MimeTypes.audioTypes.includes(this.props.file.fileType) && this.state.previewUrl && <audio className="FileView-preview-audio" controls src={this.state.previewUrl} type={this.props.file.fileType}/>}
+          {MimeTypes.audioTypes.includes(this.props.file.fileType) && this.state.previewUrl && <audio preload="auto" className="FileView-preview-audio" controls src={this.state.previewUrl} type={this.props.file.fileType}/>}
           {MimeTypes.imageTypes.includes(this.props.file.fileType) && this.state.previewUrl && <img className="FileView-preview" src={this.state.previewUrl} type={this.props.file.fileType}/>}
-          {MimeTypes.videoTypes.includes(this.props.file.fileType) && this.state.previewUrl && <video className="FileView-preview" controls src={this.state.previewUrl} type={this.props.file.fileType}/>}
+          {MimeTypes.videoTypes.includes(this.props.file.fileType) && this.state.previewUrl && <video preload="auto" className="FileView-preview" controls src={this.state.previewUrl} type={this.props.file.fileType}/>}
         </div> : <div className="FileView-container">
           <Icon className="FileView-icon" icon="document" iconSize={128}/>
           <div className="FileView-name">{this.props.file.name}</div>
