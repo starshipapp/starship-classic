@@ -43,6 +43,11 @@ Meteor.methods({
       throw new Meteor.Error("Your password must be at least 8 characters long");
     }
 
-    Accounts.createUser(user);
+    if (!Meteor.users.find().count()) {
+      console.log("creating admin account");
+      Accounts.createUser({username: user.username, password: user.password, profile: {}, email: user.email, admin: true});
+    } else {
+      Accounts.createUser(user);
+    }
   }
 });

@@ -213,6 +213,8 @@ npm-debug.log
 .meteor/.id
 .env
 
+.deploy
+
 ### Cypress
 tests/cypress/screenshots
 tests/cypress/videos
