@@ -5,12 +5,13 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/FilesComponent";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import { checkWritePermission } from "../../../util/checkPermissions";
-import { Button, Divider, ButtonGroup, Classes, Popover, vertical, ProgressBar, Icon, Intent} from "@blueprintjs/core";
+import { Button, Divider, ButtonGroup, Classes, Popover, vertical, ProgressBar, Icon, Intent, Alert} from "@blueprintjs/core";
 import FileBreadcrumbs from "./files/FileBreadcrumbs";
 import axios from "axios";
 import FileView from "./files/FileView";
 import FileButton from "./files/FileButton";
 import {uuid} from "uuidv4";
+import MimeTypes from "../../../util/validMimes";
 
 class FilesComponent extends React.Component {
   constructor(props) {
@@ -27,6 +28,8 @@ class FilesComponent extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.gotoSubComponent = this.gotoSubComponent.bind(this);
     this.downloadZip = this.downloadZip.bind(this);
+    this.downloadFile = this.downloadFile.bind(this);
+    this.dropHandler = this.dropHandler.bind(this);
 
     this.uploading = {};
 
@@ -67,34 +70,7 @@ class FilesComponent extends React.Component {
     let folderId = this.props.subId ? this.props.subId : "root";
     for(let i = 0; i < e.target.files.length; i++) {
       let file = e.target.files[i];
-      Meteor.call("aws.uploadfile", folderId, file.type, file.name, this.props.id, (error, value) => {
-        if(error) {
-          console.log(error);
-        }
-        if(value) {
-          let currentIndex = uuid();
-          this.uploading[currentIndex] = {
-            name: file.name,
-            progress: 0
-          };
-          const options = { headers: { "Content-Type": file.type }, onUploadProgress: progressEvent => {
-            this.uploading[currentIndex].progress = progressEvent.loaded / progressEvent.total;
-            if(this.uploading[currentIndex].progress === 1) {
-              delete this.uploading[currentIndex];
-            }
-            this.setState({
-              uploadUpdateCounter: this.state.uploadUpdateCounter + 1
-            });
-          }};
-          axios.put(value.url, file, options).then(function () {
-            // handle success
-            Meteor.call("fileobjects.completeupload", value.documentId);
-          }).catch(function (error) {
-            // handle error
-            console.log(error);
-          });
-        }
-      });
+      this.uploadFile(file, folderId);
     }
     this.setState({
       uploadUpdateCounter: this.state.uploadUpdateCounter + 1
@@ -117,9 +93,75 @@ class FilesComponent extends React.Component {
     });
   }
 
+  downloadFile() {
+    Meteor.call("aws.downloadfile", this.props.currentObject[0]._id, (error, value) => {
+      if(error) {
+        console.log(error);
+      }
+      if(value) {
+        window.open(value,"_self");
+      }
+    });
+  }
+
+  dropHandler(e) {
+    e.preventDefault();
+    console.log("File(s) dropped");
+
+    let folderId = this.props.subId ? this.props.subId : "root";
+  
+    if (e.dataTransfer.items) {
+      for (let i = 0; i < e.dataTransfer.items.length; i++) {
+        if (e.dataTransfer.items[i].kind === "file") {
+          let file = e.dataTransfer.items[i].getAsFile();
+          this.uploadFile(file, folderId);
+        }
+      }
+    } else {
+      for (let i = 0; i < e.dataTransfer.files.length; i++) {
+        this.uploadFile(e.dataTransfer.files[i], folderId);
+      }
+    }
+  }
+
+  uploadFile(file, folderId) {
+    Meteor.call("aws.uploadfile", folderId, file.type, file.name, this.props.id, (error, value) => {
+      if(error) {
+        console.log(error);
+      }
+      if(value) {
+        let currentIndex = uuid();
+        this.uploading[currentIndex] = {
+          name: file.name,
+          progress: 0
+        };
+        const options = { headers: { "Content-Type": file.type }, onUploadProgress: progressEvent => {
+          this.uploading[currentIndex].progress = progressEvent.loaded / progressEvent.total;
+          if(this.uploading[currentIndex].progress === 1) {
+            delete this.uploading[currentIndex];
+          }
+          this.setState({
+            uploadUpdateCounter: this.state.uploadUpdateCounter + 1
+          });
+        }};
+        axios.put(value.url, file, options).then(function () {
+          // handle success
+          Meteor.call("fileobjects.completeupload", value.documentId);
+        }).catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+      }
+    });
+  }
+  
+  onDragOver(e) {
+    e.preventDefault();
+  }
+
   render() {
     return (
-      <div className="bp3-dark FilesComponent">
+      <div className="bp3-dark FilesComponent" onDrop={this.dropHandler} onDragOver={this.onDragOver} onDragEnd={this.onDragOver}>
         <div className="FilesComponent-top">
           <input
             type="file"
@@ -146,6 +188,9 @@ class FilesComponent extends React.Component {
             </div>}
           </div>
           <Divider/>
+          {this.props.currentObject[0] && this.props.currentObject[0].type === "file" && MimeTypes.previewTypes.includes(this.props.currentObject[0].fileType) && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
+            <Button text="Download" icon="download" onClick={this.downloadFile}/>
+          </ButtonGroup>}
           {checkWritePermission(Meteor.userId(), this.props.planet) && (!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
             <Button text="Upload Files" icon="upload" onClick={this.onFileUploadClick}/>
             <Popover>
@@ -181,8 +226,8 @@ export default withTracker((props) => {
 
   return {
     fileComponent: Files.find({_id: props.id}).fetch(),
-    folders: FileObjects.find({componentId: props.id, parent: path, type: "folder"}).fetch(),
-    files: FileObjects.find({componentId: props.id, parent: path, type: "file", finishedUploading: true}).fetch(),
+    folders: FileObjects.find({componentId: props.id, parent: path, type: "folder"}, {sort: {name: 1}}).fetch(),
+    files: FileObjects.find({componentId: props.id, parent: path, type: "file", finishedUploading: true}, {sort: {name: 1}}).fetch(),
     currentObject: FileObjects.find({_id: path}).fetch(),
     currentUser: Meteor.user()
   };

@@ -127,5 +127,15 @@ Meteor.methods({
     if(checkWritePermission(this.userId, planet)){
       Planets.update({_id: planetId}, {$set: {private: !planet.private}});
     }
+  },
+  "planets.removemember"(planetId, userId) {
+    check(planetId, String);
+    check(userId, String);
+
+    const planet = Planets.findOne(planetId);
+
+    if(checkWritePermission(this.userId, planet)){
+      Planets.update({_id: planetId}, {$pull: {members: userId}});
+    }
   }
 });

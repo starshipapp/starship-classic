@@ -1,11 +1,8 @@
 import {Meteor} from "meteor/meteor";
 import {WebApp} from "meteor/webapp";
 import {check} from "meteor/check";
-import fs from 'fs';
-import {join} from 'path';
-import s3Zip from 's3-zip';
-import XmlStream from 'xml-stream';
-import { uuid } from 'uuidv4';
+import s3Zip from "s3-zip";
+import { uuid } from "uuidv4";
 
 import {FileObjects, Files, Planets} from "../imports/api/collectionsStandalone";
 import { checkWritePermission, checkReadPermission } from "../imports/util/checkPermissions";
@@ -54,6 +51,7 @@ Meteor.methods({
             planet: planet._id,
             componentId: filesComponentId,
             owner: this.userId,
+            createdAt: new Date(),
             type: "file",
             fileType: type,
             finishedUploading: false
@@ -87,6 +85,22 @@ Meteor.methods({
       }
     }
   },
+  "aws.getpreview"(fileId) {
+    check(fileId, String);
+    const file = FileObjects.findOne(fileId);
+    
+    if(file && file.type === "file") {
+      const planet = Planets.findOne(file.planet);
+      if(checkReadPermission(this.userId, planet)) {
+        const url = s3.getSignedUrl("getObject", {
+          Bucket: Meteor.settings.bucket.bucket,
+          Key: file.key,
+          Expires: 120
+        });
+        return url;
+      }
+    }
+  },
   "aws.deletefile"(documentId) {
     check(documentId, String);
     let file = FileObjects.findOne(documentId);
@@ -94,9 +108,26 @@ Meteor.methods({
       let planet = Planets.findOne(file.planet);
       if(checkWritePermission(this.userId, planet)) {
         if(file.key) {
-          s3.deleteObject({Bucket: Meteor.settings.bucket.bucket, Key: file.key});
-        }
-        if(file.type === "folder") {
+          s3.deleteObject({Bucket: Meteor.settings.bucket.bucket, Key: file.key}, function(err) {
+            if (err) console.log(err, err.stack);  // error
+          });
+        } else if(file.type === "folder") {
+          //delete everything from s3
+          let filesToCheck = FileObjects.find({path: file._id}).fetch();
+          let keys = [[]];
+          filesToCheck.map((value) => {
+            if(value.key) {
+              if(keys[keys.length - 1].length === 1000) {
+                keys.push([]);
+              }
+              keys[keys.length - 1].push({Key: value.key});
+            }
+          });
+          keys.map((value) => {
+            s3.deleteObjects({Bucket: Meteor.settings.bucket.bucket, Delete: {Objects: value}}, function(err) {
+              if (err) console.log(err, err.stack);  // error
+            });
+          });
           FileObjects.remove({path: file._id});
         }
         FileObjects.remove(file._id);

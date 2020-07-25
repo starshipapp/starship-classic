@@ -210,7 +210,7 @@ class MainSidebar extends React.Component {
           <Menu.Divider/>
           {Meteor.userId() ? <div>
             {Meteor.user() && <MenuItem disabled={true} text={Meteor.user().username}/>}
-            <Menu.Item text="Settings" icon="cog">
+            <Menu.Item text="Settings" icon="cog" disabled={true}>
               <Menu.Item icon="tick" text="Save on edit" />
               <Menu.Item icon="blank" text="Compile on edit" />
             </Menu.Item>

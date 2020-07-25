@@ -80,6 +80,7 @@ Meteor.methods({
               name: name,
               planet: planet._id,
               owner: this.userId,
+              createdAt: new Date(),
               componentId: componentId,
               type: "folder",
               fileType: "starship/folder"
@@ -107,6 +108,23 @@ Meteor.methods({
       if(checkWritePermission(this.userId, planet)) {
         let name = newName.replace(/[/\\?%*:|"<>]/g, "-");
         FileObjects.update(documentId, {$set: {name}});
+      }
+    }
+  },
+  "fileobjects.moveobject"(objectId, newParentId) {
+    check(objectId, String);
+    check(newParentId, String);
+
+    let object = FileObjects.findOne(objectId);
+    let newParent = FileObjects.findOne(newParentId);
+    if(object && (newParent || newParentId === "root")) {
+      let planet = Planets.findOne(object.planet);
+      if(checkWritePermission(this.userId, planet)) {
+        if(object.type === "file") {
+          let newPath = newParent ? newParent.path.concat([newParent._id]) : ["root"];
+          let newObjectParent = newParent ? newParent._id : "root";
+          FileObjects.update(objectId, {$set: {path: newPath, parent: newObjectParent}});
+        }
       }
     }
   }

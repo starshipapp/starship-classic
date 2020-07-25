@@ -23,3 +23,19 @@
   margin: auto;
   width: min-content;
 }
+
+
+.FileView-preview-audio {
+  display: block;
+  width: 400px;
+}
+
+.FileView-preview {
+  max-width: 75vw;
+  max-height: 50vh;
+}
+
+.FileView-upload-info {
+  margin: 0.5rem auto;
+  margin-top: 0;
+}

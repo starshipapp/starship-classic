@@ -17,6 +17,7 @@
 
 .FilesComponent-filebutton {
   max-height: 2.5rem;
+  width: 100%;
   overflow: hidden;
 }
 
@@ -88,4 +89,8 @@
 .FilesComponent-uploading-info-container {
   padding: 0.5rem;
   padding-top: 0;
+}
+
+.FilesComponent-button-container .bp3-popover-wrapper .bp3-popover-target {
+  width: 100%;
 }

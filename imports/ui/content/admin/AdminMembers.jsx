@@ -4,16 +4,22 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/AdminMembers.css";
 import Invites from "../../../api/invites";
 import {checkWritePermission} from "../../../util/checkPermissions";
+import MemberTableItem from "./MemberTableItem";
 
 class AdminMembers extends React.Component {
   constructor(props) {
     super(props);
 
     this.createInvite = this.createInvite.bind(this);
+    this.kickUser = this.kickUser.bind(this);
   }
 
   createInvite() {
     Meteor.call("invites.insert", this.props.planet._id);
+  }
+
+  kickUser(userId) {
+    Meteor.call("planets.removemember", this.props.planet._id, userId);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -40,9 +46,11 @@ class AdminMembers extends React.Component {
                 </tbody>
               </table>}
             </div>
-            {this.props.planet.members && this.props.planet.members.length > 0 ? <div>
-
-            </div> : <NonIdealState
+            {this.props.planet.members && this.props.planet.members.length > 0 ? <table className="AdminComponents-table">
+              <tbody>
+                {this.props.planet.members.map((value) => (<MemberTableItem key={value} userId={value} kickMember={(userId) => this.kickUser(userId)}/>))}
+              </tbody>
+            </table> : <NonIdealState
               icon="people"
               title="No members!"
               description="Members can edit and add content to the planet. Members can also always access the planet, even when it's in private mode."

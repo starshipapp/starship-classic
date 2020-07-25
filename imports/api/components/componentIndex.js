@@ -2,7 +2,6 @@ import {Pages, Planets, Wikis, Files, WikiPages, FileObjects} from "../collectio
 import {check} from "meteor/check";
 import { checkWritePermission } from "../../util/checkPermissions";
 
-
 export const Index = {
   page: Pages,
   wiki: Wikis,
