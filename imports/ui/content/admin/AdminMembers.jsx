@@ -27,9 +27,9 @@ class AdminMembers extends React.Component {
         {checkWritePermission(Meteor.userId(), this.props.planet) ? <div>
           <h2>Members</h2>
           <div className="AdminMembers-container">
-            {this.props.invites && this.props.invites.length > 0 && <div>
+            <div>
               <h3>Invites <Icon className="AdminMembers-add-icon" icon="plus" onClick={this.createInvite}/></h3>
-              <table className="AdminComponents-table">
+              {this.props.invites && this.props.invites.length > 0 && <table className="AdminComponents-table">
                 <tbody>
                   {this.props.invites.map((value) => (
                     <tr key={value._id}>
@@ -38,8 +38,8 @@ class AdminMembers extends React.Component {
                     </tr>
                   ))}
                 </tbody>
-              </table>
-            </div>}
+              </table>}
+            </div>
             {this.props.planet.members && this.props.planet.members.length > 0 ? <div>
 
             </div> : <NonIdealState

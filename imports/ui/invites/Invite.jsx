@@ -9,7 +9,7 @@ import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 class Invite extends React.Component {
   join() {
     Meteor.call("invites.use", this.props.inviteId);
-    FlowRouter.go("Planets.home", {_id: this.props.planet});
+    FlowRouter.go("Planets.home", {_id: this.props.invite[0].planet});
   }
 
   shouldComponentUpdate(nextProps, nextState) {
