@@ -121,7 +121,7 @@ class FileButton extends React.Component {
             <Popover isOpen={this.state.rename} position={PopoverPosition.AUTO_START}>
               <div className="FilesComponent-dummytarget"></div>
               <div className="MainSidebar-menu-form" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} onKeyPress={(e) => e.stopPropagation()} onKeyUp={(e) => e.stopPropagation()}>
-                <input className={Classes.INPUT + " MainSidebar-menu-input"} value={this.state.newFolderTextbox} onChange={this.updateRenameText}/>
+                <input className={Classes.INPUT + " MainSidebar-menu-input"} value={this.state.renameText} onChange={this.updateRenameText}/>
                 <Button text="Rename" className="MainSidebar-menu-button" onClick={this.finishRename}/>
               </div>
             </Popover>

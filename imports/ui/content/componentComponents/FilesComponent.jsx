@@ -47,6 +47,9 @@ class FilesComponent extends React.Component {
         //error
       }
       if(value) {
+        this.setState({
+          newFolderTextbox: ""
+        });
         this.gotoSubComponent(value);
       }
     });
