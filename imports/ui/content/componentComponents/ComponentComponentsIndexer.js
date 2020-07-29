@@ -2,11 +2,13 @@ import PageComponent from "./PageComponent";
 import React from "react";
 import WikiComponent from "./WikiComponent";
 import FilesComponent from "./FilesComponent";
+import ForumComponent from "./ForumComponent";
 
 export const ComponentComponents = {
   page: PageComponent,
   wiki: WikiComponent,
-  files: FilesComponent
+  files: FilesComponent,
+  forum: ForumComponent
 };
 
 export const ComponentDataTypes = {
@@ -24,6 +26,11 @@ export const ComponentDataTypes = {
     name: "files",
     icon: "folder-open",
     friendlyName: "Files"
+  },
+  forum: {
+    name: "forum",
+    icon: "comment",
+    friendlyName: "Forum"
   }
 };
 

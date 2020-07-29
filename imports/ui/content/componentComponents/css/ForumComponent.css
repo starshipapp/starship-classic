@@ -1,0 +1,79 @@
+.ForumComponent-header {
+  font-size: 2rem;
+}
+
+.ForumComponent-flex {
+  display: flex;
+}
+
+.ForumItem {
+  padding: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.ForumComponent-buttons {
+  margin-left: -0.5rem;
+}
+
+.ForumComponent-container {
+  margin: auto;
+  width: 100%;
+}
+
+.ForumItem-info {
+  display: flex;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.ForumItem-name {
+  font-size: 1.25rem;
+  font-weight: bold;
+  display: flex;
+}
+
+.ForumItem-name-flex {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ForumItem-tags {
+  margin-left: 0.25rem;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.ForumItem-tag {
+  position: relative;
+  top: -2px;
+  margin-right: 0.25rem;
+}
+
+.ForumItem-secondary {
+  width: 10rem !important;
+  padding-top: 0.75rem !important;
+}
+
+.ForumItem-rightside {
+  font-size: 1rem;
+  font-weight: normal;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.ForumItem-right-container {
+  margin-bottom: auto;
+  margin-top: auto;
+  display: flex;
+}
+
+.ForumItem-right-container .bp3-icon {
+  height: 16px;
+  margin-top: 2px !important;
+}
+
+.ForumItem-replies {
+  margin-left: 0.25rem;
+}
