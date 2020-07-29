@@ -15,7 +15,7 @@ if (Meteor.isServer) {
       const planet = Planets.findOne(forum.planet);
 
       if(checkReadPermission(this.userId, planet)) {
-        return Forums.find({_id: wikiId});
+        return Forums.find({_id: forumId});
       }
     }
   });

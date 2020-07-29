@@ -6,6 +6,8 @@ import '../imports/api/components/wiki/wikipage';
 import '../imports/api/invites';
 import '../imports/api/components/files/files';
 import '../imports/api/components/files/fileobjects';
+import '../imports/api/components/forum/forum';
+import '../imports/api/components/forum/forumpost';
 
 Meteor.startup(() => {
   import '../imports/api/users';

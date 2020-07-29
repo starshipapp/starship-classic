@@ -1,0 +1,19 @@
+.fa {
+  color: #a7b6c2;
+}
+
+.bp3-dark .ForumEditor .CodeMirror {
+  color: #ffffff;
+  caret-color: #ffffff;
+  background-color: #293742;
+}
+
+.ForumEditor-name {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.ForumEditor-button {
+  margin-right: 0.5rem;
+  margin-top: -1.5rem;
+}
