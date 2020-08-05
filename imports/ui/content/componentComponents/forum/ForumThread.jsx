@@ -1,14 +1,17 @@
 import React from "react";
 import {withTracker} from "meteor/react-meteor-data";
-import {Icon, Divider} from "@blueprintjs/core";
 import "./css/ForumThread";
 import { ForumPosts } from "../../../../api/collectionsStandalone";
+import ForumThreadItem from "./ForumThreadItem";
 
 class ForumItem extends React.Component {
   render() {    
     return (
       <div className="ForumThread">
         <h1>{this.props.post && this.props.post.name}</h1>
+        <div className="ForumThread-container">
+          {this.props.post && <ForumThreadItem post={this.props.post}/>}
+        </div>
       </div>
     );
   }

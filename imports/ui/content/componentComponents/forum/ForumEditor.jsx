@@ -56,7 +56,7 @@ class ForumEditor extends React.Component {
   }
 }
 
-export default withTracker((props) => {
+export default withTracker(() => {
   return {
     currentUser: Meteor.user()
   };

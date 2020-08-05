@@ -2,7 +2,6 @@ import React from "react";
 import {withTracker} from "meteor/react-meteor-data";
 import { Classes ,ButtonGroup, Button, Divider} from "@blueprintjs/core";
 import "./css/ForumComponent";
-import ForumItem from "./forum/ForumItem";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import ForumEditor from "./forum/ForumEditor";
 import ForumThread from "./forum/ForumThread";
@@ -70,7 +69,7 @@ class ForumComponent extends React.Component {
   }
 }
 
-export default withTracker((props) => {
+export default withTracker(() => {
   return {
     currentUser: Meteor.user()
   };

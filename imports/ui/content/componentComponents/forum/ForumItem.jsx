@@ -1,7 +1,7 @@
 import React from "react";
 import {withTracker} from "meteor/react-meteor-data";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
-import { Tag, Icon, Divider} from "@blueprintjs/core";
+import { Icon, Divider} from "@blueprintjs/core";
 import "./css/ForumItem";
 
 class ForumItem extends React.Component {
