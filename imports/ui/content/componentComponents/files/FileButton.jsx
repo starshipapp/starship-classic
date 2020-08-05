@@ -82,7 +82,6 @@ class FileButton extends React.Component {
   onDrop(e) {
     e.preventDefault();
     e.stopPropagation();
-    console.log(e.dataTransfer);
     if(e.dataTransfer.items[0].kind === "string") {
       e.dataTransfer.items[0].getAsString((stringValue) => {
         if(stringValue !== this.props.object._id) {

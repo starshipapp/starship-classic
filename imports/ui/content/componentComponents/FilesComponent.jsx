@@ -90,7 +90,6 @@ class FilesComponent extends React.Component {
         console.log(error);
       }
       if(value && this.props.files && this.props.files.length !== 0) {
-        console.log(value);
         window.open(window.location.protocol + "//" + window.location.host + "/aws/downloadzip/" + value,"_self");
       }
     });
@@ -109,8 +108,7 @@ class FilesComponent extends React.Component {
 
   dropHandler(e) {
     e.preventDefault();
-    console.log("File(s) dropped");
-
+    
     let folderId = this.props.subId ? this.props.subId : "root";
   
     if (e.dataTransfer.items) {

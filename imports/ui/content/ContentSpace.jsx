@@ -40,7 +40,6 @@ class ContentSpace extends React.Component {
     }
 
     Meteor.call("planets.addcomponent", this.state.textboxText, this.props.planetId, type, (error, value) => {
-      console.log(value);
       if(error) {
         //handle the error
       }

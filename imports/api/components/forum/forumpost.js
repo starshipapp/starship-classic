@@ -22,13 +22,10 @@ if (Meteor.isServer) {
   Meteor.publish("forumposts.posts", function findposts(forumId) {
     check(forumId, String);
 
-    console.log("a");
     const forum = Forums.findOne(forumId);
     if(forum) {
-      console.log("b");
       const planet = Planets.findOne(forum.planet);
       if (checkReadPermission(this.userId, planet)) {
-        console.log("c");
         return ForumPosts.find({componentId: forumId, planet: planet._id});
       }
     }
