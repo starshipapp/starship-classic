@@ -40,7 +40,7 @@ class ForumComponent extends React.Component {
     return (
       <div className="bp3-dark ForumComponent">
         <div className="ForumComponent-flex">
-          <table className={Classes.HTML_TABLE + " ForumComponent-container " + (!this.props.subId && Classes.INTERACTIVE)}>
+          <table className={Classes.HTML_TABLE + " ForumComponent-container " + ((!this.props.subId && !this.state.creatingNewThread) && Classes.INTERACTIVE)}>
             <thead>
               <tr>
                 <th className="ForumComponent-header">
