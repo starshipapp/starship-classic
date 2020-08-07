@@ -1,2 +1,15 @@
-.ForumThread-container {
+.ForumThread-name {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.ForumThread-reply {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.bp3-dark .ForumThread-reply-editor .CodeMirror {
+  color: #ffffff;
+  caret-color: #ffffff;
+  background-color: #293742;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar, Button, Alignment, NonIdealState, Popover, Menu, MenuItem, Intent } from "@blueprintjs/core";
+import { Navbar, Button, Alignment, NonIdealState, Popover, Menu, MenuItem, Intent, Text } from "@blueprintjs/core";
 import "./css/ContentSpace.css";
 import {withTracker} from "meteor/react-meteor-data";
 import Planets from "../../api/planets";
@@ -106,7 +106,7 @@ class ContentSpace extends React.Component {
     return (
       <div className="ContentSpace bp3-dark">
         <div className={"ContentSpace-header" + (this.props.planet[0] ? "" : " bp3-skeleton")}>
-          {this.props.planet[0] && this.props.planet[0].name}
+          <div className="ContentSpace-header-name">{this.props.planet[0] && this.props.planet[0].name}</div>
           {this.props.planet[0] && this.props.planet[0].createdAt ? <InfoStrip planet={this.props.planet[0]}/> : <div className="ContentSpace-infostrip-placeholder bp3-skeleton"/>}
         </div>
         <Navbar className="ContentSpace-navbar">

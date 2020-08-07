@@ -8,6 +8,7 @@ import '../imports/api/components/files/files';
 import '../imports/api/components/files/fileobjects';
 import '../imports/api/components/forum/forum';
 import '../imports/api/components/forum/forumpost';
+import '../imports/api/components/forum/forumreply';
 
 Meteor.startup(() => {
   import '../imports/api/users';
