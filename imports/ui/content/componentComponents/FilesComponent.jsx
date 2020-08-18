@@ -5,7 +5,7 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/FilesComponent";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import { checkWritePermission } from "../../../util/checkPermissions";
-import { Button, Divider, ButtonGroup, Classes, Popover, vertical, ProgressBar, Icon, Intent, Alert} from "@blueprintjs/core";
+import { Button, Divider, ButtonGroup, Classes, Popover, vertical, ProgressBar, Icon, Intent} from "@blueprintjs/core";
 import FileBreadcrumbs from "./files/FileBreadcrumbs";
 import axios from "axios";
 import FileView from "./files/FileView";

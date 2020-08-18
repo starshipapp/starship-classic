@@ -1,7 +1,7 @@
 import {Meteor} from "meteor/meteor";
 import {check} from "meteor/check";
 
-import {Forums, Planets, ForumPosts} from "../../collectionsStandalone";
+import {Forums, Planets, ForumPosts, ForumReplies} from "../../collectionsStandalone";
 import {checkReadPermission, checkWritePermission} from "../../../util/checkPermissions";
 
 export default ForumPosts;
@@ -71,6 +71,19 @@ Meteor.methods({
 
       if(checkWritePermission(this.userId, planet) || this.userId === post.owner) {
         ForumPosts.update(id, {$set: {content: newContent}});
+      }
+    }
+  },
+  "forumposts.delete"(id) {
+    check(id, String);
+
+    if(this.userId) {
+      const post = ForumPosts.findOne(id);
+      const planet = Planets.findOne(post.planet);
+
+      if(checkWritePermission(this.userId, planet) || this.userId === post.owner) {
+        ForumPosts.remove(id);
+        ForumReplies.remove({postId: id});
       }
     }
   }

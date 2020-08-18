@@ -1,7 +1,7 @@
 .ForumThreadItem {
   border: 1px #394B59 solid;
   border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   display: flex;
 }
 
@@ -39,16 +39,35 @@
 .ForumThreadItem-postinfo {
   padding-bottom: 0.45rem;
   border-bottom: 1px #394B59 solid;
+  color: #a7b6c2;
   margin-bottom: 0.25rem;
 }
 
-.ForumThreadItem-bottom-item {
-  margin-right: 0.5rem;
-}
-
 .ForumThreadItem-bottom {
-  padding-top: 0.45rem;
+  color: #a7b6c2;
+  padding-top: 0.35rem;
+  margin-bottom: -0.15rem;
   border-top: 1px #394B59 solid;
   margin-top: auto;
   display: flex;
+}
+
+.ForumThreadItem-postinfo-date {
+  display: inline-block;
+  margin-left: 0.25rem;
+}
+
+.ForumThreadItem-postinfo-dateicon svg {
+  position: relative;
+  top: -0.05rem;
+}
+
+.ForumThreadItem-editor {
+  position: relative;
+}
+
+.bp3-dark .ForumThreadItem-editor .CodeMirror {
+  color: #ffffff;
+  caret-color: #ffffff;
+  background-color: #293742;
 }

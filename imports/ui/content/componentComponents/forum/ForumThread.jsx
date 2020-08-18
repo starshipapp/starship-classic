@@ -17,6 +17,7 @@ class ForumItem extends React.Component {
     
     this.handleChange = this.handleChange.bind(this);
     this.postThread = this.postThread.bind(this);
+    this.addQuote = this.addQuote.bind(this);
   }
 
 
@@ -30,20 +31,32 @@ class ForumItem extends React.Component {
     if(this.state.editingContent === "") {
       ErrorToaster.show({message: "Cannot create a thread with no content.", icon:"error", intent:Intent.DANGER});
     }
-    Meteor.call("forumreplies.insert", this.props.postId, this.state.editingContent);
+    let workaround = this.state.editingContent;
     this.setState({
       editingContent: ""
     });
+    Meteor.call("forumreplies.insert", this.props.postId, workaround);
   }
 
 
+  addQuote(post) {
+    let quote = post.content.split("\n");
+    quote = quote.join("\n> ");
+    quote = "> " + quote;
+
+    this.setState({
+      editingContent: this.state.editingContent + quote + "\n \n"
+    });
+  }
+
   render() {
+    console.log(this.state.editingContent);
     return (
       <div className="ForumThread">
         <div className="ForumThread-name">{this.props.post && this.props.post.name}</div>
         <div className="ForumThread-container">
-          {this.props.post && <ForumThreadItem post={this.props.post}/>}
-          {this.props.replies.map((value) => (<ForumThreadItem key={value._id} post={value}/>))}
+          {this.props.post && <ForumThreadItem post={this.props.post} addQuote={this.addQuote}/>}
+          {this.props.replies.map((value) => (<ForumThreadItem key={value._id} post={value} addQuote={this.addQuote}/>))}
         </div>
         <div className="ForumThread-reply-editor">
           <div className="ForumThread-reply">Reply</div>

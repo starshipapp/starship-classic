@@ -43,7 +43,7 @@ Meteor.methods({
         const planet = Planets.findOne(post.planet);
 
         if(checkReadPermission(this.userId, planet)) {
-          ForumPosts.update(postId, {$set: {updatedAt: new Date()}});
+          ForumPosts.update(postId, {$set: {updatedAt: new Date()}, $inc: {replyCount: 1}});
           return ForumReplies.insert({
             postId: postId,
             componentId: post.componentId,
@@ -69,6 +69,18 @@ Meteor.methods({
 
       if(checkWritePermission(this.userId, planet) || this.userId === post.owner) {
         ForumReplies.update(id, {$set: {content: newContent}});
+      }
+    }
+  },
+  "forumreplies.delete"(id) {
+    check(id, String);
+
+    if(this.userId) {
+      const post = ForumReplies.findOne(id);
+      const planet = Planets.findOne(post.planet);
+
+      if(checkWritePermission(this.userId, planet) || this.userId === post.owner) {
+        ForumReplies.remove(id);
       }
     }
   }

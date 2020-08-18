@@ -3,6 +3,7 @@ import React from "react";
 import WikiComponent from "./WikiComponent";
 import FilesComponent from "./FilesComponent";
 import ForumComponent from "./ForumComponent";
+import ForumAdmin from "../admin/settings/ForumAdmin";
 
 export const ComponentComponents = {
   page: PageComponent,
@@ -30,8 +31,14 @@ export const ComponentDataTypes = {
   forum: {
     name: "forum",
     icon: "comment",
-    friendlyName: "Forum"
+    friendlyName: "Forum",
+    settingsComponent: ForumAdmin
   }
+};
+
+export const FindSettingsComponent = (id, type, planet) => {
+  const Component = ComponentDataTypes[type].settingsComponent;
+  return <Component id={id} planet={planet} name={name}/>;
 };
 
 export const FindComponentComponent = (id, type, planet, name, subId) => {
