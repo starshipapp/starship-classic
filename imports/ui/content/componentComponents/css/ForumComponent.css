@@ -1,0 +1,33 @@
+.ForumComponent-header {
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.ForumComponent-flex {
+  display: flex;
+}
+
+.ForumComponent-item-container {
+  width: 100%;
+}
+
+.ForumComponent-buttons {
+  margin-left: -0.5rem;
+}
+
+.ForumComponent-container {
+  margin: auto;
+  width: 100%;
+}
+
+.ForumComponent-loadmore:hover {
+  background-color: #293742 !important;
+  cursor: initial !important;
+}
+
+.ForumComponent-loadmore-text {
+  display: inline-block;
+  margin-top: 0.5rem;
+  margin-left: 0.25rem
+}

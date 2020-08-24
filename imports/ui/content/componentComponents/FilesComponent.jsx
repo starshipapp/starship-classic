@@ -5,7 +5,7 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/FilesComponent";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import { checkWritePermission } from "../../../util/checkPermissions";
-import { Button, Divider, ButtonGroup, Classes, Popover, vertical, ProgressBar, Icon, Intent, Alert} from "@blueprintjs/core";
+import { Button, Divider, ButtonGroup, Classes, Popover, vertical, ProgressBar, Icon, Intent} from "@blueprintjs/core";
 import FileBreadcrumbs from "./files/FileBreadcrumbs";
 import axios from "axios";
 import FileView from "./files/FileView";
@@ -90,7 +90,6 @@ class FilesComponent extends React.Component {
         console.log(error);
       }
       if(value && this.props.files && this.props.files.length !== 0) {
-        console.log(value);
         window.open(window.location.protocol + "//" + window.location.host + "/aws/downloadzip/" + value,"_self");
       }
     });
@@ -109,8 +108,7 @@ class FilesComponent extends React.Component {
 
   dropHandler(e) {
     e.preventDefault();
-    console.log("File(s) dropped");
-
+    
     let folderId = this.props.subId ? this.props.subId : "root";
   
     if (e.dataTransfer.items) {

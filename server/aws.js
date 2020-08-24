@@ -159,6 +159,7 @@ WebApp.connectHandlers.use("/aws/downloadzip/", (req, res) => {
     if(fileKeys.length > 0) {
       res.setHeader("Content-Disposition", "filename=\"" + name + "\"");
       s3Zip
+        .setFormat("tar")
         .archive({ s3: s3, bucket: Meteor.settings.bucket.bucket, debug: true}, "", fileKeys)
         .pipe(res);
     } else {

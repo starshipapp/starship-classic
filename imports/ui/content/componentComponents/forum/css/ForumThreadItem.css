@@ -1,0 +1,73 @@
+.ForumThreadItem {
+  border: 1px #394B59 solid;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+}
+
+.ForumThreadItem-profilepic {
+  width: 8.5rem;
+  margin: 0.75rem;
+  height: 8.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: #30404D;
+}
+
+.ForumThreadItem-info {
+  min-width: 10rem;
+  max-width: 10rem;
+  border-right: 1px #394B59 solid;
+  padding-bottom: 0.75rem;
+}
+
+.ForumThreadItem-content {
+  width: 100%;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.ForumThreadItem-username {
+  margin-left: 0.75rem;
+}
+
+.ForumThreadItem-text {
+  margin-bottom: 0.25rem;
+}
+
+.ForumThreadItem-postinfo {
+  padding-bottom: 0.45rem;
+  border-bottom: 1px #394B59 solid;
+  color: #a7b6c2;
+  margin-bottom: 0.25rem;
+}
+
+.ForumThreadItem-bottom {
+  color: #a7b6c2;
+  padding-top: 0.35rem;
+  margin-bottom: -0.15rem;
+  border-top: 1px #394B59 solid;
+  margin-top: auto;
+  display: flex;
+}
+
+.ForumThreadItem-postinfo-date {
+  display: inline-block;
+  margin-left: 0.25rem;
+}
+
+.ForumThreadItem-postinfo-dateicon svg {
+  position: relative;
+  top: -0.05rem;
+}
+
+.ForumThreadItem-editor {
+  position: relative;
+}
+
+.bp3-dark .ForumThreadItem-editor .CodeMirror {
+  color: #ffffff;
+  caret-color: #ffffff;
+  background-color: #293742;
+}

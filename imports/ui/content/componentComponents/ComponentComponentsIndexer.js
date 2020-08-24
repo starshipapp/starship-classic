@@ -2,11 +2,14 @@ import PageComponent from "./PageComponent";
 import React from "react";
 import WikiComponent from "./WikiComponent";
 import FilesComponent from "./FilesComponent";
+import ForumComponent from "./ForumComponent";
+import ForumAdmin from "../admin/settings/ForumAdmin";
 
 export const ComponentComponents = {
   page: PageComponent,
   wiki: WikiComponent,
-  files: FilesComponent
+  files: FilesComponent,
+  forum: ForumComponent
 };
 
 export const ComponentDataTypes = {
@@ -24,7 +27,18 @@ export const ComponentDataTypes = {
     name: "files",
     icon: "folder-open",
     friendlyName: "Files"
+  },
+  forum: {
+    name: "forum",
+    icon: "comment",
+    friendlyName: "Forum"//,
+    //settingsComponent: ForumAdmin
   }
+};
+
+export const FindSettingsComponent = (id, type, planet) => {
+  const Component = ComponentDataTypes[type].settingsComponent;
+  return <Component id={id} planet={planet} name={name}/>;
 };
 
 export const FindComponentComponent = (id, type, planet, name, subId) => {

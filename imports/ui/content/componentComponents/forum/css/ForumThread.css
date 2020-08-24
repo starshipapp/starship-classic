@@ -1,0 +1,36 @@
+.ForumThread-name {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.ForumThread-reply {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.bp3-dark .ForumThread-reply-editor .CodeMirror {
+  color: #ffffff;
+  caret-color: #ffffff;
+  background-color: #293742;
+}
+
+.pagination {
+  padding-left: 0;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem; 
+}
+
+.pagination-link {
+  color: #ffffff !important;
+  width: 100%;
+  height: 100%;
+  padding: 5px 10px;
+}
+
+.pagination-link:hover {
+  text-decoration: none;
+}
+
+.pagination-button {
+  padding: 0 !important;
+}

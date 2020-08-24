@@ -7,3 +7,6 @@ export const WikiPages = new Mongo.Collection("wikipages");
 export const Invites = new Mongo.Collection("invites");
 export const Files = new Mongo.Collection("files");
 export const FileObjects = new Mongo.Collection("fileobjects");
+export const Forums = new Mongo.Collection("forums");
+export const ForumPosts = new Mongo.Collection("forumposts");
+export const ForumReplies = new Mongo.Collection("forumreplies");

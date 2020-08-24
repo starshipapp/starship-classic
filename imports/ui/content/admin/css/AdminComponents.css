@@ -32,5 +32,11 @@
 }
 
 .AdminComponents-table-action {
-  width: 2rem;
+  width: 5rem;
+  text-align: right; 
+}
+
+.AdminComponents-action-button {
+  display: inline-flex;
+  margin-left: 0.5rem;
 }

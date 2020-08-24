@@ -1,11 +1,12 @@
-import {Pages, Planets, Wikis, Files, WikiPages, FileObjects} from "../collectionsStandalone";
+import {Pages, Planets, Wikis, Files, WikiPages, FileObjects, Forums, ForumPosts, ForumReplies} from "../collectionsStandalone";
 import {check} from "meteor/check";
 import { checkWritePermission } from "../../util/checkPermissions";
 
 export const Index = {
   page: Pages,
   wiki: Wikis,
-  files: Files
+  files: Files,
+  forum: Forums
 };
 
 export const CreationFunctions = {
@@ -57,6 +58,22 @@ export const CreationFunctions = {
         }, callback);
       }
     }
+  },
+  forum: (planetId, userId, callback) => {
+    check(planetId, String);
+
+    const planet = Planets.findOne(planetId);
+
+    if(planet) {
+      if(checkWritePermission(userId, planet)) {
+        return Forums.insert({
+          createdAt: new Date(),
+          owner: userId,
+          planet: planetId,
+          updatedAt: new Date()
+        }, callback);
+      }
+    }
   }
 };
 
@@ -71,6 +88,11 @@ export const DeletionFunctions = {
   },
   page: (componentId) => {
     Pages.remove(componentId);
+  },
+  forum: (componentId) => {
+    Forums.remove(componentId);
+    ForumPosts.remove({componentId});
+    ForumReplies.remove({componentId});
   }
 };
 

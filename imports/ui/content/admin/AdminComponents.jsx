@@ -9,6 +9,10 @@ class AdminComponents extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      showingSettings: ""
+    };
+
     this.deleteComponent = this.deleteComponent.bind(this);
   }
 
@@ -28,10 +32,13 @@ class AdminComponents extends React.Component {
           <div className="AdminComponents-container">
             <table className="AdminComponents-table">
               <tbody>
-                { this.props.planet.components.map((value) => (
+                {this.props.planet.components.map((value) => (
                   <tr key={value.componentId}>
                     <td className="AdminComponents-table-name"><Icon className="AdminComponents-table-name-icon" icon={ComponentDataTypes[value.type].icon}/> {value.name}</td>
-                    <td className="AdminComponents-table-action"><Button intent="danger" small={true} icon="trash" onClick={() => {this.deleteComponent(value.componentId);}}/></td>
+                    <td className="AdminComponents-table-action">
+                      <Button intent="danger" className="AdminComponents-action-button" small={true} icon="trash" onClick={() => {this.deleteComponent(value.componentId);}}/>
+                      {ComponentDataTypes[value.type].settingsComponent && <Button small={true} className="AdminComponents-action-button" icon="settings"/>}
+                    </td>
                   </tr>
                 ))}
               </tbody>
