@@ -51,7 +51,7 @@ Meteor.methods({
 
     const invite = Invites.findOne(inviteId);
 
-    if(invite) {
+    if(invite && this.userId) {
       const planet = Planets.findOne(invite.planet);
 
       if(planet) {

@@ -26,7 +26,8 @@ class Invite extends React.Component {
           <div className="Invite-name">
             {this.props.invite[0] && <InviteName inviteId={this.props.inviteId} planetId={this.props.invite[0].planet}/>}
           </div>
-          <Button className="Invite-button" text="Join" onClick={() => this.join()}/>
+          {Meteor.userId() && <Button className="Invite-button" text="Join" onClick={() => this.join()}/>}
+          {!Meteor.userId() && <p>Sign in to join</p>}
         </div>
         <div className="Invite-debug">
           inviteId: {this.props.inviteId}<br/>

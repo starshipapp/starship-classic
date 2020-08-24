@@ -132,9 +132,6 @@ class ContentSpace extends React.Component {
               </Popover>}
               
             </Navbar.Group>
-            <Navbar.Group align={Alignment.RIGHT}>
-              <input className="bp3-input" type="text" placeholder="Search..." />
-            </Navbar.Group>
           </div>
         </Navbar>
         {!this.props.planet[0] && <div className="bp3-skeleton ContentSpace-contentcontainer" style={{height: "100%"}}/>}
