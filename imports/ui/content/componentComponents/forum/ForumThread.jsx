@@ -4,20 +4,24 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/ForumThread";
 import { ForumPosts, ForumReplies } from "../../../../api/collectionsStandalone";
 import ForumThreadItem from "./ForumThreadItem";
-import { Button, Classes, Intent } from "@blueprintjs/core";
+import { Button, Intent } from "@blueprintjs/core";
 import SimpleMDE from "react-simplemde-editor";
+import ForumThreadItemContainer from "./ForumThreadItemContainer";
+import ReactPaginate from 'react-paginate';
 
-class ForumItem extends React.Component {
+class ForumThread extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      editingContent: ""
+      editingContent: "",
+      forumPage: 1
     };
     
     this.handleChange = this.handleChange.bind(this);
     this.postThread = this.postThread.bind(this);
     this.addQuote = this.addQuote.bind(this);
+    this.changePage = this.changePage.bind(this);
   }
 
 
@@ -49,15 +53,42 @@ class ForumItem extends React.Component {
     });
   }
 
+  changePage(page) {
+    console.log("page changed");
+    console.log(page);
+    this.setState({
+      forumPage: page.selected + 1
+    });
+  }
+
   render() {
     console.log(this.state.editingContent);
     return (
       <div className="ForumThread">
         <div className="ForumThread-name">{this.props.post && this.props.post.name}</div>
         <div className="ForumThread-container">
-          {this.props.post && <ForumThreadItem post={this.props.post} addQuote={this.addQuote}/>}
-          {this.props.replies.map((value) => (<ForumThreadItem key={value._id} post={value} addQuote={this.addQuote}/>))}
+          {this.props.post && this.state.forumPage === 1 && <ForumThreadItem post={this.props.post} addQuote={this.addQuote}/>}
+          <ForumThreadItemContainer page={this.state.forumPage} addQuote={this.addQuote} postId={this.props.postId}/>
         </div>
+        <ReactPaginate
+          previousLabel="<"
+          nextLabel=">"
+          breakLabel="..."
+          breakClassName="bp3-button bp3-disabled pagination-button"
+          pageCount={Math.ceil(this.props.postCount / 20)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={this.changePage}
+          containerClassName="pagination bp3-button-group"
+          activeClassName="active"
+          pageClassName="bp3-button pagination-button"
+          previousClassName="bp3-button pagination-button"
+          nextClassName="bp3-button pagination-button"
+          pageLinkClassName="pagination-link"
+          nextLinkClassName="pagination-link"
+          previousLinkClassName="pagination-link"
+          breakLinkClassName="pagination-link"
+        />
         <div className="ForumThread-reply-editor">
           <div className="ForumThread-reply">Reply</div>
           <SimpleMDE onChange={this.handleChange} value={this.state.editingContent}/>
@@ -74,7 +105,7 @@ export default withTracker((props) => {
 
   return {
     post: ForumPosts.findOne(props.postId),
-    replies: ForumReplies.find({}, {sort: { createdAt: 1 }, limit: 20}).fetch(),
+    postCount: ForumReplies.find({postId: props.postId}).count(),
     currentUser: Meteor.user()
   };
-})(ForumItem);
+})(ForumThread);

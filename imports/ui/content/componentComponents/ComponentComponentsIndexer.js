@@ -31,8 +31,8 @@ export const ComponentDataTypes = {
   forum: {
     name: "forum",
     icon: "comment",
-    friendlyName: "Forum",
-    settingsComponent: ForumAdmin
+    friendlyName: "Forum"//,
+    //settingsComponent: ForumAdmin
   }
 };
 
