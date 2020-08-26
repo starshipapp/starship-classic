@@ -1,7 +1,7 @@
 import {Meteor} from "meteor/meteor";
-import {WebApp} from "meteor/webapp";
+//import {WebApp} from "meteor/webapp";
 import {check} from "meteor/check";
-import s3Zip from "s3-zip";
+//import s3Zip from "s3-zip";
 import { uuid } from "uuidv4";
 
 import {FileObjects, Files, Planets} from "../imports/api/collectionsStandalone";
@@ -148,13 +148,13 @@ Meteor.methods({
   }
 });
 
-WebApp.connectHandlers.use("/aws/downloadzip/", (req, res) => {
+/*WebApp.connectHandlers.use("/aws/downloadzip/", (req, res) => {
   let uuid = req.url.split("/")[1];
   if(authenticatedRequests[uuid]) {
     let files = FileObjects.find({parent: authenticatedRequests[uuid].id, type: "file", finishedUploading: true}).fetch();
     let name = authenticatedRequests[uuid].name;
     delete authenticatedRequests[uuid];
-    let fileKeys = [];
+    let fileKeys = ["starship.nfo"];
     files.map((value) => {fileKeys.push(value.key);});
     if(fileKeys.length > 0) {
       res.setHeader("Content-Disposition", "filename=\"" + name + "\"");
@@ -170,4 +170,4 @@ WebApp.connectHandlers.use("/aws/downloadzip/", (req, res) => {
     res.writeHead(403);
     res.end("Invalid auth UUID");
   }
-});
+});*/

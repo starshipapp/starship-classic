@@ -79,11 +79,13 @@
 .FilesComponent-uploading-info {
   max-width: 13.5rem;
   min-width: 13.5rem;
+  overflow-x: hidden;
 }
 
 .FilesComponent-uploading-info-name {
   padding-bottom: 0.35rem;
   padding-top: 0.5rem;
+  white-space: nowrap;
 }
 
 .FilesComponent-uploading-info-container {

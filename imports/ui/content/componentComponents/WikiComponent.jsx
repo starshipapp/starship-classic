@@ -58,12 +58,12 @@ class WikiComponent extends React.Component {
           <NonIdealState
             icon="error"
             title="No pages!"
-            description={"This page group contains no pages!" + (checkWritePermission(Meteor.userId(), this.props.planet) && "Create a page to get started.")}
+            description={"This page group contains no pages!" + (checkWritePermission(Meteor.userId(), this.props.planet) && " Create a page to get started.")}
             action={checkWritePermission(Meteor.userId(), this.props.planet) && <Popover>
               <Button>Create new page</Button>
               <div className="MainSidebar-menu-form">
-                <input className="MainSidebar-menu-input bp3-input" ref="noPageTextbox" placeholder="Page Name" onKeyDown={this.createNewPage} value={this.state.pageTextbox} onChange={this.updatePageTextbox}/>
-                <Button className="MainSidebar-menu-button" onClick={this.createNewFirstPage}>Create Page</Button>
+                <input className="MainSidebar-menu-input bp3-input" placeholder="Page Name" onKeyDown={this.createNewPage} value={this.state.pageTextbox} onChange={this.updatePageTextbox}/>
+                <Button className="MainSidebar-menu-button" onClick={this.createNewPage}>Create Page</Button>
               </div>
             </Popover>}
           />

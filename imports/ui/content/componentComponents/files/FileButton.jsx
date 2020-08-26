@@ -22,6 +22,7 @@ class FileButton extends React.Component {
     this.finishDelete = this.finishDelete.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
     this.onDrop = this.onDrop.bind(this);
+    this.downloadFile = this.downloadFile.bind(this);
   }
 
   delete() {
@@ -62,12 +63,24 @@ class FileButton extends React.Component {
     });
   }
 
+  downloadFile() {
+    Meteor.call("aws.downloadfile", this.props.object._id, (error, value) => {
+      if(error) {
+        console.log(error);
+      }
+      if(value) {
+        window.open(value,"_self");
+      }
+    });
+  }
+
   handleContext(e) {
     if(checkWritePermission(Meteor.userId(), this.props.planet)) {
       e.preventDefault();
       ContextMenu.show(<Menu>
         <MenuItem text="Delete" icon="delete" onClick={this.delete}/>
         <MenuItem text="Rename" icon="edit" onClick={this.rename}/>
+        <MenuItem text="Download" icon="download" onClick={this.downloadFile}/>
       </Menu>, { left: e.clientX, top: e.clientY }, () => {
         // menu was closed; callback optional
       }, true);

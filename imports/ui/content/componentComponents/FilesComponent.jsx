@@ -5,7 +5,7 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/FilesComponent";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import { checkWritePermission } from "../../../util/checkPermissions";
-import { Button, Divider, ButtonGroup, Classes, Popover, vertical, ProgressBar, Icon, Intent} from "@blueprintjs/core";
+import { Button, Divider, ButtonGroup, Classes, Popover, vertical, ProgressBar, Icon, Intent, Text} from "@blueprintjs/core";
 import FileBreadcrumbs from "./files/FileBreadcrumbs";
 import axios from "axios";
 import FileView from "./files/FileView";
@@ -181,7 +181,7 @@ class FilesComponent extends React.Component {
                 <Icon className="FilesComponent-uploading-icon" iconSize={16} icon="chevron-down"/>
                 <div className="FilesComponent-uploading-info-container">
                   {Object.values(this.uploading).map((value, index) => (<div key={index} className="FilesComponent-uploading-info">
-                    <div className="FilesComponent-uploading-info-name">{value.name}</div>
+                    <Text className="FilesComponent-uploading-info-name">{value.name}</Text>
                     <ProgressBar className="FilesComponent-uploading-info" value={value.progress} intent={Intent.PRIMARY}/>
                   </div>))}
                 </div>
@@ -201,8 +201,8 @@ class FilesComponent extends React.Component {
                 <Button text="Create" className="MainSidebar-menu-button" onClick={this.createFolder}/>
               </div>
             </Popover>
-            <Divider/>
-            <Button text="Download Folder" icon="download" onClick={this.downloadZip}/>
+            {/*<Divider/>
+            <Button text="Download Folder" icon="download" onClick={this.downloadZip}/>*/}
           </ButtonGroup>}
         </div>
         {(!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <div className="FilesComponent-button-container">
