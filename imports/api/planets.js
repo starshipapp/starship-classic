@@ -137,5 +137,16 @@ Meteor.methods({
     if(checkWritePermission(this.userId, planet)){
       Planets.update({_id: planetId}, {$pull: {members: userId}});
     }
+  },
+  "planets.renamecomponent"(planetId, componentId, name) {
+    check(planetId, String);
+    check(componentId, String);
+    check(name, String);
+    
+    const planet = Planets.findOne(planetId);
+
+    if(checkWritePermission(this.userId, planet)) {
+      Planets.update({_id: planetId, "components.componentId": componentId}, {$set: {"components.$.name": name}});
+    }
   }
 });

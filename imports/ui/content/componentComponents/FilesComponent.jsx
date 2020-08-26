@@ -19,7 +19,8 @@ class FilesComponent extends React.Component {
     
     this.state = {
       newFolderTextbox: "",
-      uploadUpdateCounter: 0
+      uploadUpdateCounter: 0,
+      createFolderPrompt: false
     };
     
     this.createFolder = this.createFolder.bind(this);
@@ -30,7 +31,9 @@ class FilesComponent extends React.Component {
     this.downloadZip = this.downloadZip.bind(this);
     this.downloadFile = this.downloadFile.bind(this);
     this.dropHandler = this.dropHandler.bind(this);
-
+    this.onDrop = this.onDrop.bind(this);
+    this.toggleCreateFolderPrompt = this.toggleCreateFolderPrompt.bind(this);
+    
     this.uploading = {};
 
     this.fileInput = React.createRef();
@@ -51,6 +54,7 @@ class FilesComponent extends React.Component {
           newFolderTextbox: ""
         });
         this.gotoSubComponent(value);
+        this.toggleCreateFolderPrompt();
       }
     });
   }
@@ -160,6 +164,24 @@ class FilesComponent extends React.Component {
     e.preventDefault();
   }
 
+  onDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if(e.dataTransfer.items[0].kind === "string") {
+      e.dataTransfer.items[0].getAsString((stringValue) => {
+        if(stringValue !== this.props.currentObject[0].parent) {
+          Meteor.call("fileobjects.moveobject", stringValue, this.props.currentObject[0].parent);
+        }
+      });
+    }
+  }
+
+  toggleCreateFolderPrompt() {
+    this.setState({
+      createFolderPrompt: !this.state.createFolderPrompt
+    });
+  }
+
   render() {
     return (
       <div className="bp3-dark FilesComponent" onDrop={this.dropHandler} onDragOver={this.onDragOver} onDragEnd={this.onDragOver}>
@@ -194,8 +216,8 @@ class FilesComponent extends React.Component {
           </ButtonGroup>}
           {checkWritePermission(Meteor.userId(), this.props.planet) && (!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
             <Button text="Upload Files" icon="upload" onClick={this.onFileUploadClick}/>
-            <Popover>
-              <Button text="New Folder" icon="folder-new"/>
+            <Popover isOpen={this.state.createFolderPrompt}>
+              <Button text="New Folder" icon="folder-new" onClick={this.toggleCreateFolderPrompt}/>
               <div className="MainSidebar-menu-form">
                 <input className={Classes.INPUT + " MainSidebar-menu-input"} value={this.state.newFolderTextbox} onChange={this.updateTextbox}/>
                 <Button text="Create" className="MainSidebar-menu-button" onClick={this.createFolder}/>
@@ -206,6 +228,14 @@ class FilesComponent extends React.Component {
           </ButtonGroup>}
         </div>
         {(!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <div className="FilesComponent-button-container">
+          {this.props.subId && <Button
+            alignText="left"
+            icon="arrow-up"
+            onClick={(() => this.gotoSubComponent(this.props.currentObject[0].parent))}
+            text="../"
+            large={true}
+            onDrop={this.onDrop}
+          />}
           {this.props.folders.map((value) => (<FileButton planet={this.props.planet} key={value._id} object={value} gotoSubComponent={this.gotoSubComponent}/>))}
           {this.props.files.map((value) => (<FileButton planet={this.props.planet} key={value._id} object={value} gotoSubComponent={this.gotoSubComponent}/>))}
         </div>}

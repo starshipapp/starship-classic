@@ -84,7 +84,6 @@ export const DeletionFunctions = {
   },
   files: (componentId) => {
     Files.remove(componentId);
-    FileObjects.remove({componentId});
   },
   page: (componentId) => {
     Pages.remove(componentId);

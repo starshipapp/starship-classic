@@ -145,6 +145,25 @@ Meteor.methods({
         return currentUuid;
       }
     }
+  },
+  "aws.deletefilecomponent"(componentId) {
+    check(componentId, String);
+    let filesToCheck = FileObjects.find({componentId}).fetch();
+    let keys = [[]];
+    filesToCheck.map((value) => {
+      if(value.key) {
+        if(keys[keys.length - 1].length === 1000) {
+          keys.push([]);
+        }
+        keys[keys.length - 1].push({Key: value.key});
+      }
+    });
+    keys.map((value) => {
+      s3.deleteObjects({Bucket: Meteor.settings.bucket.bucket, Delete: {Objects: value}}, function(err) {
+        if (err) console.log(err, err.stack);  // error
+      });
+    });
+    FileObjects.remove({componentId});
   }
 });
 
