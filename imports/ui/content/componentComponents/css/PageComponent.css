@@ -1,6 +1,6 @@
 .PageComponent {
   position: relative;
-  min-height: 100%;
+  overflow-wrap: anywhere;
 }
 
 .PageComponent-edit-button {
