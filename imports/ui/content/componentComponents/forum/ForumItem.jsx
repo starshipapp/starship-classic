@@ -27,7 +27,7 @@ class ForumItem extends React.Component {
           <div className="ForumItem-name">
             <span className={this.props.stickied ? "ForumItem-name-text ForumItem-stickied" : "ForumItem-name-text"}>{this.props.stickied && <Icon icon="pin" color="#3dcc91" className="ForumItem-stickied-pin"/>} {this.props.post.name}</span>
             <div className="ForumItem-name-flex">
-              <div className="ForumItem-tags"><Tag className="ForumItem-tag">Test</Tag></div>
+              {this.props.post.tags && <div className="ForumItem-tags">{this.props.post.tags.map((value) => (<Tag className="ForumItem-tag" key={value}>{value}</Tag>))}</div>}
             </div>
             <div className="ForumItem-rightside">
               <div className="ForumItem-right-container">

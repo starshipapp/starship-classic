@@ -7,7 +7,7 @@ import ForumThreadItem from "./ForumThreadItem";
 import { Button, Intent } from "@blueprintjs/core";
 import SimpleMDE from "react-simplemde-editor";
 import ForumThreadItemContainer from "./ForumThreadItemContainer";
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from "react-paginate";
 
 class ForumThread extends React.Component {
   constructor(props) {

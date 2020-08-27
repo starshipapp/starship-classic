@@ -1,12 +1,14 @@
 import React from "react";
 import {withTracker} from "meteor/react-meteor-data";
-import {Classes, ButtonGroup, Button, Divider, Callout} from "@blueprintjs/core";
+import {Classes, ButtonGroup, Button, Divider, Callout, Popover, Menu, MenuItem, MenuDivider} from "@blueprintjs/core";
 import "./css/ForumComponent";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import ForumEditor from "./forum/ForumEditor";
 import ForumThread from "./forum/ForumThread";
 import ForumItemContainer from "./forum/ForumItemContainer";
 import ForumPosts from "../../../api/components/forum/forumpost";
+import Forum from "../../../api/components/forum/forum";
+import { checkWritePermission } from "../../../util/checkPermissions";
 
 class ForumComponent extends React.Component {
   constructor(props) {
@@ -14,13 +16,18 @@ class ForumComponent extends React.Component {
     
     this.state = {
       creatingNewThread: false,
-      postCount: 25
+      postCount: 25,
+      newTagTextbox: "",
+      activeTag: null
     };
 
     this.startNewThread = this.startNewThread.bind(this);
     this.dismissThread = this.dismissThread.bind(this);
     this.goHome = this.goHome.bind(this);
     this.loadMore = this.loadMore.bind(this);
+    this.updateTextbox = this.updateTextbox.bind(this);
+    this.createTag = this.createTag.bind(this);
+    this.setActiveTag = this.setActiveTag.bind(this);
   }
 
   startNewThread() {
@@ -45,6 +52,25 @@ class ForumComponent extends React.Component {
     });
   }
 
+  updateTextbox(e) {
+    this.setState({
+      newTagTextbox: e.target.value
+    });
+  }
+
+  createTag() {
+    Meteor.call("forums.createtag", this.props.id, this.state.newTagTextbox);
+    this.setState({
+      newTagTextbox: ""
+    });
+  }
+
+  setActiveTag(tag) {
+    this.setState({
+      activeTag: this.state.activeTag === tag ? null : tag
+    });
+  }
+
   render() {
     return (
       <div className="bp3-dark ForumComponent">
@@ -61,10 +87,22 @@ class ForumComponent extends React.Component {
                   {this.props.subId ? <ButtonGroup minimal={true} className="ForumComponent-buttons">
                     <Button icon="arrow-left" text="Back" onClick={this.goHome}/>
                   </ButtonGroup>: <ButtonGroup minimal={true} className="ForumComponent-buttons">
-                    {/*<Button icon="sort" text="Sort By"/>
+                    <Button icon="sort" text="Sort By"/>
+                    {this.props.forum[0] && <Popover>
                       <Button icon="tag" text="Tags"/>
-                    <Divider/>*/}
-                    <Button icon="plus" text="New Thread" onClick={this.startNewThread}/>
+                      <Menu>
+                        {this.props.forum[0].tags && this.props.forum[0].tags.map((value) => (<MenuItem key={value} icon={this.state.activeTag === value && "tick"} text={value} onClick={() => this.setActiveTag(value)}/>))}
+                        {checkWritePermission(Meteor.userId(), this.props.planet) && this.props.forum[0].tags && this.props.forum[0].tags.length !== 0 && <MenuDivider/>}
+                        {checkWritePermission(Meteor.userId(), this.props.planet) && <MenuItem icon="plus" text="Add New">
+                          <div className="MainSidebar-menu-form">
+                            <input className={Classes.INPUT + " MainSidebar-menu-input"} value={this.state.newTagTextbox} onChange={this.updateTextbox}/>
+                            <Button text="Create" className="MainSidebar-menu-button" onClick={this.createTag}/>
+                          </div>
+                        </MenuItem>}
+                      </Menu>
+                    </Popover>}
+                    <Divider/>
+                    {this.props.forum[0] && <Button icon="plus" text="New Thread" onClick={this.startNewThread}/>}
                   </ButtonGroup>}
                 </th>
               </tr>
@@ -72,10 +110,10 @@ class ForumComponent extends React.Component {
             {this.state.creatingNewThread || this.props.subId ? <tbody>
               <tr>
                 <td>
-                  {this.props.subId ? <ForumThread planet={this.props.planet} postId={this.props.subId}/> : <ForumEditor onClose={this.dismissThread} forumId={this.props.id}/>}
+                  {this.props.subId ? <ForumThread planet={this.props.planet} postId={this.props.subId}/> : <ForumEditor onClose={this.dismissThread} forum={this.props.forum[0]} forumId={this.props.id}/>}
                 </td>
               </tr>
-            </tbody> : <ForumItemContainer planet={this.props.planet} id={this.props.id} postCount={this.state.postCount} loadMore={this.loadMore}/>}
+            </tbody> : <ForumItemContainer planet={this.props.planet} id={this.props.id} postCount={this.state.postCount} loadMore={this.loadMore} tag={this.state.activeTag}/>}
           </table>
         </div>
       </div>
@@ -84,7 +122,10 @@ class ForumComponent extends React.Component {
 }
 
 export default withTracker((props) => {
+  Meteor.subscribe("forums.forum", props.id);
+
   return {
+    forum: Forum.find({_id: props.id}).fetch(),
     postCount: ForumPosts.find({componentId: props.id}).count(),
     currentUser: Meteor.user()
   };

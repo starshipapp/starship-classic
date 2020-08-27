@@ -23,9 +23,15 @@ class ForumItemContainer extends React.Component {
 export default withTracker((props) => {
   Meteor.subscribe("forumposts.posts", props.id);
 
+  let forumPostsSelector = {componentId: props.id, stickied: false};
+
+  if(props.tag !== null) {
+    forumPostsSelector["tags"] = props.tag;
+  }
+
   return {
     stickiedPosts: ForumPosts.find({componentId: props.id, stickied: true}, {sort: { updatedAt: -1 }}).fetch(),
-    forumPosts: ForumPosts.find({componentId: props.id, stickied: false}, {sort: { updatedAt: -1 }, limit: props.postCount}).fetch(),
+    forumPosts: ForumPosts.find(forumPostsSelector, {sort: { updatedAt: -1 }, limit: props.postCount}).fetch(),
     threadCount: ForumPosts.find({componentId: props.id}).count(),
     currentUser: Meteor.user()
   };

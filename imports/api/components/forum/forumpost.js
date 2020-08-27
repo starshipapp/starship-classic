@@ -33,7 +33,8 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  "forumposts.insert"(forumId, content, name) {
+  // eslint-disable-next-line meteor/audit-argument-checks
+  "forumposts.insert"(forumId, content, name, tag) {
     check(forumId, String);
     check(content, String);
     check(name, String);
@@ -42,6 +43,12 @@ Meteor.methods({
       const forum = Forums.findOne(forumId);
       if(forum) {
         const planet = Planets.findOne(forum.planet);
+        let tags = [];
+
+        if(tag !== null) {
+          check(tag, String);
+          tags.push(tag);
+        }
 
         if(checkReadPermission(this.userId, planet)) {
           return ForumPosts.insert({
@@ -50,7 +57,7 @@ Meteor.methods({
             content: content,
             owner: this.userId,
             planet: forum.planet,
-            tags: [],
+            tags: tags,
             reactions: [],
             replyCount: 0,
             stickied: false,

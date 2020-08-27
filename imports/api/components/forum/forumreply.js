@@ -1,7 +1,7 @@
 import {Meteor} from "meteor/meteor";
 import {check} from "meteor/check";
 
-import {Forums, Planets, ForumPosts, ForumReplies} from "../../collectionsStandalone";
+import {Planets, ForumPosts, ForumReplies} from "../../collectionsStandalone";
 import {checkReadPermission, checkWritePermission} from "../../../util/checkPermissions";
 
 export default ForumReplies;
