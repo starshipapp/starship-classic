@@ -118,7 +118,7 @@ class FileButton extends React.Component {
           canEscapeKeyCancel={true}
           onCancel={this.delete}
           onConfirm={this.finishDelete}
-        >Are you sure you want to delete {this.props.object.name}? It will be gone forever (a very long time)!</Alert>
+        >Are you sure you want to delete this file?<br/>&apos;{this.props.object.name}&apos; will be lost forever! (A long time!)</Alert>
         <Tooltip content={this.props.object.name} inheritDarkTheme={true}>
           <Button
             draggable={this.props.object.type !== "folder"}

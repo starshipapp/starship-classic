@@ -1,7 +1,7 @@
 import React from "react";
 import {withTracker} from "meteor/react-meteor-data";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
-import { Icon, Divider} from "@blueprintjs/core";
+import { Icon, Divider, Tag } from "@blueprintjs/core";
 import "./css/ForumItem";
 
 class ForumItem extends React.Component {
@@ -25,10 +25,10 @@ class ForumItem extends React.Component {
       <tr className="ForumItem" onClick={this.gotoSubComponent}>
         <td>
           <div className="ForumItem-name">
-            <span className="ForumItem-name-text">{this.props.post.name}</span>
-            {/*<div className="ForumItem-name-flex">
+            <span className={this.props.stickied ? "ForumItem-name-text ForumItem-stickied" : "ForumItem-name-text"}>{this.props.stickied && <Icon icon="pin" color="#3dcc91" className="ForumItem-stickied-pin"/>} {this.props.post.name}</span>
+            <div className="ForumItem-name-flex">
               <div className="ForumItem-tags"><Tag className="ForumItem-tag">Test</Tag></div>
-            </div>*/}
+            </div>
             <div className="ForumItem-rightside">
               <div className="ForumItem-right-container">
                 <Icon icon="comment"/>

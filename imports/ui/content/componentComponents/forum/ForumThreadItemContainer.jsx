@@ -8,7 +8,7 @@ class ForumThreadItemContainer extends React.Component {
   render() {
     return (
       <div className="ForumThread-itemcontainer">
-        {this.props.replies.map((value) => (<ForumThreadItem key={value._id} post={value} addQuote={this.props.addQuote}/>))}
+        {this.props.replies.map((value) => (<ForumThreadItem key={value._id} planet={this.props.planet} post={value} addQuote={this.props.addQuote}/>))}
       </div>
     );
   }

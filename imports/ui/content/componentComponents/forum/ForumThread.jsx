@@ -67,10 +67,10 @@ class ForumThread extends React.Component {
       <div className="ForumThread">
         <div className="ForumThread-name">{this.props.post && this.props.post.name}</div>
         <div className="ForumThread-container">
-          {this.props.post && this.state.forumPage === 1 && <ForumThreadItem post={this.props.post} addQuote={this.addQuote}/>}
-          <ForumThreadItemContainer page={this.state.forumPage} addQuote={this.addQuote} postId={this.props.postId}/>
+          {this.props.post && this.state.forumPage === 1 && <ForumThreadItem post={this.props.post} planet={this.props.planet} isParent={true} addQuote={this.addQuote}/>}
+          <ForumThreadItemContainer page={this.state.forumPage} addQuote={this.addQuote} planet={this.props.planet} postId={this.props.postId}/>
         </div>
-        <ReactPaginate
+        {this.props.postCount > 20 && <ReactPaginate
           previousLabel="<"
           nextLabel=">"
           breakLabel="..."
@@ -88,7 +88,7 @@ class ForumThread extends React.Component {
           nextLinkClassName="pagination-link"
           previousLinkClassName="pagination-link"
           breakLinkClassName="pagination-link"
-        />
+        />}
         <div className="ForumThread-reply-editor">
           <div className="ForumThread-reply">Reply</div>
           <SimpleMDE onChange={this.handleChange} value={this.state.editingContent}/>

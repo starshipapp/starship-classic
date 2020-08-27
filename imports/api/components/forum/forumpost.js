@@ -86,5 +86,19 @@ Meteor.methods({
         ForumReplies.remove({postId: id});
       }
     }
+  },
+  "forumposts.sticky"(id) {
+    check(id, String);
+
+    if(this.userId) {
+      const post = ForumPosts.findOne(id);
+      if(post) {
+        const planet = Planets.findOne(post.planet);
+
+        if(checkWritePermission(this.userId, planet)) {
+          ForumPosts.update(id, {$set: {stickied: !post.stickied}});
+        }
+      }
+    }
   }
 });

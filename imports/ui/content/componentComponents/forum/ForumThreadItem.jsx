@@ -5,6 +5,7 @@ import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { Icon, Button, ButtonGroup, Intent, Alert } from "@blueprintjs/core";
 import ReactMarkdown from "react-markdown";
+import { checkWritePermission } from "../../../../util/checkPermissions";
 
 class ForumThreadItem extends React.Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class ForumThreadItem extends React.Component {
     this.updateEditorValue = this.updateEditorValue.bind(this);
     this.toggleEditor = this.toggleEditor.bind(this);
     this.toggleAlert = this.toggleAlert.bind(this);
+    this.sticky = this.sticky.bind(this);
   }
 
   edit() {
@@ -35,7 +37,7 @@ class ForumThreadItem extends React.Component {
   }
 
   delete() {
-    if(this.props.post.postId) {
+    if(!this.props.isParent) {
       Meteor.call("forumreplies.delete", this.props.post._id);
     } else {
       Meteor.call("forumposts.delete", this.props.post._id);
@@ -63,9 +65,18 @@ class ForumThreadItem extends React.Component {
     });
   }
 
+  sticky() {
+    Meteor.call("forumposts.sticky", this.props.post._id);
+  }
+
   render() {
+    console.log(this.props.planet);
+
     let creationDate = this.props.post.createdAt ? this.props.post.createdAt : new Date("2020-07-25T15:24:30+00:00");
     let creationDateText = creationDate.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+    let canEdit = this.props.post.owner === Meteor.userId() || checkWritePermission(Meteor.userId(), this.props.planet);
+
     return (
       <div className="ForumThreadItem">
         <Alert
@@ -79,7 +90,7 @@ class ForumThreadItem extends React.Component {
           canEscapeKeyCancel={true}
           onCancel={this.toggleAlert}
           onConfirm={this.delete}
-        >Are you sure you want to delete this post? It will be gone forever (a very long time)!</Alert>
+        >Are you sure you want to delete this post? It will be lost forever! (A long time!)</Alert>
         <div className="ForumThreadItem-info">
           <div className="ForumThreadItem-profilepic"/>
           <div className="ForumThreadItem-username">{this.props.user[0] && this.props.user[0].username}</div>
@@ -104,8 +115,9 @@ class ForumThreadItem extends React.Component {
           <div className="ForumThreadItem-bottom">
             <ButtonGroup>
               <Button small={true} icon="comment" text="Quote" onClick={() => this.props.addQuote(this.props.post)} minimal={true} alignText="left"/>
-              <Button small={true} icon="edit" text="Edit" onClick={this.toggleEditor} minimal={true} alignText="left"/>
-              <Button small={true} icon="trash" text="Delete" minimal={true} onClick={this.toggleAlert} alignText="left" intent={Intent.DANGER}/>
+              {canEdit && <Button small={true} icon="edit" text="Edit" onClick={this.toggleEditor} minimal={true} alignText="left"/>}
+              {canEdit && <Button small={true} icon="trash" text="Delete" minimal={true} onClick={this.toggleAlert} alignText="left" intent={Intent.DANGER}/>}
+              {this.props.isParent && checkWritePermission(Meteor.userId(), this.props.planet) && <Button small={true} icon="pin" text={this.props.post.stickied ? "Unsticky" : "Sticky"} minimal={true} onClick={this.sticky} alignText="left" intent={Intent.SUCCESS}/>}
             </ButtonGroup>
           </div>
         </div>

@@ -61,3 +61,11 @@
 .ForumItem-replies {
   margin-left: 0.25rem;
 }
+
+.ForumItem-stickied {
+  color: #3dcc91;
+}
+
+.ForumItem-stickied-pin {
+  margin-bottom: 0.25rem;
+}

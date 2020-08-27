@@ -72,7 +72,7 @@ class ForumComponent extends React.Component {
             {this.state.creatingNewThread || this.props.subId ? <tbody>
               <tr>
                 <td>
-                  {this.props.subId ? <ForumThread postId={this.props.subId}/> : <ForumEditor onClose={this.dismissThread} forumId={this.props.id}/>}
+                  {this.props.subId ? <ForumThread planet={this.props.planet} postId={this.props.subId}/> : <ForumEditor onClose={this.dismissThread} forumId={this.props.id}/>}
                 </td>
               </tr>
             </tbody> : <ForumItemContainer planet={this.props.planet} id={this.props.id} postCount={this.state.postCount} loadMore={this.loadMore}/>}
