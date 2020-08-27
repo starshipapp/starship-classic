@@ -8,6 +8,7 @@ import { Button, Intent } from "@blueprintjs/core";
 import SimpleMDE from "react-simplemde-editor";
 import ForumThreadItemContainer from "./ForumThreadItemContainer";
 import ReactPaginate from "react-paginate";
+import { checkWritePermission } from "../../../../util/checkPermissions";
 
 class ForumThread extends React.Component {
   constructor(props) {
@@ -89,11 +90,11 @@ class ForumThread extends React.Component {
           previousLinkClassName="pagination-link"
           breakLinkClassName="pagination-link"
         />}
-        <div className="ForumThread-reply-editor">
+        {this.props.post && (!this.props.post.locked || checkWritePermission(Meteor.userId(), this.props.planet)) && <div className="ForumThread-reply-editor">
           <div className="ForumThread-reply">Reply</div>
           <SimpleMDE onChange={this.handleChange} value={this.state.editingContent}/>
           <Button text="Post" className="ForumEditor-button" onClick={this.postThread}/>
-        </div>
+        </div>}
       </div>
     );
   }

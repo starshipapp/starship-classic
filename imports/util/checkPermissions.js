@@ -1,5 +1,14 @@
 export function checkWritePermission(userId, planet) {
   if (userId && planet) {
+    //admin check
+    let user = null;
+
+    user = Meteor.users.findOne(userId);
+
+    if(user && user.admin) {
+      return true;
+    }
+
     //we own it
     if (planet.owner === userId) {
       return true;
@@ -14,6 +23,15 @@ export function checkWritePermission(userId, planet) {
 
 export function checkReadPermission(userId, planet) {
   if (planet) {
+    //admin check
+    let user = null;
+
+    user = Meteor.users.findOne(userId);
+
+    if(user && user.admin) {
+      return true;
+    }
+
     //planet is not private
     if (!planet.private) {
       return true;

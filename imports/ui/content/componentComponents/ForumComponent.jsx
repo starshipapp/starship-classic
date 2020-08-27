@@ -18,7 +18,8 @@ class ForumComponent extends React.Component {
       creatingNewThread: false,
       postCount: 25,
       newTagTextbox: "",
-      activeTag: null
+      activeTag: null,
+      activeSort: "recentlyUpdated"
     };
 
     this.startNewThread = this.startNewThread.bind(this);
@@ -28,6 +29,7 @@ class ForumComponent extends React.Component {
     this.updateTextbox = this.updateTextbox.bind(this);
     this.createTag = this.createTag.bind(this);
     this.setActiveTag = this.setActiveTag.bind(this);
+    this.setActiveSort = this.setActiveSort.bind(this);
   }
 
   startNewThread() {
@@ -71,7 +73,42 @@ class ForumComponent extends React.Component {
     });
   }
 
+  setActiveSort(sort) {
+    this.setState({
+      activeSort: sort
+    });
+  }
+
   render() {
+    let sortOptions = {
+      newest: {
+        friendlyName: "Newest",
+        sort: { createdAt: -1 }
+      },
+      oldest: {
+        friendlyName: "Oldest",
+        sort: { createdAt: 1 }
+      },
+      recentlyUpdated: {
+        friendlyName: "Recently Updated",
+        sort: { updatedAt: -1 }
+      },
+      leastRecentlyUpdated: {
+        friendlyName: "Last Updated",
+        sort: { updatedAt: 1 }
+      },
+      mostReplies: {
+        friendlyName: "Most Replied",
+        sort: { replyCount: -1 }
+      },
+      fewestReplies: {
+        friendlyName: "Least Replied",
+        sort: { replyCount: 1 }
+      }
+    };
+
+    console.log(this.state.activeSort);
+
     return (
       <div className="bp3-dark ForumComponent">
         <div className="ForumComponent-flex">
@@ -87,7 +124,12 @@ class ForumComponent extends React.Component {
                   {this.props.subId ? <ButtonGroup minimal={true} className="ForumComponent-buttons">
                     <Button icon="arrow-left" text="Back" onClick={this.goHome}/>
                   </ButtonGroup>: <ButtonGroup minimal={true} className="ForumComponent-buttons">
-                    <Button icon="sort" text="Sort By"/>
+                    <Popover>
+                      <Button icon="sort" text="Sort By"/>
+                      <Menu>
+                        {Object.entries(sortOptions).map((value) => (<MenuItem text={value[1].friendlyName} key={value[0]} icon={this.state.activeSort === value[0] ? "tick" : null} onClick={() => this.setActiveSort(value[0])}/>))}
+                      </Menu>
+                    </Popover>
                     {this.props.forum[0] && <Popover>
                       <Button icon="tag" text="Tags"/>
                       <Menu>
@@ -113,7 +155,7 @@ class ForumComponent extends React.Component {
                   {this.props.subId ? <ForumThread planet={this.props.planet} postId={this.props.subId}/> : <ForumEditor onClose={this.dismissThread} forum={this.props.forum[0]} forumId={this.props.id}/>}
                 </td>
               </tr>
-            </tbody> : <ForumItemContainer planet={this.props.planet} id={this.props.id} postCount={this.state.postCount} loadMore={this.loadMore} tag={this.state.activeTag}/>}
+            </tbody> : <ForumItemContainer planet={this.props.planet} id={this.props.id} postCount={this.state.postCount} loadMore={this.loadMore} sort={sortOptions[this.state.activeSort].sort} tag={this.state.activeTag}/>}
           </table>
         </div>
       </div>

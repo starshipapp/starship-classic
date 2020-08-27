@@ -42,7 +42,7 @@ Meteor.methods({
       if(post) {
         const planet = Planets.findOne(post.planet);
 
-        if(checkReadPermission(this.userId, planet)) {
+        if(checkReadPermission(this.userId, planet) && (!post.locked || checkWritePermission(this.userId, planet))) {
           ForumPosts.update(postId, {$set: {updatedAt: new Date()}, $inc: {replyCount: 1}});
           return ForumReplies.insert({
             postId: postId,

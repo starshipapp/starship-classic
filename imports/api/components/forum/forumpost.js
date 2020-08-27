@@ -107,5 +107,20 @@ Meteor.methods({
         }
       }
     }
+  },
+  "forumposts.lock"(id) {
+    check(id, String);
+
+    if(this.userId) {
+      const post = ForumPosts.findOne(id);
+      if(post) {
+        const planet = Planets.findOne(post.planet);
+
+        if(checkWritePermission(this.userId, planet)) {
+          //we don't know if this post has the variable or not
+          ForumPosts.update(id, {$set: {locked: post.locked ? false : true}});
+        }
+      }
+    }
   }
 });

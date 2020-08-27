@@ -31,7 +31,7 @@ export default withTracker((props) => {
 
   return {
     stickiedPosts: ForumPosts.find({componentId: props.id, stickied: true}, {sort: { updatedAt: -1 }}).fetch(),
-    forumPosts: ForumPosts.find(forumPostsSelector, {sort: { updatedAt: -1 }, limit: props.postCount}).fetch(),
+    forumPosts: ForumPosts.find(forumPostsSelector, {sort: props.sort, limit: props.postCount}).fetch(),
     threadCount: ForumPosts.find({componentId: props.id}).count(),
     currentUser: Meteor.user()
   };

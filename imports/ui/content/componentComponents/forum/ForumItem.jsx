@@ -25,7 +25,7 @@ class ForumItem extends React.Component {
       <tr className="ForumItem" onClick={this.gotoSubComponent}>
         <td>
           <div className="ForumItem-name">
-            <span className={this.props.stickied ? "ForumItem-name-text ForumItem-stickied" : "ForumItem-name-text"}>{this.props.stickied && <Icon icon="pin" color="#3dcc91" className="ForumItem-stickied-pin"/>} {this.props.post.name}</span>
+            <span className={this.props.stickied ? "ForumItem-name-text ForumItem-stickied" : "ForumItem-name-text"}>{this.props.post.locked && <Icon icon="lock" color="#ffb366" className="ForumItem-stickied-pin"/>} {this.props.stickied && <Icon icon="pin" color="#3dcc91" className="ForumItem-stickied-pin"/>} {this.props.post.name}</span>
             <div className="ForumItem-name-flex">
               {this.props.post.tags && <div className="ForumItem-tags">{this.props.post.tags.map((value) => (<Tag className="ForumItem-tag" key={value}>{value}</Tag>))}</div>}
             </div>

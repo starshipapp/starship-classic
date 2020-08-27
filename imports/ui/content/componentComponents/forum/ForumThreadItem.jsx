@@ -23,6 +23,7 @@ class ForumThreadItem extends React.Component {
     this.toggleEditor = this.toggleEditor.bind(this);
     this.toggleAlert = this.toggleAlert.bind(this);
     this.sticky = this.sticky.bind(this);
+    this.lock = this.lock.bind(this);
   }
 
   edit() {
@@ -67,6 +68,10 @@ class ForumThreadItem extends React.Component {
 
   sticky() {
     Meteor.call("forumposts.sticky", this.props.post._id);
+  }
+
+  lock() {
+    Meteor.call("forumposts.lock", this.props.post._id);
   }
 
   render() {
@@ -118,6 +123,7 @@ class ForumThreadItem extends React.Component {
               {canEdit && <Button small={true} icon="edit" text="Edit" onClick={this.toggleEditor} minimal={true} alignText="left"/>}
               {canEdit && <Button small={true} icon="trash" text="Delete" minimal={true} onClick={this.toggleAlert} alignText="left" intent={Intent.DANGER}/>}
               {this.props.isParent && checkWritePermission(Meteor.userId(), this.props.planet) && <Button small={true} icon="pin" text={this.props.post.stickied ? "Unsticky" : "Sticky"} minimal={true} onClick={this.sticky} alignText="left" intent={Intent.SUCCESS}/>}
+              {this.props.isParent && checkWritePermission(Meteor.userId(), this.props.planet) && <Button small={true} icon="lock" text={this.props.post.locked ? "Unlock" : "Lock"} minimal={true} onClick={this.lock} alignText="left" intent={Intent.WARNING}/>}
             </ButtonGroup>
           </div>
         </div>

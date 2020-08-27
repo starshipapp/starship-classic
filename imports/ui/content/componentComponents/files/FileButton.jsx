@@ -80,7 +80,7 @@ class FileButton extends React.Component {
       ContextMenu.show(<Menu>
         <MenuItem text="Delete" icon="delete" onClick={this.delete}/>
         <MenuItem text="Rename" icon="edit" onClick={this.rename}/>
-        <MenuItem text="Download" icon="download" onClick={this.downloadFile}/>
+        {this.props.object.type === "file" && <MenuItem text="Download" icon="download" onClick={this.downloadFile}/>}
       </Menu>, { left: e.clientX, top: e.clientY }, () => {
         // menu was closed; callback optional
       }, true);

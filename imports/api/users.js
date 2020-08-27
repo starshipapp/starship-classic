@@ -2,16 +2,26 @@ import {Meteor} from "meteor/meteor";
 import {Accounts} from "meteor/accounts-base";
 import {check} from "meteor/check";
 
+Accounts.config({
+  defaultFieldSelector: {
+    username: 1,
+    emails: 1,
+    admin: 1,
+    profile: 1,
+    services: 1
+  }
+});
+
 if(Meteor.isServer) {
   Meteor.publish("users.findId", function findUserById(userId) {
     check(userId, String);
 
-    return Meteor.users.find({_id: userId}, {fields: {username: 1}});
+    return Meteor.users.find({_id: userId}, {fields: {username: 1, admin: 1}});
   });
   Meteor.publish("user.currentUserData", function () {
     if (this.userId) {
       return Meteor.users.find({ _id: this.userId }, {
-        fields: { following: 1 }
+        fields: { following: 1, admin: 1 }
       });
     } else {
       this.ready();
@@ -43,11 +53,25 @@ Meteor.methods({
       throw new Meteor.Error("Your password must be at least 8 characters long");
     }
 
-    if (!Meteor.users.find().count()) {
-      console.log("creating admin account");
-      Accounts.createUser({username: user.username, password: user.password, profile: {}, email: user.email, admin: true});
-    } else {
-      Accounts.createUser(user);
+    Accounts.createUser(user);
+  },
+  "users.setadmin"(id) {
+    check(id, String);
+
+    Meteor.users.update({_id: id}, {$set: {admin: true}});
+  },
+  "users.getadmin"(id) {
+    check(id, String);
+    
+    let user = Meteor.users.findOne(id);
+
+    if(user) {
+      return user.admin;
     }
   }
+});
+
+// Deny all client-side updates to user documents
+Meteor.users.deny({
+  update() {return true;}
 });
