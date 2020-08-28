@@ -55,11 +55,11 @@ Meteor.methods({
 
     Accounts.createUser(user);
   },
-  "users.setadmin"(id) {
+  /*"users.setadmin"(id) {
     check(id, String);
 
     Meteor.users.update({_id: id}, {$set: {admin: true}});
-  },
+  },*/
   "users.getadmin"(id) {
     check(id, String);
     
