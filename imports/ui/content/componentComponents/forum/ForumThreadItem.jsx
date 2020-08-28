@@ -17,7 +17,8 @@ class ForumThreadItem extends React.Component {
     this.state = {
       textValue: this.props.post.content,
       editor: false,
-      alert: false
+      alert: false,
+      showEmojiPrompt: false
     };
 
     this.edit = this.edit.bind(this);
@@ -28,6 +29,8 @@ class ForumThreadItem extends React.Component {
     this.sticky = this.sticky.bind(this);
     this.lock = this.lock.bind(this);
     this.selectEmoji = this.selectEmoji.bind(this);
+    this.toggleEmojiPrompt = this.toggleEmojiPrompt.bind(this);
+    this.closePrompt = this.closePrompt.bind(this);
   }
 
   edit() {
@@ -78,13 +81,27 @@ class ForumThreadItem extends React.Component {
     Meteor.call("forumposts.lock", this.props.post._id);
   }
 
-  selectEmoji(emoji) {
+  selectEmoji(emoji, isPrompt) {
     if(!this.props.isParent) {
       Meteor.call("forumreplies.react", emoji.native, this.props.post._id);
     } else {
       Meteor.call("forumposts.react", emoji.native, this.props.post._id);
     }
-    console.log(emoji);
+    if(isPrompt) {
+      this.toggleEmojiPrompt();
+    }
+  }
+
+  toggleEmojiPrompt() {
+    this.setState({
+      showEmojiPrompt: !this.state.showEmojiPrompt
+    });
+  }
+
+  closePrompt() {
+    this.setState({
+      showEmojiPrompt: false
+    });
   }
 
   render() {
@@ -92,8 +109,6 @@ class ForumThreadItem extends React.Component {
     let creationDateText = creationDate.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
 
     let canEdit = this.props.post.owner === Meteor.userId() || checkWritePermission(Meteor.userId(), this.props.planet);
-
-    console.log(this.props.post);
 
     return (
       <div className="ForumThreadItem">
@@ -142,10 +157,10 @@ class ForumThreadItem extends React.Component {
             </ButtonGroup>
             <ButtonGroup className="ForumThreadItem-reactions">
               {this.props.post.reactions.map((value) => (<Button key={value.emoji} onClick={() => this.selectEmoji({native: value.emoji})} minimal={!value.reactors.includes(Meteor.userId())} small={true} icon={<Twemoji className="ForumThreadItem-twemoji">{value.emoji}</Twemoji>} text={value.reactors.length}/>))}
-              <Popover>
-                <Button minimal={true} small={true} icon="new-object"/>
+              <Popover isOpen={this.state.showEmojiPrompt} onClose={this.closePrompt}>
+                <Button minimal={true} small={true} icon="new-object" onClick={this.toggleEmojiPrompt}/>
                 <div>
-                  <Picker theme="dark" set="twitter" title="Pick an emoji" emoji="smile" onSelect={this.selectEmoji}/>
+                  <Picker theme="dark" set="twitter" title="Pick an emoji" emoji="smile" onSelect={(e) => this.selectEmoji(e, true)}/>
                 </div>
               </Popover>
             </ButtonGroup>

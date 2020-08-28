@@ -4,6 +4,8 @@ import {check} from "meteor/check";
 import {Planets, ForumPosts, ForumReplies} from "../../collectionsStandalone";
 import {checkReadPermission, checkWritePermission} from "../../../util/checkPermissions";
 
+import emoji from "node-emoji-new";
+
 export default ForumReplies;
 
 if (Meteor.isServer) {
@@ -91,7 +93,7 @@ Meteor.methods({
     if(this.userId) {
       const post = ForumReplies.findOne(id);
       const planet = Planets.findOne(post.planet);
-      if(checkReadPermission(this.userId, planet)) {
+      if(checkReadPermission(this.userId, planet) && emoji.hasEmoji(reactEmoji)) {
         let reaction = post.reactions.find(value => value.emoji === reactEmoji);
         if(reaction) {
           if(reaction.reactors.includes(this.userId)) {
