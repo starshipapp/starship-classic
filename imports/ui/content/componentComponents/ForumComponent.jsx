@@ -114,11 +114,6 @@ class ForumComponent extends React.Component {
             <thead>
               <tr>
                 <th className="ForumComponent-header">
-                  <Callout intent="warning" title="Work In Progress">
-                    The Forum component is not finished, and is missing many important features that will be added in future updates.<br/>
-                    These include reactions, polls, post tags, and a better text editor.
-                  </Callout>
-                  <Divider/>
                   {this.props.subId ? <ButtonGroup minimal={true} className="ForumComponent-buttons">
                     <Button icon="arrow-left" text="Back" onClick={this.goHome}/>
                   </ButtonGroup>: <ButtonGroup minimal={true} className="ForumComponent-buttons">
