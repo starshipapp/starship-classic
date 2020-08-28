@@ -3,9 +3,12 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/ForumThreadItem";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
-import { Icon, Button, ButtonGroup, Intent, Alert } from "@blueprintjs/core";
+import { Icon, Button, ButtonGroup, Intent, Alert, Popover } from "@blueprintjs/core";
 import ReactMarkdown from "react-markdown";
 import { checkWritePermission } from "../../../../util/checkPermissions";
+import "emoji-mart/css/emoji-mart.css";
+import { Picker } from "emoji-mart";
+import Twemoji from "react-twemoji";
 
 class ForumThreadItem extends React.Component {
   constructor(props) {
@@ -24,6 +27,7 @@ class ForumThreadItem extends React.Component {
     this.toggleAlert = this.toggleAlert.bind(this);
     this.sticky = this.sticky.bind(this);
     this.lock = this.lock.bind(this);
+    this.selectEmoji = this.selectEmoji.bind(this);
   }
 
   edit() {
@@ -74,13 +78,22 @@ class ForumThreadItem extends React.Component {
     Meteor.call("forumposts.lock", this.props.post._id);
   }
 
-  render() {
-    console.log(this.props.planet);
+  selectEmoji(emoji) {
+    if(!this.props.isParent) {
+      Meteor.call("forumreplies.react", emoji.native, this.props.post._id);
+    } else {
+      Meteor.call("forumposts.react", emoji.native, this.props.post._id);
+    }
+    console.log(emoji);
+  }
 
+  render() {
     let creationDate = this.props.post.createdAt ? this.props.post.createdAt : new Date("2020-07-25T15:24:30+00:00");
     let creationDateText = creationDate.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
 
     let canEdit = this.props.post.owner === Meteor.userId() || checkWritePermission(Meteor.userId(), this.props.planet);
+
+    console.log(this.props.post);
 
     return (
       <div className="ForumThreadItem">
@@ -102,8 +115,10 @@ class ForumThreadItem extends React.Component {
         </div>
         <div className="ForumThreadItem-content">
           <div className="ForumThreadItem-postinfo">
-            <Icon icon="time" className="ForumThreadItem-postinfo-dateicon"/>
-            <span className="ForumThreadItem-postinfo-date">{creationDateText}</span>
+            <div>
+              <Icon icon="time" className="ForumThreadItem-postinfo-dateicon"/>
+              <span className="ForumThreadItem-postinfo-date">{creationDateText}</span>
+            </div>
           </div>
           <div className="ForumThreadItem-text">
             {this.state.editor ? <div className="ForumThreadItem-editor">
@@ -124,6 +139,15 @@ class ForumThreadItem extends React.Component {
               {canEdit && <Button small={true} icon="trash" text="Delete" minimal={true} onClick={this.toggleAlert} alignText="left" intent={Intent.DANGER}/>}
               {this.props.isParent && checkWritePermission(Meteor.userId(), this.props.planet) && <Button small={true} icon="pin" text={this.props.post.stickied ? "Unsticky" : "Sticky"} minimal={true} onClick={this.sticky} alignText="left" intent={Intent.SUCCESS}/>}
               {this.props.isParent && checkWritePermission(Meteor.userId(), this.props.planet) && <Button small={true} icon="lock" text={this.props.post.locked ? "Unlock" : "Lock"} minimal={true} onClick={this.lock} alignText="left" intent={Intent.WARNING}/>}
+            </ButtonGroup>
+            <ButtonGroup className="ForumThreadItem-reactions">
+              {this.props.post.reactions.map((value) => (<Button key={value.emoji} onClick={() => this.selectEmoji({native: value.emoji})} minimal={!value.reactors.includes(Meteor.userId())} small={true} icon={<Twemoji className="ForumThreadItem-twemoji">{value.emoji}</Twemoji>} text={value.reactors.length}/>))}
+              <Popover>
+                <Button minimal={true} small={true} icon="new-object"/>
+                <div>
+                  <Picker theme="dark" set="twitter" title="Pick an emoji" emoji="smile" onSelect={this.selectEmoji}/>
+                </div>
+              </Popover>
             </ButtonGroup>
           </div>
         </div>

@@ -83,5 +83,30 @@ Meteor.methods({
         ForumReplies.remove(id);
       }
     }
+  },
+  "forumreplies.react"(reactEmoji, id) {
+    check(reactEmoji, String);
+    check(id, String);
+
+    if(this.userId) {
+      const post = ForumReplies.findOne(id);
+      const planet = Planets.findOne(post.planet);
+      if(checkReadPermission(this.userId, planet)) {
+        let reaction = post.reactions.find(value => value.emoji === reactEmoji);
+        if(reaction) {
+          if(reaction.reactors.includes(this.userId)) {
+            if(reaction.reactors.length === 1) {
+              ForumReplies.update(id, {$pull: {reactions: reaction}});
+            } else {
+              ForumReplies.update({_id: id, reactions: {$elemMatch: {emoji: reactEmoji}}}, {$pull: {"reactions.$.reactors": this.userId}});
+            }
+          } else {
+            ForumReplies.update({_id: id, reactions: {$elemMatch: {emoji: reactEmoji}}}, {$push: {"reactions.$.reactors": this.userId}});
+          }
+        } else {
+          ForumReplies.update(id, {$push: {reactions: {emoji: reactEmoji, reactors: [this.userId]}}});
+        }
+      }
+    }
   }
 });

@@ -107,8 +107,6 @@ class ForumComponent extends React.Component {
       }
     };
 
-    console.log(this.state.activeSort);
-
     return (
       <div className="bp3-dark ForumComponent">
         <div className="ForumComponent-flex">

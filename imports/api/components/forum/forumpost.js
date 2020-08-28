@@ -4,6 +4,8 @@ import {check} from "meteor/check";
 import {Forums, Planets, ForumPosts, ForumReplies} from "../../collectionsStandalone";
 import {checkReadPermission, checkWritePermission} from "../../../util/checkPermissions";
 
+import emoji from "node-emoji-new";
+
 export default ForumPosts;
 
 if (Meteor.isServer) {
@@ -119,6 +121,31 @@ Meteor.methods({
         if(checkWritePermission(this.userId, planet)) {
           //we don't know if this post has the variable or not
           ForumPosts.update(id, {$set: {locked: post.locked ? false : true}});
+        }
+      }
+    }
+  },
+  "forumposts.react"(reactEmoji, id) {
+    check(reactEmoji, String);
+    check(id, String);
+
+    if(this.userId) {
+      const post = ForumPosts.findOne(id);
+      const planet = Planets.findOne(post.planet);
+      if(checkReadPermission(this.userId, planet)) {
+        let reaction = post.reactions.find(value => value.emoji === reactEmoji);
+        if(reaction) {
+          if(reaction.reactors.includes(this.userId)) {
+            if(reaction.reactors.length === 1) {
+              ForumPosts.update(id, {$pull: {reactions: reaction}});
+            } else {
+              ForumPosts.update({_id: id, reactions: {$elemMatch: {emoji: reactEmoji}}}, {$pull: {"reactions.$.reactors": this.userId}});
+            }
+          } else {
+            ForumPosts.update({_id: id, reactions: {$elemMatch: {emoji: reactEmoji}}}, {$push: {"reactions.$.reactors": this.userId}});
+          }
+        } else {
+          ForumPosts.update(id, {$push: {reactions: {emoji: reactEmoji, reactors: [this.userId]}}});
         }
       }
     }

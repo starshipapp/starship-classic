@@ -26,8 +26,6 @@ Meteor.methods({
     check(id, String);
     check(tag, String);
 
-    console.log(id);
-
     const forum = Forums.findOne(id);
     if(forum) {
       const planet = Planets.findOne(forum.planet);

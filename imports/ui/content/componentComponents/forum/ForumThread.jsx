@@ -55,15 +55,12 @@ class ForumThread extends React.Component {
   }
 
   changePage(page) {
-    console.log("page changed");
-    console.log(page);
     this.setState({
       forumPage: page.selected + 1
     });
   }
 
   render() {
-    console.log(this.state.editingContent);
     return (
       <div className="ForumThread">
         <div className="ForumThread-name">{this.props.post && this.props.post.name}</div>

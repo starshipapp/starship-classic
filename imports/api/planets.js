@@ -16,7 +16,7 @@ if (Meteor.isServer) {
           {owner: this.userId},
           {members: this.userId}
         ]
-      }, {fields: {name: 1, owner: 1}});
+      }, {fields: {name: 1, owner: 1, members: 1}});
     }
   });
   Meteor.publish("planets.sidebar.following", function planetsPublication() {
@@ -105,8 +105,10 @@ Meteor.methods({
 
     if (checkWritePermission(this.userId, planet)) {
       let filteredComponents = planet.components.filter(value => value.componentId === componentId);
-      DeletionFunctions[filteredComponents[0].type](componentId);
-      Planets.update({_id: planetId}, {$pull: {components: {componentId: componentId}}});
+      if(filteredComponents[0]) {
+        DeletionFunctions[filteredComponents[0].type](componentId);
+        Planets.update({_id: planetId}, {$pull: {components: {componentId: componentId}}});
+      }
     }
   },
   "planets.updatename"(planetId, name) {

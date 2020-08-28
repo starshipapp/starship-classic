@@ -142,6 +142,7 @@ class MainSidebar extends React.Component {
       }
 
       if(value) {
+        Meteor.call("planets.createhome", value, "page");
         FlowRouter.go("Planets.home", {_id: value});
       }
     });
@@ -266,8 +267,8 @@ export default withTracker(() => {
 
   let tracked = {
     memberPlanets: Planets.find({$or: [
-      {owner: Meteor.userId()},
-      {members: Meteor.userId()}
+      {members: Meteor.userId()},
+      {owner: Meteor.userId()}
     ]}, {sort: {name: 1}}).fetch(),
     currentUser: Meteor.user()
   };
