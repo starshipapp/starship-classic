@@ -1,17 +1,36 @@
 .Home {
-  min-height: 100%;
-  min-width: 100%;
-  max-width: 100%;
+  height: 100vh;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
   background-color: #30404d;
-  padding: 2rem;
+  display: flex;
+  padding-top: 4rem;
+  height: 100vh;
+}
+
+.Home-container {
+  min-width: 75vw;
+  max-width: 75vw;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.Home-alpha-callout {
+  min-width: 75vw;
+  max-width: 75vw;
 }
 
 .Home-header-branding {
   font-size: 3rem;
   margin: none;
   padding: none;
+  text-align: center;
   line-height: 3rem;
   font-weight: bold;
+  margin-bottom: 2rem
 }
 
 .Home-header-version {
@@ -21,10 +40,76 @@
 }
 
 .Home-featured {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .Home-featured-header {
   font-size: 1.5rem;
   font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.Home-featured-list {
+  width: 100%;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill,minmax(17rem,1.5fr));
+}
+
+.Home-featured-item {
+  background-color: #394B59;
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+  max-height: 10rem;
+  min-height: 10rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.Home-featured-name {
+  max-width: 15.5rem;
+  white-space: nowrap;
+  font-size: 1.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+}
+
+.Home-featured-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 4.6rem;
+}
+
+.Home-featured-followers {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  color: #CED9E0;
+}
+
+.Home-footer {
+  margin-top: auto;
+  padding-bottom: 1rem;
+}
+
+.Home-footer-copyright {
+  display: block;
+  font-weight: bold;
+}
+
+.Home-footer-copyright {
+  display: block;
+  font-weight: bold;
+}
+
+.Home-footer-links {
+  display: block;
+  font-weight: bold;
+}
+
+.Home-footer-link {
+  display: inline-block;
+  margin-right: 0.3rem;
 }

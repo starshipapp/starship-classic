@@ -4,7 +4,7 @@ import {check} from "meteor/check";
 import {CreateComponent, Index, DeletionFunctions} from "./components/componentIndex";
 
 import {Planets} from "./collectionsStandalone.js";
-import {checkReadPermission, checkWritePermission} from "../util/checkPermissions";
+import {checkReadPermission, checkWritePermission, checkAdminPermission} from "../util/checkPermissions";
 
 export default Planets;
 
@@ -25,6 +25,11 @@ if (Meteor.isServer) {
       if(user.following) {
         return Planets.find({_id: {$in: user.following}}, {fields: {name: 1}});
       }
+    }
+  });
+  Meteor.publish("planets.featured", function planetsPublication() {
+    if(this.userId) {
+      return Planets.find({featured: true, private: false}, {fields: {name: 1, featuredDescription: 1, followerCount: 1, featured: 1}});
     }
   });
   Meteor.publish("planets.planet", function findPlanet(planetId) {
@@ -149,6 +154,22 @@ Meteor.methods({
 
     if(checkWritePermission(this.userId, planet)) {
       Planets.update({_id: planetId, "components.componentId": componentId}, {$set: {"components.$.name": name}});
+    }
+  },
+  "planets.applymodtools"(planetId, featured, verified, partnered, featuredDescription) {
+    check(planetId, String);
+    check(featuredDescription, String);
+    check(featured, Boolean);
+    check(verified, Boolean);
+    check(partnered, Boolean);
+
+    console.log("test");
+
+    const planet = Planets.findOne(planetId);
+
+    if(checkAdminPermission(this.userId) && planet) {
+      console.log("test3");
+      Planets.update({_id: planetId}, {$set: {featuredDescription, featured, verified, partnered}});
     }
   }
 });
