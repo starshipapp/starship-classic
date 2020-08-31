@@ -11,7 +11,38 @@
 .bp3-dark .ForumThread-reply-editor .CodeMirror {
   color: #ffffff;
   caret-color: #ffffff;
-  background-color: #293742;
+  background-color: #30404d;
+  border: 1px #394B59 solid;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem
+}
+
+.bp3-dark .ForumThread-reply-editor .editor-toolbar {
+  border-top: 1px #394B59 solid;
+  border-left: 1px #394B59 solid;
+  border-right: 1px #394B59 solid;
+  background-color: #30404d;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem
+}
+
+.bp3-dark .ForumThread-reply-editor .editor-toolbar i.separator {
+  border-bottom: 0px;
+  border-left: 0px;
+  border-top: 0px;
+  border-right: 1px solid rgba(16, 22, 26, 0.15);
+  border-right-color: rgba(16, 22, 26, 0.15);
+  margin: 5px;
+  border-color: rgba(16, 22, 26, 0.4);
+  width: 0;
+}
+
+.bp3-dark .ForumThread-reply-editor .editor-toolbar button:hover {
+  border-bottom: 0px;
+  border-left: 0px;
+  border-top: 0px;
+  border-right: 0px;
+  background-color: rgba(138, 155, 168, 0.15);;
 }
 
 .pagination {

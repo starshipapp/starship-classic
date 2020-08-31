@@ -5,7 +5,8 @@
 .bp3-dark .ForumEditor .CodeMirror {
   color: #ffffff;
   caret-color: #ffffff;
-  background-color: #293742;
+  background-color: #30404d;
+  border: 1px #394B59 solid;
 }
 
 .ForumEditor-name {

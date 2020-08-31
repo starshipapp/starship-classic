@@ -3,7 +3,6 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/FileView";
 import { Icon, Button } from "@blueprintjs/core";
 import MimeTypes from "../../../../util/validMimes";
-import { Files } from "../../../../api/collectionsStandalone";
 
 class FileView extends React.Component {
   constructor(props) {

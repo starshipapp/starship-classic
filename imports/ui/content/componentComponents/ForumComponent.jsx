@@ -28,6 +28,7 @@ class ForumComponent extends React.Component {
     this.loadMore = this.loadMore.bind(this);
     this.updateTextbox = this.updateTextbox.bind(this);
     this.createTag = this.createTag.bind(this);
+    this.removeTag = this.removeTag.bind(this);
     this.setActiveTag = this.setActiveTag.bind(this);
     this.setActiveSort = this.setActiveSort.bind(this);
   }
@@ -65,6 +66,10 @@ class ForumComponent extends React.Component {
     this.setState({
       newTagTextbox: ""
     });
+  }
+
+  removeTag(tag) {
+    Meteor.call("forums.removetag", this.props.id, tag);
   }
 
   setActiveTag(tag) {
@@ -133,6 +138,9 @@ class ForumComponent extends React.Component {
                             <input className={Classes.INPUT + " MainSidebar-menu-input"} value={this.state.newTagTextbox} onChange={this.updateTextbox}/>
                             <Button text="Create" className="MainSidebar-menu-button" onClick={this.createTag}/>
                           </div>
+                        </MenuItem>}
+                        {checkWritePermission(Meteor.userId(), this.props.planet) && <MenuItem icon="cross" text="Delete">
+                          {this.props.forum[0].tags && this.props.forum[0].tags.map((value) => (<MenuItem key={value} icon={this.state.activeTag === value && "tick"} text={value} onClick={() => this.removeTag(value)}/>))}
                         </MenuItem>}
                       </Menu>
                     </Popover>}

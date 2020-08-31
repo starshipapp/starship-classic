@@ -75,7 +75,7 @@ class WikiComponent extends React.Component {
               {checkWritePermission(Meteor.userId(), this.props.planet) && <Popover>
                 <Menu.Item icon="plus" text="New Page"/>
                 <div className="MainSidebar-menu-form">
-                  <input className="MainSidebar-menu-input bp3-input" ref="pageTextbox" placeholder="Page Name" value={this.state.pageTextbox} onChange={this.updatePageTextbox} onKeyDown={this.createNewPage}/>
+                  <input className="MainSidebar-menu-input bp3-input" placeholder="Page Name" value={this.state.pageTextbox} onChange={this.updatePageTextbox} onKeyDown={this.createNewPage}/>
                   <Button className="MainSidebar-menu-button" onClick={this.createNewPage}>Create Page</Button>
                 </div>
               </Popover>}
