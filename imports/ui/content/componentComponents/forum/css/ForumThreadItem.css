@@ -106,3 +106,9 @@
   display: inline-block;
   margin-left: 3.5rem;
 }
+
+.ForumThreadItem-customemoji {
+  height: 1rem;
+  margin-bottom: 0rem;
+  display: inline-block;
+}

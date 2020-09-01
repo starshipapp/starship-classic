@@ -93,7 +93,7 @@ Meteor.methods({
     if(this.userId) {
       const post = ForumReplies.findOne(id);
       const planet = Planets.findOne(post.planet);
-      if(checkReadPermission(this.userId, planet) && emoji.hasEmoji(reactEmoji)) {
+      if(checkReadPermission(this.userId, planet) && (emoji.hasEmoji(reactEmoji) || reactEmoji === "largecrushed")) {
         let reaction = post.reactions.find(value => value.emoji === reactEmoji);
         if(reaction) {
           if(reaction.reactors.includes(this.userId)) {

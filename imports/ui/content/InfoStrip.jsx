@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Divider} from "@blueprintjs/core";
+import {Button, Divider, Icon, Tooltip} from "@blueprintjs/core";
 import {withTracker} from "meteor/react-meteor-data";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 
@@ -29,6 +29,9 @@ class InfoStrip extends React.Component {
   render() {
     return (
       <div className="InfoStrip">
+        {this.props.planet.verified && <Tooltip content="Verified" className="InfoStrip-icon bp3-dark"><Icon icon="tick-circle"/></Tooltip>}
+        {this.props.planet.partnered && <Tooltip content="Partnered" className="InfoStrip-icon bp3-dark"><Icon icon="unresolve"/></Tooltip>}
+        {(this.props.planet.verified || this.props.planet.partnered) && <Divider/>}
         {this.props.user[0] && <div className="InfoStrip-username">Created by {this.props.user[0].username}</div>}
         <Divider/>
         {(this.props.planet.followerCount !== null && this.props.planet.followerCount !== undefined) && <div className="InfoStrip-followers">{this.props.planet.followerCount} {this.props.planet.followerCount === 1 ? "Follower" : "Followers"}</div>}

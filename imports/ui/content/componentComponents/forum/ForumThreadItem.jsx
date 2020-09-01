@@ -9,6 +9,8 @@ import { checkWritePermission } from "../../../../util/checkPermissions";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import Twemoji from "react-twemoji";
+import { PickerEmojis, DefaultCustom } from "../../../assets/emojis/customemojis.jsx";
+import { ObjectCreatedAll } from "minio";
 
 class ForumThreadItem extends React.Component {
   constructor(props) {
@@ -82,10 +84,12 @@ class ForumThreadItem extends React.Component {
   }
 
   selectEmoji(emoji, isPrompt) {
+    console.log(emoji);
+    let stringToSend = emoji.native ? emoji.native : emoji.id;
     if(!this.props.isParent) {
-      Meteor.call("forumreplies.react", emoji.native, this.props.post._id);
+      Meteor.call("forumreplies.react", stringToSend, this.props.post._id);
     } else {
-      Meteor.call("forumposts.react", emoji.native, this.props.post._id);
+      Meteor.call("forumposts.react", stringToSend, this.props.post._id);
     }
     if(isPrompt) {
       this.toggleEmojiPrompt();
@@ -156,11 +160,11 @@ class ForumThreadItem extends React.Component {
               {this.props.isParent && checkWritePermission(Meteor.userId(), this.props.planet) && <Button small={true} icon="lock" text={this.props.post.locked ? "Unlock" : "Lock"} minimal={true} onClick={this.lock} alignText="left" intent={Intent.WARNING}/>}
             </ButtonGroup>
             <ButtonGroup className="ForumThreadItem-reactions">
-              {this.props.post.reactions.map((value) => (<Button key={value.emoji} onClick={() => this.selectEmoji({native: value.emoji})} minimal={!value.reactors.includes(Meteor.userId())} small={true} icon={<Twemoji className="ForumThreadItem-twemoji">{value.emoji}</Twemoji>} text={value.reactors.length}/>))}
+              {this.props.post.reactions.map((value) => (<Button key={value.emoji} onClick={() => this.selectEmoji({native: value.emoji})} minimal={!value.reactors.includes(Meteor.userId())} small={true} icon={Object.keys(DefaultCustom).includes(value.emoji) ? <img src={DefaultCustom[value.emoji]} className="ForumThreadItem-customemoji"/> : <Twemoji className="ForumThreadItem-twemoji">{value.emoji}</Twemoji>} text={value.reactors.length}/>))}
               <Popover isOpen={this.state.showEmojiPrompt} onClose={this.closePrompt}>
                 <Button minimal={true} small={true} icon="new-object" onClick={this.toggleEmojiPrompt}/>
                 <div>
-                  <Picker theme="dark" set="twitter" title="Pick an emoji" emoji="smile" onSelect={(e) => this.selectEmoji(e, true)}/>
+                  <Picker theme="dark" set="twitter" title="Pick an emoji" emoji="smile" custom={PickerEmojis} onSelect={(e) => this.selectEmoji(e, true)}/>
                 </div>
               </Popover>
             </ButtonGroup>

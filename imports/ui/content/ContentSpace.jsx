@@ -216,7 +216,6 @@ class ContentSpace extends React.Component {
                   </Menu>
                 </div>
               </Popover>}
-              
             </Navbar.Group>
           </div>
         </Navbar>
