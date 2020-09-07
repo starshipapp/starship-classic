@@ -5,6 +5,10 @@ import {ForumReplies} from "../../../../api/collectionsStandalone";
 import ForumThreadItem from "./ForumThreadItem";
 
 class ForumThreadItemContainer extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   render() {
     return (
       <div className="ForumThread-itemcontainer">

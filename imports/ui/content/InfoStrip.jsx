@@ -2,6 +2,7 @@ import React from "react";
 import {Button, Divider, Icon, Tooltip} from "@blueprintjs/core";
 import {withTracker} from "meteor/react-meteor-data";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
+import Profile from "../profile/Profile";
 
 import "./css/InfoStrip.css";
 import { checkWritePermission, checkAdminPermission } from "../../util/checkPermissions";
@@ -10,8 +11,14 @@ class InfoStrip extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      showProfile: false
+    };
+
     this.toggleFollow = this.toggleFollow.bind(this);
     this.goToAdmin = this.goToAdmin.bind(this);
+    this.showProfile = this.showProfile.bind(this);
+    this.closeProfile = this.closeProfile.bind(this);
   }
 
   toggleFollow() {
@@ -26,13 +33,26 @@ class InfoStrip extends React.Component {
     FlowRouter.go("Planets.admin", {_id: this.props.planet._id});
   }
 
+  showProfile() {
+    this.setState({
+      showProfile: true
+    });
+  }
+
+  closeProfile() {
+    this.setState({
+      showProfile: false
+    });
+  }
+
   render() {
     return (
       <div className="InfoStrip">
+        <Profile isOpen={this.state.showProfile} userId={this.props.planet.owner} onClose={this.closeProfile}/>
         {this.props.planet.verified && <Tooltip content="Verified" className="InfoStrip-icon bp3-dark"><Icon icon="tick-circle"/></Tooltip>}
         {this.props.planet.partnered && <Tooltip content="Partnered" className="InfoStrip-icon bp3-dark"><Icon icon="unresolve"/></Tooltip>}
         {(this.props.planet.verified || this.props.planet.partnered) && <Divider/>}
-        {this.props.user[0] && <div className="InfoStrip-username">Created by {this.props.user[0].username}</div>}
+        {this.props.user[0] && <div className="InfoStrip-username" onClick={this.showProfile}>Created by {this.props.user[0].username}</div>}
         <Divider/>
         {(this.props.planet.followerCount !== null && this.props.planet.followerCount !== undefined) && <div className="InfoStrip-followers">{this.props.planet.followerCount} {this.props.planet.followerCount === 1 ? "Follower" : "Followers"}</div>}
         {(this.props.planet.followerCount === null || this.props.planet.followerCount === undefined) && <div className="InfoStrip-followers">0 Followers</div>}

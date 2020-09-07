@@ -11,6 +11,10 @@ class ForumItem extends React.Component {
     this.gotoSubComponent = this.gotoSubComponent.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   gotoSubComponent() {
     FlowRouter.go("Planets.component.subid", {_id: this.props.planet._id, _cid: this.props.id, _sid: this.props.post._id});
   }

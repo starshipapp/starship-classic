@@ -12,6 +12,7 @@ import FileView from "./files/FileView";
 import FileButton from "./files/FileButton";
 import {uuid} from "uuidv4";
 import MimeTypes from "../../../util/validMimes";
+import {ErrorToaster} from "../../Toaster";
 
 class FilesComponent extends React.Component {
   constructor(props) {
@@ -33,6 +34,7 @@ class FilesComponent extends React.Component {
     this.dropHandler = this.dropHandler.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.toggleCreateFolderPrompt = this.toggleCreateFolderPrompt.bind(this);
+    this.hideCreateFolderPrompt = this.hideCreateFolderPrompt.bind(this);
     
     this.uploading = {};
 
@@ -89,14 +91,35 @@ class FilesComponent extends React.Component {
   }
 
   downloadZip() {
-    Meteor.call("aws.generatezipkey", this.props.subId, (error, value) => {
+    Meteor.call("aws.downloadfolder", this.props.subId, (error, value) => {
+      if (error) {
+        console.log(error);
+      }
+      if(value) {
+        ErrorToaster.show({message: "This may trigger your popup blocker. If requested, please allow popups to download the folder. This is a temporary workaround and will be changed in a future update.", icon:"error", intent:Intent.WARNING});
+        let interval = setInterval(() => {
+          let url = value.pop();
+
+          let a = document.createElement("a");
+          a.setAttribute("href", url);
+          a.setAttribute("download", "");
+          a.setAttribute("target", "_self");
+          a.click();
+        
+          if (value.length === 0) {
+            clearInterval(interval);
+          }
+        }, 300);
+      }
+    });
+    /*Meteor.call("aws.generatezipkey", this.props.subId, (error, value) => {
       if(error) {
         console.log(error);
       }
       if(value && this.props.files && this.props.files.length !== 0) {
         window.open(window.location.protocol + "//" + window.location.host + "/aws/downloadzip/" + value,"_self");
       }
-    });
+    });*/
   }
 
   downloadFile() {
@@ -182,6 +205,12 @@ class FilesComponent extends React.Component {
     });
   }
 
+  hideCreateFolderPrompt() {
+    this.setState({
+      createFolderPrompt: false
+    });
+  }
+
   render() {
     return (
       <div className="bp3-dark FilesComponent" onDrop={this.dropHandler} onDragOver={this.onDragOver} onDragEnd={this.onDragOver}>
@@ -216,15 +245,15 @@ class FilesComponent extends React.Component {
           </ButtonGroup>}
           {checkWritePermission(Meteor.userId(), this.props.planet) && (!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
             <Button text="Upload Files" icon="upload" onClick={this.onFileUploadClick}/>
-            <Popover isOpen={this.state.createFolderPrompt}>
+            <Popover isOpen={this.state.createFolderPrompt} onClose={this.hideCreateFolderPrompt}>
               <Button text="New Folder" icon="folder-new" onClick={this.toggleCreateFolderPrompt}/>
               <div className="MainSidebar-menu-form">
                 <input className={Classes.INPUT + " MainSidebar-menu-input"} value={this.state.newFolderTextbox} onChange={this.updateTextbox}/>
                 <Button text="Create" className="MainSidebar-menu-button" onClick={this.createFolder}/>
               </div>
             </Popover>
-            {/*<Divider/>
-            <Button text="Download Folder" icon="download" onClick={this.downloadZip}/>*/}
+            {this.props.subId && <Divider/>}
+            {this.props.subId && <Button text="Download Folder" icon="download" onClick={this.downloadZip}/>}
           </ButtonGroup>}
         </div>
         {(!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <div className="FilesComponent-button-container">

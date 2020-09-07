@@ -121,7 +121,7 @@ class FileButton extends React.Component {
         >Are you sure you want to delete this file?<br/>&apos;{this.props.object.name}&apos; will be lost forever! (A long time!)</Alert>
         <Tooltip content={this.props.object.name} inheritDarkTheme={true}>
           <Button
-            draggable={this.props.object.type !== "folder"}
+            draggable={true /*this.props.object.type !== "folder"*/}
             alignText="left"
             onContextMenu={this.handleContext} large={true} className={"FilesComponent-filebutton"}
             icon={this.props.object.type === "folder" ? "folder-close" : "document"}

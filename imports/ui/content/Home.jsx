@@ -3,10 +3,15 @@ import "./css/Home.css";
 import { Callout, Intent, Text } from "@blueprintjs/core";
 import {withTracker} from "meteor/react-meteor-data";
 import Planets from "../../api/planets";
+import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 
 class Home extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     return this.props !== nextProps || this.state !== nextState;
+  }
+
+  goToPlanet(id) {
+    FlowRouter.go("Planets.home", {_id: id});
   }
 
   render() {
@@ -24,7 +29,7 @@ class Home extends React.Component {
           <div className="Home-featured">
             <div className="Home-featured-header">Featured Planets</div>
             <div className="Home-featured-list">
-              {this.props.planets.map((value) => (<div className="Home-featured-item" key={value._id}>
+              {this.props.planets.map((value) => (<div className="Home-featured-item" onClick={() => this.goToPlanet(value._id)} key={value._id}>
                 <Text className="Home-featured-name">{value.name}</Text>
                 <Text className="Home-featured-description">{value.featuredDescription && value.featuredDescription} </Text>
                 <div className="Home-featured-followers">{value.followerCount} {value.followerCount === 1 ? "Follower" : "Followers"}</div>

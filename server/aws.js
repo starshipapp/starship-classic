@@ -85,6 +85,28 @@ Meteor.methods({
       }
     }
   },
+  "aws.downloadfolder"(folderId) {
+    check(folderId, String);
+    const file = FileObjects.findOne(folderId);
+    
+    if(file && file.type === "folder") {
+      const planet = Planets.findOne(file.planet);
+      if(checkReadPermission(this.userId, planet)) {
+        let urls = [];
+        let files = FileObjects.find({parent: folderId});
+        
+        files.map((value) => {
+          urls.push(s3.getSignedUrl("getObject", {
+            Bucket: Meteor.settings.bucket.bucket,
+            Key: value.key,
+            Expires: 18000,
+            ResponseContentDisposition: "attachment; filename=\"" + value.name + "\""
+          }));
+        });
+        return urls;
+      }
+    }
+  },
   "aws.getpreview"(fileId) {
     check(fileId, String);
     const file = FileObjects.findOne(fileId);

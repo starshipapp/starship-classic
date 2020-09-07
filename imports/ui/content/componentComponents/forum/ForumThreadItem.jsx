@@ -10,7 +10,7 @@ import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import Twemoji from "react-twemoji";
 import { PickerEmojis, DefaultCustom } from "../../../assets/emojis/customemojis.jsx";
-import { ObjectCreatedAll } from "minio";
+import Profile from "../../../profile/Profile";
 
 class ForumThreadItem extends React.Component {
   constructor(props) {
@@ -20,7 +20,8 @@ class ForumThreadItem extends React.Component {
       textValue: this.props.post.content,
       editor: false,
       alert: false,
-      showEmojiPrompt: false
+      showEmojiPrompt: false,
+      showProfile: false
     };
 
     this.edit = this.edit.bind(this);
@@ -33,6 +34,8 @@ class ForumThreadItem extends React.Component {
     this.selectEmoji = this.selectEmoji.bind(this);
     this.toggleEmojiPrompt = this.toggleEmojiPrompt.bind(this);
     this.closePrompt = this.closePrompt.bind(this);
+    this.showProfile = this.showProfile.bind(this);
+    this.closeProfile = this.closeProfile.bind(this);
   }
 
   edit() {
@@ -108,6 +111,18 @@ class ForumThreadItem extends React.Component {
     });
   }
 
+  showProfile() {
+    this.setState({
+      showProfile: true
+    });
+  }
+
+  closeProfile() {
+    this.setState({
+      showProfile: false
+    });
+  }
+
   render() {
     let creationDate = this.props.post.createdAt ? this.props.post.createdAt : new Date("2020-07-25T15:24:30+00:00");
     let creationDateText = creationDate.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
@@ -116,6 +131,7 @@ class ForumThreadItem extends React.Component {
 
     return (
       <div className="ForumThreadItem">
+        <Profile isOpen={this.state.showProfile} planet={this.props.planet} userId={this.props.planet.owner} onClose={this.closeProfile}/>
         <Alert
           isOpen={this.state.alert}
           className="bp3-dark"
@@ -129,8 +145,8 @@ class ForumThreadItem extends React.Component {
           onConfirm={this.delete}
         >Are you sure you want to delete this post? It will be lost forever! (A long time!)</Alert>
         <div className="ForumThreadItem-info">
-          <div className="ForumThreadItem-profilepic"/>
-          <div className="ForumThreadItem-username">{this.props.user[0] && this.props.user[0].username}</div>
+          <div className="ForumThreadItem-profilepic" onClick={this.showProfile}/>
+          <div className="ForumThreadItem-username" onClick={this.showProfile}>{this.props.user[0] && this.props.user[0].username}</div>
         </div>
         <div className="ForumThreadItem-content">
           <div className="ForumThreadItem-postinfo">

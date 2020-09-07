@@ -13,6 +13,7 @@
   border-radius: 0.5rem;
   margin-bottom: 0.5rem;
   background-color: #394B59;
+  cursor: pointer;
 }
 
 .ForumThreadItem-info {
@@ -31,6 +32,7 @@
 
 .ForumThreadItem-username {
   margin-left: 0.75rem;
+  cursor: pointer;
 }
 
 .ForumThreadItem-text {

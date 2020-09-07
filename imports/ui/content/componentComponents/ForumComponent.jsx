@@ -33,6 +33,10 @@ class ForumComponent extends React.Component {
     this.setActiveSort = this.setActiveSort.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   startNewThread() {
     this.setState({
       creatingNewThread: true

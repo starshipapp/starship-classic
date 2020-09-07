@@ -66,6 +66,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .Home-featured-name {

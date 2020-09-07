@@ -22,6 +22,10 @@ class ForumEditor extends React.Component {
     this.setActiveTag = this.setActiveTag.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
+
   handleChange(value) {
     this.setState({
       editingContent: value

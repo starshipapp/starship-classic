@@ -124,6 +124,13 @@ Meteor.methods({
           let newPath = newParent ? newParent.path.concat([newParent._id]) : ["root"];
           let newObjectParent = newParent ? newParent._id : "root";
           FileObjects.update(objectId, {$set: {path: newPath, parent: newObjectParent}});
+        } else if (object.type === "folder") {
+          let newPath = newParent ? newParent.path.concat([newParent._id]) : ["root"];
+          let newObjectParent = newParent ? newParent._id : "root";
+          FileObjects.update({path: object._id}, {$pull: {path: {$in: object.path}}}, {multi: true}, () => {
+            FileObjects.update({path: object._id}, {$push: {path: {$each: newPath, $position: 0}}}, {multi: true});
+            FileObjects.update(objectId, {$set: {path: newPath, parent: newObjectParent}});
+          });
         }
       }
     }

@@ -25,6 +25,9 @@ class ForumThread extends React.Component {
     this.changePage = this.changePage.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps || this.state !== nextState;
+  }
 
   handleChange(value) {
     this.setState({

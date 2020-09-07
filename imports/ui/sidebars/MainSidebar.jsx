@@ -4,6 +4,7 @@ import { Meteor } from "meteor/meteor";
 import {ErrorToaster} from "../Toaster";
 import {withTracker} from "meteor/react-meteor-data";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
+import Profile from "../profile/Profile";
 
 import Planets from "../../api/planets";
 import "./css/MainSidebar.css";
@@ -18,7 +19,8 @@ class MainSidebar extends React.Component {
       passwordText: "",
       passwordConfirmText: "",
       emailText: "",
-      planetText: ""
+      planetText: "",
+      showProfile: false
     };
 
     this.toggleSignUp = this.toggleSignUp.bind(this);
@@ -27,7 +29,8 @@ class MainSidebar extends React.Component {
     this.logout = this.logout.bind(this);
     this.createPlanet = this.createPlanet.bind(this);
     this.goToPlanet = this.goToPlanet.bind(this);
-
+    this.showProfile = this.showProfile.bind(this);
+    this.closeProfile = this.closeProfile.bind(this);
     this.setUsernameText = this.setUsernameText.bind(this);
     this.setPasswordText = this.setPasswordText.bind(this);
     this.setPasswordConfirmText = this.setPasswordConfirmText.bind(this);
@@ -184,10 +187,23 @@ class MainSidebar extends React.Component {
       planetText: e.target.value
     });
   }
+  
+  showProfile() {
+    this.setState({
+      showProfile: true
+    });
+  }
+
+  closeProfile() {
+    this.setState({
+      showProfile: false
+    });
+  }
 
   render() {
     return (
       <div className="MainSidebar">
+        <Profile isOpen={this.state.showProfile} userId={Meteor.userId()} onClose={this.closeProfile}/>
         <Menu className="MainSidebar-menu">
           <div className="MainSidebar-menu-logo" onClick={() => {FlowRouter.go("Home", {});}}>starship<span className="MainSidebar-version">alpha</span></div>
           {Meteor.userId() && <div>
@@ -210,11 +226,7 @@ class MainSidebar extends React.Component {
           {Meteor.userId() && this.props.followingPlanets && this.props.followingPlanets.map((value) => (<Menu.Item key={value._id} icon="control" onClick={() => this.goToPlanet(value._id)} text={value.name}/>))}
           <Menu.Divider/>
           {Meteor.userId() ? <div>
-            {Meteor.user() && <MenuItem disabled={true} text={Meteor.user().username}/>}
-            <Menu.Item text="Settings" icon="cog" disabled={true}>
-              <Menu.Item icon="tick" text="Save on edit" />
-              <Menu.Item icon="blank" text="Compile on edit" />
-            </Menu.Item>
+            {Meteor.user() && <MenuItem text={Meteor.user().username} onClick={this.showProfile} icon="person"/>}
             <Menu.Item icon="log-out" text="Logout" onClick={this.logout}/>
           </div> : <div>
             <Popover position="right" className="MainSidebar-menu-popover">
