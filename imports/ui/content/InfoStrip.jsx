@@ -48,7 +48,7 @@ class InfoStrip extends React.Component {
   render() {
     return (
       <div className="InfoStrip">
-        <Profile isOpen={this.state.showProfile} userId={this.props.planet.owner} onClose={this.closeProfile}/>
+        <Profile isOpen={this.state.showProfile} userId={this.props.planet.owner} planet={this.props.planet} onClose={this.closeProfile}/>
         {this.props.planet.verified && <Tooltip content="Verified" className="InfoStrip-icon bp3-dark"><Icon icon="tick-circle"/></Tooltip>}
         {this.props.planet.partnered && <Tooltip content="Partnered" className="InfoStrip-icon bp3-dark"><Icon icon="unresolve"/></Tooltip>}
         {(this.props.planet.verified || this.props.planet.partnered) && <Divider/>}

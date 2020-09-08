@@ -171,5 +171,19 @@ Meteor.methods({
       console.log("test3");
       Planets.update({_id: planetId}, {$set: {featuredDescription, featured, verified, partnered}});
     }
+  },
+  "planets.toggleban"(planetId, userId) {
+    check(userId, String);
+    check(planetId, String);
+
+    const planet = Planets.findOne(planetId);
+
+    if(checkWritePermission(this.userId, planet) && !checkWritePermission(userId, planet)) {
+      if(planet.banned && planet.banned.includes(userId)) {
+        Planets.update({_id: planetId}, {$pull: {banned: userId}});
+      } else {
+        Planets.update({_id: planetId}, {$push: {banned: userId}});
+      }
+    }
   }
 });

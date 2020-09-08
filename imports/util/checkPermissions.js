@@ -5,16 +5,24 @@ export function checkWritePermission(userId, planet) {
 
     user = Meteor.users.findOne(userId);
 
+    if(user && user.banned) {
+      return false;
+    }
+
     if(user && user.admin) {
       return true;
     }
 
+    if(planet.banned && planet.banned.includes(userId)) {
+      return false;
+    }
+
     //we own it
-    if (planet.owner === userId) {
+    if(planet.owner === userId) {
       return true;
     }
     //we are a member of it
-    if (planet.members && planet.members.includes(userId)) {
+    if(planet.members && planet.members.includes(userId)) {
       return true;
     }
   }
@@ -28,8 +36,16 @@ export function checkReadPermission(userId, planet) {
 
     user = Meteor.users.findOne(userId);
 
+    if(user && user.banned) {
+      return false;
+    }
+
     if(user && user.admin) {
       return true;
+    }
+
+    if(planet.banned && planet.banned.includes(userId)) {
+      return false;
     }
 
     //planet is not private

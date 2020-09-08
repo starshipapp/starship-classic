@@ -115,22 +115,24 @@ Meteor.methods({
     check(objectId, String);
     check(newParentId, String);
 
-    let object = FileObjects.findOne(objectId);
-    let newParent = FileObjects.findOne(newParentId);
-    if(object && (newParent || newParentId === "root")) {
-      let planet = Planets.findOne(object.planet);
-      if(checkWritePermission(this.userId, planet)) {
-        if(object.type === "file") {
-          let newPath = newParent ? newParent.path.concat([newParent._id]) : ["root"];
-          let newObjectParent = newParent ? newParent._id : "root";
-          FileObjects.update(objectId, {$set: {path: newPath, parent: newObjectParent}});
-        } else if (object.type === "folder") {
-          let newPath = newParent ? newParent.path.concat([newParent._id]) : ["root"];
-          let newObjectParent = newParent ? newParent._id : "root";
-          FileObjects.update({path: object._id}, {$pull: {path: {$in: object.path}}}, {multi: true}, () => {
-            FileObjects.update({path: object._id}, {$push: {path: {$each: newPath, $position: 0}}}, {multi: true});
+    if(newParentId !== objectId) {
+      let object = FileObjects.findOne(objectId);
+      let newParent = FileObjects.findOne(newParentId);
+      if(object && (newParent || newParentId === "root")) {
+        let planet = Planets.findOne(object.planet);
+        if(checkWritePermission(this.userId, planet)) {
+          if(object.type === "file") {
+            let newPath = newParent ? newParent.path.concat([newParent._id]) : ["root"];
+            let newObjectParent = newParent ? newParent._id : "root";
             FileObjects.update(objectId, {$set: {path: newPath, parent: newObjectParent}});
-          });
+          } else if (object.type === "folder") {
+            let newPath = newParent ? newParent.path.concat([newParent._id]) : ["root"];
+            let newObjectParent = newParent ? newParent._id : "root";
+            FileObjects.update({path: object._id}, {$pull: {path: {$in: object.path}}}, {multi: true}, () => {
+              FileObjects.update({path: object._id}, {$push: {path: {$each: newPath, $position: 0}}}, {multi: true});
+              FileObjects.update(objectId, {$set: {path: newPath, parent: newObjectParent}});
+            });
+          }
         }
       }
     }

@@ -131,7 +131,7 @@ class ForumThreadItem extends React.Component {
 
     return (
       <div className="ForumThreadItem">
-        <Profile isOpen={this.state.showProfile} planet={this.props.planet} userId={this.props.planet.owner} onClose={this.closeProfile}/>
+        <Profile isOpen={this.state.showProfile} planet={this.props.planet} userId={this.props.post.owner} onClose={this.closeProfile}/>
         <Alert
           isOpen={this.state.alert}
           className="bp3-dark"

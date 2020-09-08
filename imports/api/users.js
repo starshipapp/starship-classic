@@ -1,6 +1,7 @@
 import {Meteor} from "meteor/meteor";
 import {Accounts} from "meteor/accounts-base";
 import {check} from "meteor/check";
+import { checkAdminPermission } from "../util/checkPermissions";
 
 Accounts.config({
   defaultFieldSelector: {
@@ -16,12 +17,12 @@ if(Meteor.isServer) {
   Meteor.publish("users.findId", function findUserById(userId) {
     check(userId, String);
 
-    return Meteor.users.find({_id: userId}, {fields: {username: 1, admin: 1, createdAt: 1}});
+    return Meteor.users.find({_id: userId}, {fields: {username: 1, admin: 1, createdAt: 1, banned: 1}});
   });
   Meteor.publish("user.currentUserData", function () {
     if (this.userId) {
       return Meteor.users.find({ _id: this.userId }, {
-        fields: { following: 1, admin: 1 }
+        fields: { following: 1, admin: 1, banned: 1 }
       });
     } else {
       this.ready();
@@ -67,6 +68,15 @@ Meteor.methods({
 
     if(user) {
       return user.admin;
+    }
+  },
+  "users.toggleban"(id) {
+    check(id, String);
+
+    let user = Meteor.users.findOne(id);
+
+    if(user && checkAdminPermission(this.userId)) {
+      Meteor.users.update(id, {$set: {banned: !user.banned}});
     }
   }
 });
