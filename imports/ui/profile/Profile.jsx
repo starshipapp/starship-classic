@@ -31,7 +31,7 @@ class Profile extends React.Component {
         <div className={Classes.DIALOG_BODY}>
           {this.props.user[0] && <div className="Profile-container">
             <div className="Profile-icon">
-              {this.props.user[0].profilePicture ? <div></div> : <div className="Profile-no-pfp"/>}
+              {this.props.user[0].profilePicture ? <div className="Profile-pfp"><img src={this.props.user[0].profilePicture + "?t=" + Number(Date.now())}/></div> : <div className="Profile-pfp"/>}
             </div>
             <div className="Profile-info">
               <div className="Profile-name">{this.props.user[0].username}</div>

@@ -6,13 +6,19 @@
   width: 100%;
 }
 
-.Profile-no-pfp {
+.Profile-pfp {
   width: 6.5rem;
   margin-right: 0.75rem;
   height: 6.5rem;
   border-radius: 0.5rem;
   margin-bottom: 0.5rem;
   background-color: #394B59;
+}
+
+.Profile-pfp img {
+  width: 6.5rem;
+  height: 6.5rem;
+  border-radius: 0.5rem;
 }
 
 .Profile-name {

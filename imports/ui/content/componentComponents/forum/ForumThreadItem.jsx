@@ -145,7 +145,9 @@ class ForumThreadItem extends React.Component {
           onConfirm={this.delete}
         >Are you sure you want to delete this post? It will be lost forever! (A long time!)</Alert>
         <div className="ForumThreadItem-info">
-          <div className="ForumThreadItem-profilepic" onClick={this.showProfile}/>
+          <div className="ForumThreadItem-profilepic" onClick={this.showProfile}>
+            {this.props.user[0] && this.props.user[0].profilePicture && <img src={this.props.user[0].profilePicture + "?t=" + Number(Date.now())}/>}
+          </div>
           <div className="ForumThreadItem-username" onClick={this.showProfile}>{this.props.user[0] && this.props.user[0].username}</div>
         </div>
         <div className="ForumThreadItem-content">

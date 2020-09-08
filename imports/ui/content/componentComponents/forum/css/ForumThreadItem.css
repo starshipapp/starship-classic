@@ -16,6 +16,12 @@
   cursor: pointer;
 }
 
+.ForumThreadItem-profilepic img {
+  width: 8.5rem;
+  height: 8.5rem;
+  border-radius: 0.5rem;
+}
+
 .ForumThreadItem-info {
   min-width: 10rem;
   max-width: 10rem;

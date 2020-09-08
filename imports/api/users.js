@@ -17,12 +17,12 @@ if(Meteor.isServer) {
   Meteor.publish("users.findId", function findUserById(userId) {
     check(userId, String);
 
-    return Meteor.users.find({_id: userId}, {fields: {username: 1, admin: 1, createdAt: 1, banned: 1}});
+    return Meteor.users.find({_id: userId}, {fields: {username: 1, admin: 1, createdAt: 1, banned: 1, profilePicture: 1}});
   });
   Meteor.publish("user.currentUserData", function () {
     if (this.userId) {
       return Meteor.users.find({ _id: this.userId }, {
-        fields: { following: 1, admin: 1, banned: 1 }
+        fields: { following: 1, admin: 1, banned: 1, profilePicture: 1 }
       });
     } else {
       this.ready();

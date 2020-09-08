@@ -7,7 +7,7 @@ import { uuid } from "uuidv4";
 import {FileObjects, Files, Planets} from "../imports/api/collectionsStandalone";
 import { checkWritePermission, checkReadPermission } from "../imports/util/checkPermissions";
 import AWS from "aws-sdk";
-import MimeTypes from "../util/validMimes";
+import MimeTypes from "../imports/util/validMimes";
 
 let authenticatedRequests = {};
 
@@ -191,7 +191,10 @@ Meteor.methods({
   "aws.getprofileuploadlink"(mimeType, size) {
     check(mimeType, String);
     check(size, Number);
-    if(MimeTypes.imageTypes.includes(mimeType) && this.userId && this.size > 8000000) {
+
+    console.log(mimeType);
+    console.log(size);
+    if(MimeTypes.imageTypes.includes(mimeType) && this.userId && size < 8000000) {
       const url = s3.getSignedUrl("putObject", {
         Bucket: Meteor.settings.bucket.bucket,
         Key: "profilepictures/" + this.userId,
@@ -200,7 +203,7 @@ Meteor.methods({
         ACL: "public-read"
       });
 
-      Meteor.users.update(this.userId, {$set: {profilePicture: Meteor.settings.bucket.endpoint + "/profilepictures/" + this.userId}});
+      Meteor.users.update(this.userId, {$set: {profilePicture: Meteor.settings.bucket.endpoint + "/" + Meteor.settings.bucket.bucket + "/profilepictures/" + this.userId}});
 
       return url;
     }
