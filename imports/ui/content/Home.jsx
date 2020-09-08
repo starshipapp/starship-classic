@@ -37,7 +37,7 @@ class Home extends React.Component {
             </div>
           </div>
           <div className="Home-footer">
-            <span className="Home-footer-copyright">© Starship 2019. All rights reserved.</span>
+            <span className="Home-footer-copyright">© Starship 2020. All rights reserved.</span>
             <span className="Home-footer-links">
               <a className="Home-footer-link" href="#">Terms</a> 
               <a className="Home-footer-link" href="#">Privacy Policy</a> 
