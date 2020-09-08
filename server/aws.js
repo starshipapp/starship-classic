@@ -7,6 +7,7 @@ import { uuid } from "uuidv4";
 import {FileObjects, Files, Planets} from "../imports/api/collectionsStandalone";
 import { checkWritePermission, checkReadPermission } from "../imports/util/checkPermissions";
 import AWS from "aws-sdk";
+import MimeTypes from "../util/validMimes";
 
 let authenticatedRequests = {};
 
@@ -186,6 +187,23 @@ Meteor.methods({
       });
     });
     FileObjects.remove({componentId});
+  },
+  "aws.getprofileuploadlink"(mimeType, size) {
+    check(mimeType, String);
+    check(size, Number);
+    if(MimeTypes.imageTypes.includes(mimeType) && this.userId && this.size > 8000000) {
+      const url = s3.getSignedUrl("putObject", {
+        Bucket: Meteor.settings.bucket.bucket,
+        Key: "profilepictures/" + this.userId,
+        Expires: 120,
+        ContentType: mimeType,
+        ACL: "public-read"
+      });
+
+      Meteor.users.update(this.userId, {$set: {profilePicture: Meteor.settings.bucket.endpoint + "/profilepictures/" + this.userId}});
+
+      return url;
+    }
   }
 });
 

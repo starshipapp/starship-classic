@@ -3,7 +3,6 @@ import MainSidebar from "./sidebars/MainSidebar";
 import {withTracker} from "meteor/react-meteor-data";
 import "./css/App.css";
 import { NonIdealState } from "@blueprintjs/core";
-
 class App extends React.Component {
   render() {
     console.log(Meteor.user());

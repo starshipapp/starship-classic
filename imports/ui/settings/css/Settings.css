@@ -1,0 +1,36 @@
+.Settings {
+  background-color: #293742;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.Settings-header {
+  padding-right: calc(50% - 37.5vw);
+  padding-left: calc(50% - 37.5vw);
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+  font-size: 3rem;
+  font-weight: bold;
+  background-color: #30404d;
+}
+
+.Settings-container {
+  width: 75vw;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.Settings-profilepic {
+  width: 8.5rem;
+  margin: 0.75rem 0;
+  height: 8.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: #394B59;
+  cursor: pointer;
+}

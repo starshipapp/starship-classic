@@ -200,6 +200,10 @@ class MainSidebar extends React.Component {
     });
   }
 
+  goToSettings() {
+    FlowRouter.go("Settings");
+  }
+
   render() {
     return (
       <div className="MainSidebar">
@@ -227,6 +231,7 @@ class MainSidebar extends React.Component {
           <Menu.Divider/>
           {Meteor.userId() ? <div>
             {Meteor.user() && <MenuItem text={Meteor.user().username} onClick={this.showProfile} icon="person"/>}
+            {Meteor.user() && <MenuItem text="Settings" onClick={this.goToSettings} icon="settings"/>}
             <Menu.Item icon="log-out" text="Logout" onClick={this.logout}/>
           </div> : <div>
             <Popover position="right" className="MainSidebar-menu-popover">

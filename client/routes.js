@@ -5,6 +5,7 @@ import App from "/imports/ui/App";
 import ContentSpace from "../imports/ui/content/ContentSpace";
 import Home from "../imports/ui/content/Home";
 import Invite from "../imports/ui/invites/Invite";
+import Settings from "../imports/ui/settings/Settings";
 
 FlowRouter.route("/planet/:_id", {
   name: "Planets.home",
@@ -45,5 +46,12 @@ FlowRouter.route("/", {
   name: "Home",
   action() {
     ReactDOM.render(<App component={<Home/>}/>, document.getElementById("react-target"));
+  }
+});
+
+FlowRouter.route("/settings", {
+  name: "Settings",
+  action() {
+    ReactDOM.render(<App component={<Settings/>}/>, document.getElementById("react-target"));
   }
 });
