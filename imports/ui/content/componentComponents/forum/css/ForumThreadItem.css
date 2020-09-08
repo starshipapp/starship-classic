@@ -38,7 +38,12 @@
 
 .ForumThreadItem-username {
   margin-left: 0.75rem;
+  font-weight: bold;
+  font-size: 0.95rem;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ForumThreadItem-text {
@@ -119,4 +124,30 @@
   height: 1rem;
   margin-bottom: 0rem;
   display: inline-block;
+}
+
+.ForumThreadItem-admin {
+  background-color: #db3737;
+  width: calc(100% - 1.5rem);
+  margin: 0.75rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0rem;
+  padding-top: 0.25rem;
+  padding-left: 0.35rem;
+  padding-bottom: 0.25rem;
+  font-weight: bold;
+  border-radius: 0.25rem;
+}
+
+.ForumThreadItem-member {
+  background-color: #15B371;
+  width: calc(100% - 1.5rem);
+  margin: 0.75rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0rem;
+  padding-top: 0.25rem;
+  padding-left: 0.35rem;
+  padding-bottom: 0.25rem;
+  font-weight: bold;
+  border-radius: 0.25rem;
 }

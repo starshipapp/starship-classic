@@ -149,6 +149,8 @@ class ForumThreadItem extends React.Component {
             {this.props.user[0] && this.props.user[0].profilePicture && <img src={this.props.user[0].profilePicture + "?t=" + Number(Date.now())}/>}
           </div>
           <div className="ForumThreadItem-username" onClick={this.showProfile}>{this.props.user[0] && this.props.user[0].username}</div>
+          {this.props.user[0] && this.props.user[0].admin && <div className="ForumThreadItem-admin">Global Admin</div>}
+          {checkWritePermission(this.props.post.owner, this.props.planet) && this.props.user[0] && !this.props.user[0].admin && <div className="ForumThreadItem-member">Planet Member</div>}
         </div>
         <div className="ForumThreadItem-content">
           <div className="ForumThreadItem-postinfo">
