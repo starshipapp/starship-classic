@@ -2,6 +2,7 @@ import {Meteor} from "meteor/meteor";
 import {Accounts} from "meteor/accounts-base";
 import {check} from "meteor/check";
 import { checkAdminPermission } from "../util/checkPermissions";
+import axios from "axios";
 
 Accounts.config({
   defaultFieldSelector: {
@@ -36,7 +37,8 @@ Meteor.methods({
       email: String,
       password: String,
       profile: {},
-      username: String
+      username: String,
+      recaptcha: String
     });
 
     const usernameExists = Accounts.findUserByUsername(user.username);
@@ -54,7 +56,22 @@ Meteor.methods({
       throw new Meteor.Error("Your password must be at least 8 characters long");
     }
 
-    Accounts.createUser(user);
+    let secret = Meteor.settings.recaptchaSecret;
+    let response = user.recaptcha;
+
+    axios.post(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${response}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+        },
+      },
+    ).then((res) => {
+      if(res.data.success === true) {
+        Accounts.createUser(user);
+      }
+    });
   },
   /*"users.setadmin"(id) {
     check(id, String);

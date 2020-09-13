@@ -52,3 +52,9 @@
   font-size: 0.75rem;
   margin-left: 0.25rem;
 }
+
+.MainSidebar-signup-input {
+  display: block;
+  margin-bottom: 0.5rem;
+  width: 100%;
+}

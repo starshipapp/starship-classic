@@ -1,9 +1,13 @@
 {
+  "public": {
+    "recaptchaSite": "6Lf10ssZAAAAACcFZ6w2fOWqfioMeoB9XX_gnzyn"
+  },
   "bucket": {
     "endpoint": "http://127.0.0.1:9000",
     "accessKey": "minioadmin",
     "accessKeySecret": "minioadmin",
     "bucket": "starship-dev",
     "forcePathStyle": true
-  }
+  },
+  "recaptchaSecret": "6Lf10ssZAAAAACxmuQXltSy4cnDpPtXZOa7ZYSRI"
 }

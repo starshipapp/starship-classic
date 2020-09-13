@@ -28,9 +28,7 @@ if (Meteor.isServer) {
     }
   });
   Meteor.publish("planets.featured", function planetsPublication() {
-    if(this.userId) {
-      return Planets.find({featured: true, private: false}, {fields: {name: 1, featuredDescription: 1, followerCount: 1, featured: 1}});
-    }
+    return Planets.find({featured: true, private: false}, {fields: {name: 1, featuredDescription: 1, followerCount: 1, featured: 1}});
   });
   Meteor.publish("planets.planet", function findPlanet(planetId) {
     check(planetId, String);

@@ -1,10 +1,11 @@
 import React from "react";
-import { Menu, Button, Popover, MenuItem, Intent } from "@blueprintjs/core";
+import { Menu, Button, Popover, MenuItem, Intent, Dialog, Classes, AnchorButton } from "@blueprintjs/core";
 import { Meteor } from "meteor/meteor";
 import {ErrorToaster} from "../Toaster";
 import {withTracker} from "meteor/react-meteor-data";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import Profile from "../profile/Profile";
+import Recaptcha from "react-google-recaptcha";
 
 import Planets from "../../api/planets";
 import "./css/MainSidebar.css";
@@ -23,6 +24,8 @@ class MainSidebar extends React.Component {
       showProfile: false
     };
 
+    this.recaptchaRef = React.createRef();
+
     this.toggleSignUp = this.toggleSignUp.bind(this);
     this.signUp = this.signUp.bind(this);
     this.signIn = this.signIn.bind(this);
@@ -36,6 +39,7 @@ class MainSidebar extends React.Component {
     this.setPasswordConfirmText = this.setPasswordConfirmText.bind(this);
     this.setEmailText = this.setEmailText.bind(this);
     this.setPlanetText = this.setPlanetText.bind(this);
+    this.onClose = this.onClose.bind(this);
   }
 
   toggleSignUp() {
@@ -50,54 +54,58 @@ class MainSidebar extends React.Component {
 
   signUp(e) {
     e.preventDefault();
-    if(!this.state.isSigningUp) {
-      this.toggleSignUp();
-    } else {
-      if(this.state.usernameText === "") {
-        ErrorToaster.show({message: "Please enter a username.", icon:"error", intent:Intent.DANGER});
-        return;
-      }
+    const recaptchaValue = this.recaptchaRef.current.getValue();
 
-      if(this.state.passwordText === "") {
-        ErrorToaster.show({message: "Please enter a password.", icon:"error", intent:Intent.DANGER});
-        return;
-      }
-
-      if(this.state.passwordText !== this.state.passwordConfirmText) {
-        ErrorToaster.show({message: "Password text does not match!", icon:"error", intent:Intent.DANGER});
-        return;
-      }
-
-
-      if(this.state.emailText === "") {
-        ErrorToaster.show({message: "Please enter an email address.", icon:"error", intent:Intent.DANGER});
-        return;
-      }
-
-      Meteor.call("users.insert", {
-        username: this.state.usernameText,
-        password: this.state.passwordText,
-        email: this.state.emailText,
-        profile: {}
-      }, (e) => {
-        if(e) {
-          ErrorToaster.show({message: e.message.substr(1).slice(0, -1) + ".", icon:"error", intent:Intent.DANGER});
-        } else {
-          Meteor.loginWithPassword(this.state.usernameText, this.state.passwordText, function(e) {
-            if(e) {
-              ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER});
-            } else {
-              this.setState({
-                usernameText: "",
-                passwordText: "",
-                passwordConfirmText: "",
-                emailText: "",
-              });
-            }
-          });
-        }
-      });
+    if(recaptchaValue === "") { 
+      ErrorToaster.show({message: "CAPTCHA failed.", icon:"error", intent:Intent.DANGER});
+      return;
     }
+
+    if(this.state.usernameText === "") {
+      ErrorToaster.show({message: "Please enter a username.", icon:"error", intent:Intent.DANGER});
+      return;
+    }
+
+    if(this.state.passwordText === "") {
+      ErrorToaster.show({message: "Please enter a password.", icon:"error", intent:Intent.DANGER});
+      return;
+    }
+
+    if(this.state.passwordText !== this.state.passwordConfirmText) {
+      ErrorToaster.show({message: "Password text does not match!", icon:"error", intent:Intent.DANGER});
+      return;
+    }
+
+
+    if(this.state.emailText === "") {
+      ErrorToaster.show({message: "Please enter an email address.", icon:"error", intent:Intent.DANGER});
+      return;
+    }
+
+    Meteor.call("users.insert", {
+      username: this.state.usernameText,
+      password: this.state.passwordText,
+      email: this.state.emailText,
+      profile: {},
+      recaptcha: recaptchaValue
+    }, (e) => {
+      if(e) {
+        ErrorToaster.show({message: e.message.substr(1).slice(0, -1) + ".", icon:"error", intent:Intent.DANGER});
+      } else {
+        Meteor.loginWithPassword(this.state.usernameText, this.state.passwordText, function(e) {
+          if(e) {
+            ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER});
+          } else {
+            this.setState({
+              usernameText: "",
+              passwordText: "",
+              passwordConfirmText: "",
+              emailText: "",
+            });
+          }
+        });
+      }
+    });
   }
 
   signIn(e) {
@@ -204,9 +212,58 @@ class MainSidebar extends React.Component {
     FlowRouter.go("Settings");
   }
 
+  onClose() {
+    this.setState({
+      isSigningUp: false
+    });
+  }
+
   render() {
     return (
       <div className="MainSidebar">
+        <Dialog className="bp3-dark" title="Sign Up" onClose={this.onClose} isOpen={this.state.isSigningUp}>
+          <div className={Classes.DIALOG_BODY}>
+            <form className="MainSidebar-signup" onSubmit={this.isSigningUp ? this.signUp : this.signIn}>
+              <input
+                className="MainSidebar-signup-input bp3-input bp3-large"
+                placeholder="Username"
+                onChange={this.setUsernameText}
+                value={this.state.usernameText}
+              />
+              <input
+                className="MainSidebar-signup-input bp3-input bp3-large"
+                placeholder="Password"
+                type="password"
+                onChange={this.setPasswordText}
+                value={this.state.passwordText}
+              />
+              <input
+                className="MainSidebar-signup-input bp3-input bp3-large"
+                placeholder="Confirm Password"
+                type="password"
+                onChange={this.setPasswordConfirmText}
+                value={this.state.passwordConfirmText}
+              />
+              <input
+                className="MainSidebar-signup-input bp3-input bp3-large"
+                placeholder="Email"
+                onChange={this.setEmailText}
+                value={this.state.emailText}
+              />
+              <Recaptcha
+                ref={this.recaptchaRef}
+                sitekey={Meteor.settings.public.recaptchaSite}
+                theme="dark"
+              />
+              <input type="submit" style={{display: "none"}}/>
+            </form>
+          </div>
+          <div className={Classes.DIALOG_FOOTER}>
+            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+              <AnchorButton text="Sign Up" onClick={this.signUp}/>
+            </div>
+          </div>
+        </Dialog>
         <Profile isOpen={this.state.showProfile} userId={Meteor.userId()} onClose={this.closeProfile}/>
         <Menu className="MainSidebar-menu">
           <div className="MainSidebar-menu-logo" onClick={() => {FlowRouter.go("Home", {});}}>starship<span className="MainSidebar-version">alpha</span></div>
@@ -250,24 +307,9 @@ class MainSidebar extends React.Component {
                   onChange={this.setPasswordText}
                   value={this.state.passwordText}
                 />
-                {this.state.isSigningUp && <div>
-                  <input
-                    className="MainSidebar-menu-input bp3-input"
-                    placeholder="Confirm Password"
-                    type="password"
-                    onChange={this.setPasswordConfirmText}
-                    value={this.state.passwordConfirmText}
-                  />
-                  <input
-                    className="MainSidebar-menu-input bp3-input"
-                    placeholder="Email"
-                    onChange={this.setEmailText}
-                    value={this.state.emailText}
-                  />
-                </div>}
                 <input type="submit" style={{display: "none"}}/>
                 <Button className="MainSidebar-menu-button" onClick={this.signIn}>Sign In</Button>
-                <Button className="MainSidebar-menu-button" onClick={this.signUp}>Sign Up</Button>
+                <Button className="MainSidebar-menu-button" onClick={this.toggleSignUp}>Sign Up</Button>
               </form>
             </Popover>
           </div>}
