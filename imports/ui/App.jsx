@@ -5,7 +5,6 @@ import "./css/App.css";
 import { NonIdealState } from "@blueprintjs/core";
 class App extends React.Component {
   render() {
-    console.log(Meteor.user());
     return (
       <div className="App bp3-dark">
         <div className="App-container">

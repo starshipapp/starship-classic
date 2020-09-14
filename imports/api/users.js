@@ -99,13 +99,20 @@ Meteor.methods({
   },
   "users.resendemail"(username) {
     check(username, String);
-    console.log(username);
 
     let user = Meteor.users.findOne({username: username});
-    console.log(user);
 
     if(user) {
       Accounts.sendVerificationEmail(user._id);
+    }
+  },
+  "users.resetpassword"(username) {
+    check(username, String);
+    
+    let user = Meteor.users.findOne({username: username});
+
+    if(user) {
+      Accounts.sendResetPasswordEmail(user._id);
     }
   }
 });

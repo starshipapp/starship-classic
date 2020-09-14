@@ -15,7 +15,6 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div className="Home bp3-dark">
         <div className="Home-container">

@@ -41,6 +41,7 @@ class MainSidebar extends React.Component {
     this.setPlanetText = this.setPlanetText.bind(this);
     this.onClose = this.onClose.bind(this);
     this.sendEmail = this.sendEmail.bind(this);
+    this.resetPassword = this.resetPassword.bind(this);
   }
 
   toggleSignUp() {
@@ -110,6 +111,11 @@ class MainSidebar extends React.Component {
     ErrorToaster.show({message: "Email sent. If you don't see it in 5 minutes, check your spam.", icon:"tick", intent:Intent.SUCCESS});
   }
 
+  resetPassword() {
+    Meteor.call("users.resetpassword", this.state.usernameText);
+    ErrorToaster.show({message: "Email sent. If you don't see it in 5 minutes, check your spam.", icon:"tick", intent:Intent.SUCCESS});
+  }
+
   signIn(e) {
     e.preventDefault();
     if(this.state.isSigningUp) {
@@ -127,7 +133,15 @@ class MainSidebar extends React.Component {
 
       Meteor.loginWithPassword(this.state.usernameText, this.state.passwordText, function(e) {
         if(e) {
-          ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER, action:(e.error === "email-not-verified" ? {text: "Resend Email", onClick: this.sendEmail} : null)});
+          let action = null;
+          if(e.error === "email-not-verified") {
+            action = {text: "Resend Email", onClick: this.sendEmail};
+          }
+          if(e.error === 403) {
+            action = {text: "Forgot Password?", onClick: this.resetPassword};
+          }
+          console.log(e);
+          ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER, action:action});
         } else {
           this.setState({
             usernameText: "",

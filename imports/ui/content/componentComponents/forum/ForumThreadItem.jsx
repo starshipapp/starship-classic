@@ -87,7 +87,6 @@ class ForumThreadItem extends React.Component {
   }
 
   selectEmoji(emoji, isPrompt) {
-    console.log(emoji);
     let stringToSend = emoji.native ? emoji.native : emoji.id;
     if(!this.props.isParent) {
       Meteor.call("forumreplies.react", stringToSend, this.props.post._id);
@@ -146,7 +145,7 @@ class ForumThreadItem extends React.Component {
         >Are you sure you want to delete this post? It will be lost forever! (A long time!)</Alert>
         <div className="ForumThreadItem-info">
           <div className="ForumThreadItem-profilepic" onClick={this.showProfile}>
-            {this.props.user[0] && this.props.user[0].profilePicture && <img src={this.props.user[0].profilePicture + "?t=" + Number(Date.now())}/>}
+            {this.props.user[0] && this.props.user[0].profilePicture && <img src={"https://" + this.props.user[0].profilePicture + "?t=" + Number(Date.now())}/>}
           </div>
           <div className="ForumThreadItem-username" onClick={this.showProfile}>{this.props.user[0] && this.props.user[0].username}</div>
           {this.props.user[0] && this.props.user[0].admin && <div className="ForumThreadItem-admin">Global Admin</div>}

@@ -161,12 +161,9 @@ Meteor.methods({
     check(verified, Boolean);
     check(partnered, Boolean);
 
-    console.log("test");
-
     const planet = Planets.findOne(planetId);
 
     if(checkAdminPermission(this.userId) && planet) {
-      console.log("test3");
       Planets.update({_id: planetId}, {$set: {featuredDescription, featured, verified, partnered}});
     }
   },

@@ -69,8 +69,6 @@ export function checkAdminPermission(userId) {
   let user = null;
 
   user = Meteor.users.findOne(userId, {fields: { following: 1, admin: 1 }});
-
-  console.log(user);
   
   if(user && user.admin) {
     return true;

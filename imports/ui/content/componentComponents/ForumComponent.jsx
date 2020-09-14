@@ -149,7 +149,7 @@ class ForumComponent extends React.Component {
                       </Menu>
                     </Popover>}
                     <Divider/>
-                    {this.props.forum[0] && <Button icon="plus" text="New Thread" onClick={this.startNewThread}/>}
+                    {this.props.forum[0] && Meteor.userId() && <Button icon="plus" text="New Thread" onClick={this.startNewThread}/>}
                   </ButtonGroup>}
                 </th>
               </tr>

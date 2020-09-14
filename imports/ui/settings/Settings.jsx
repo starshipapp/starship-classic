@@ -30,7 +30,6 @@ class Settings extends React.Component {
         console.log(error);
       }
       if(value) {
-        console.log(value);
         const options = { headers: { "Content-Type": file.type, "x-amz-acl": "public-read" }};
         axios.put(value, file, options).then(() => {
           this.image.current.src = this.props.user.profilePicture + "?t=" + Number(Date.now());
@@ -43,7 +42,6 @@ class Settings extends React.Component {
   }
 
   render() {
-    console.log(Meteor.user());
     return (
       <div className="Settings bp3-dark">
         <input
@@ -61,7 +59,7 @@ class Settings extends React.Component {
         <div className="Settings-container">
           <h1>Profile Picture</h1>
           <div className="Settings-profilepic" onClick={this.onFileUploadClick}>
-            {this.props.user && this.props.user.profilePicture && <img src={this.props.user.profilePicture + "?t=" + Number(Date.now())} ref={this.image}/>}
+            {this.props.user && this.props.user.profilePicture && <img src={"https://" + this.props.user.profilePicture + "?t=" + Number(Date.now())} ref={this.image}/>}
             <Icon icon="upload" className="Settings-uploadpfp"/>
           </div>
         </div>

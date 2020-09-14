@@ -119,7 +119,6 @@ class ContentSpace extends React.Component {
   }
 
   applyModTools() {
-    console.log("test");
     Meteor.call("planets.applymodtools", this.props.planet[0]._id, this.state.featured, this.state.verified, this.state.partnered, this.state.featuredText);
     this.setState({
       showTools: false
@@ -162,8 +161,6 @@ class ContentSpace extends React.Component {
         }
       }
     }
-
-    console.log(this.props.planet[0]);
 
     return (
       <div className="ContentSpace bp3-dark">

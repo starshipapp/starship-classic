@@ -192,8 +192,6 @@ Meteor.methods({
     check(mimeType, String);
     check(size, Number);
 
-    console.log(mimeType);
-    console.log(size);
     if(MimeTypes.imageTypes.includes(mimeType) && this.userId && size < 8000000) {
       const url = s3.getSignedUrl("putObject", {
         Bucket: Meteor.settings.bucket.bucket,
