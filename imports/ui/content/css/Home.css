@@ -25,12 +25,11 @@
 
 .Home-header-branding {
   font-size: 3rem;
-  margin: none;
   padding: none;
   text-align: center;
   line-height: 3rem;
   font-weight: bold;
-  margin-bottom: 2rem
+  margin-bottom: 0 0 2rem 0;
 }
 
 .Home-header-version {
