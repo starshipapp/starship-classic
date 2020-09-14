@@ -6,6 +6,9 @@ import ContentSpace from "../imports/ui/content/ContentSpace";
 import Home from "../imports/ui/content/Home";
 import Invite from "../imports/ui/invites/Invite";
 import Settings from "../imports/ui/settings/Settings";
+import Terms from "../imports/ui/legal/Terms";
+import Rules from "../imports/ui/legal/Rules";
+import Privacy from "../imports/ui/legal/Privacy";
 
 FlowRouter.route("/planet/:_id", {
   name: "Planets.home",
@@ -53,5 +56,26 @@ FlowRouter.route("/settings", {
   name: "Settings",
   action() {
     ReactDOM.render(<App component={<Settings/>}/>, document.getElementById("react-target"));
+  }
+});
+
+FlowRouter.route("/terms", {
+  name: "Terms",
+  action() {
+    ReactDOM.render(<App component={<Terms/>}/>, document.getElementById("react-target"));
+  }
+});
+
+FlowRouter.route("/rules", {
+  name: "Rules",
+  action() {
+    ReactDOM.render(<App component={<Rules/>}/>, document.getElementById("react-target"));
+  }
+});
+
+FlowRouter.route("/privacy", {
+  name: "Privacy",
+  action() {
+    ReactDOM.render(<App component={<Privacy/>}/>, document.getElementById("react-target"));
   }
 });
