@@ -140,7 +140,6 @@ class MainSidebar extends React.Component {
           if(e.error === 403) {
             action = {text: "Forgot Password?", onClick: this.resetPassword};
           }
-          console.log(e);
           ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER, action:action});
         } else {
           this.setState({
