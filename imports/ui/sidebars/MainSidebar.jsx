@@ -93,7 +93,7 @@ class MainSidebar extends React.Component {
       if(e) {
         ErrorToaster.show({message: e.message.substr(1).slice(0, -1) + ".", icon:"error", intent:Intent.DANGER});
       } else {
-        ErrorToaster.show({message: "Account created! Check your email for a verification email.", icon:"tick", intent:Intent.SUCCESS});
+        ErrorToaster.show({message: "Account created! Check your email for a verification email. If you don't see it in 5 minutes, check your spam.", icon:"tick", intent:Intent.SUCCESS});
         this.setState({
           usernameText: "",
           passwordText: "",
@@ -107,7 +107,7 @@ class MainSidebar extends React.Component {
 
   sendEmail() {
     Meteor.call("users.resendemail", this.state.usernameText);
-    ErrorToaster.show({message: "Email sent.", icon:"tick", intent:Intent.SUCCESS});
+    ErrorToaster.show({message: "Email sent. If you don't see it in 5 minutes, check your spam.", icon:"tick", intent:Intent.SUCCESS});
   }
 
   signIn(e) {
