@@ -69,7 +69,8 @@ Meteor.methods({
       },
     ).then((res) => {
       if(res.data.success === true) {
-        Accounts.createUser(user);
+        let userId = Accounts.createUser(user);
+        Accounts.sendVerificationEmail(userId);
       }
     });
   },
@@ -95,8 +96,60 @@ Meteor.methods({
     if(user && checkAdminPermission(this.userId)) {
       Meteor.users.update(id, {$set: {banned: !user.banned}});
     }
+  },
+  "users.resendemail"(username) {
+    check(username, String);
+    console.log(username);
+
+    let user = Meteor.users.findOne({username: username});
+    console.log(user);
+
+    if(user) {
+      Accounts.sendVerificationEmail(user._id);
+    }
   }
 });
+
+Accounts.validateLoginAttempt(function(options) {
+  /* options:
+    type            (String)    The service name, such as "password" or "twitter".
+    allowed         (Boolean)   Whether this login is allowed and will be successful.
+    error           (Error)     When allowed is false, the exception describing why the login failed.
+    user            (Object)    When it is known which user was attempting to login, the Meteor user object.
+    connection      (Object)    The connection object the request came in on.
+    methodName      (String)    The name of the Meteor method being used to login.
+    methodArguments (Array)     An array of the arguments passed to the login method
+  */
+
+  // If the login has failed, just return false.
+  if (!options.allowed) {
+    return false;
+  }
+
+  // Check the user's email is verified. If users may have multiple 
+  // email addresses (or no email address) you'd need to do something
+  // more complex.
+  if (options.user.emails[0].verified === true) {
+    return true;
+  } else {
+    throw new Meteor.Error("email-not-verified", "You must verify your email address before you can log in");
+  }
+
+});
+
+
+Accounts.emailTemplates.siteName = "Starship";
+Accounts.emailTemplates.from = "noreply <noreply@starship.william341.me>";
+
+Accounts.emailTemplates.verifyEmail = {
+  subject() {
+    return "Welcome to Starship!";
+  },
+  text(user, url) {
+    return `Welcome to Starship, ${user.username}!\n
+You can verify your e-mail by following this link: ${url}`;
+  }
+};
 
 // Deny all client-side updates to user documents
 Meteor.users.deny({

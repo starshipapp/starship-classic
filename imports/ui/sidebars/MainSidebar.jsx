@@ -40,6 +40,7 @@ class MainSidebar extends React.Component {
     this.setEmailText = this.setEmailText.bind(this);
     this.setPlanetText = this.setPlanetText.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.sendEmail = this.sendEmail.bind(this);
   }
 
   toggleSignUp() {
@@ -92,20 +93,21 @@ class MainSidebar extends React.Component {
       if(e) {
         ErrorToaster.show({message: e.message.substr(1).slice(0, -1) + ".", icon:"error", intent:Intent.DANGER});
       } else {
-        Meteor.loginWithPassword(this.state.usernameText, this.state.passwordText, function(e) {
-          if(e) {
-            ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER});
-          } else {
-            this.setState({
-              usernameText: "",
-              passwordText: "",
-              passwordConfirmText: "",
-              emailText: "",
-            });
-          }
+        ErrorToaster.show({message: "Account created! Check your email for a verification email.", icon:"tick", intent:Intent.SUCCESS});
+        this.setState({
+          usernameText: "",
+          passwordText: "",
+          passwordConfirmText: "",
+          emailText: "",
+          isSigningUp: false
         });
       }
     });
+  }
+
+  sendEmail() {
+    Meteor.call("users.resendemail", this.state.usernameText);
+    ErrorToaster.show({message: "Email sent.", icon:"tick", intent:Intent.SUCCESS});
   }
 
   signIn(e) {
@@ -125,7 +127,7 @@ class MainSidebar extends React.Component {
 
       Meteor.loginWithPassword(this.state.usernameText, this.state.passwordText, function(e) {
         if(e) {
-          ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER});
+          ErrorToaster.show({message: e.message.split(" [")[0] + ".", icon:"error", intent:Intent.DANGER, action:(e.error === "email-not-verified" ? {text: "Resend Email", onClick: this.sendEmail} : null)});
         } else {
           this.setState({
             usernameText: "",

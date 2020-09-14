@@ -1,7 +1,7 @@
 import React from "react";
 import {withTracker} from "meteor/react-meteor-data";
 import "./css/Settings.css";
-import { Button, Icon } from "@blueprintjs/core";
+import { Icon } from "@blueprintjs/core";
 import axios from "axios";
 
 class Settings extends React.Component {
