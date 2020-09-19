@@ -29,6 +29,15 @@ if(Meteor.isServer) {
       this.ready();
     }
   });
+  Meteor.publish("user.admin", function () {
+    if (this.userId) {
+      let user = Meteor.users.findOne(this.userId);
+
+      if(user.admin) {
+        return Meteor.users.find({});
+      }
+    }
+  });
 }
 
 Meteor.methods({

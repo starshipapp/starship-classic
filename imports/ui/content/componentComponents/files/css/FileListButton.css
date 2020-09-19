@@ -1,0 +1,22 @@
+.FileListButton {
+  border-bottom: 1px #30404d solid;
+  padding: 0.5rem;
+  display: flex;
+}
+
+.FileListButton:hover {
+  background-color: #30404d;
+}
+
+.FileListButton-popover {
+  display: inline-block;
+}
+
+.FileListButton-date {
+  margin-left: auto;
+}
+
+.FileListButton-icon {
+  margin-bottom: 0.1rem;
+  padding-right: 0.5rem;
+}

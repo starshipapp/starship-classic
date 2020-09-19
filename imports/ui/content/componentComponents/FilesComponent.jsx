@@ -5,7 +5,7 @@ import {withTracker} from "meteor/react-meteor-data";
 import "./css/FilesComponent";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import { checkWritePermission } from "../../../util/checkPermissions";
-import { Button, Divider, ButtonGroup, Classes, Popover, vertical, ProgressBar, Icon, Intent, Text} from "@blueprintjs/core";
+import { Button, Divider, ButtonGroup, Classes, Popover, vertical, ProgressBar, Icon, Intent, Text, Menu, MenuItem} from "@blueprintjs/core";
 import FileBreadcrumbs from "./files/FileBreadcrumbs";
 import axios from "axios";
 import FileView from "./files/FileView";
@@ -13,15 +13,19 @@ import FileButton from "./files/FileButton";
 import {uuid} from "uuidv4";
 import MimeTypes from "../../../util/validMimes";
 import {ErrorToaster} from "../../Toaster";
+import FileListButton from "./files/FileListButton";
 
 class FilesComponent extends React.Component {
   constructor(props) {
     super(props);
     
+    let listViewStore = window.localStorage.getItem("files.listView");
+
     this.state = {
       newFolderTextbox: "",
       uploadUpdateCounter: 0,
-      createFolderPrompt: false
+      createFolderPrompt: false,
+      listView: listViewStore
     };
     
     this.createFolder = this.createFolder.bind(this);
@@ -35,6 +39,7 @@ class FilesComponent extends React.Component {
     this.onDrop = this.onDrop.bind(this);
     this.toggleCreateFolderPrompt = this.toggleCreateFolderPrompt.bind(this);
     this.hideCreateFolderPrompt = this.hideCreateFolderPrompt.bind(this);
+    this.switchListView = this.switchListView.bind(this);
     
     this.uploading = {};
 
@@ -211,6 +216,14 @@ class FilesComponent extends React.Component {
     });
   }
 
+  switchListView() {
+    let newListState = this.state.listView ? false : true;
+    this.setState({
+      listView: newListState
+    });
+    window.localStorage.setItem("files.listView", newListState);
+  }
+
   render() {
     return (
       <div className="bp3-dark FilesComponent" onDrop={this.dropHandler} onDragOver={this.onDragOver} onDragEnd={this.onDragOver}>
@@ -252,11 +265,17 @@ class FilesComponent extends React.Component {
                 <Button text="Create" className="MainSidebar-menu-button" onClick={this.createFolder}/>
               </div>
             </Popover>
+            <Popover>
+              <Button icon="settings"/>
+              <Menu>
+                <MenuItem icon={this.state.listView ? "tick" : "cross"} text="List View" onClick={this.switchListView}/>
+              </Menu>
+            </Popover>
             {this.props.subId && <Divider/>}
             {this.props.subId && <Button text="Download Folder" icon="download" onClick={this.downloadZip}/>}
           </ButtonGroup>}
         </div>
-        {(!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <div className="FilesComponent-button-container">
+        {(!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && !this.state.listView && <div className="FilesComponent-button-container">
           {this.props.subId && <Button
             alignText="left"
             icon="arrow-up"
@@ -267,6 +286,17 @@ class FilesComponent extends React.Component {
           />}
           {this.props.folders.map((value) => (<FileButton planet={this.props.planet} key={value._id} object={value} gotoSubComponent={this.gotoSubComponent}/>))}
           {this.props.files.map((value) => (<FileButton planet={this.props.planet} key={value._id} object={value} gotoSubComponent={this.gotoSubComponent}/>))}
+        </div>}
+        {(!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && this.state.listView && <div className="FilesComponent-list-table">
+          {this.props.subId && <div
+            className="FileListButton"
+            onClick={(() => this.gotoSubComponent(this.props.currentObject[0].parent))}
+            onDrop={this.onDrop}
+          >
+            <div><Icon className="FileListButton-icon" icon="arrow-up"/>../</div>
+          </div>}
+          {this.props.folders.map((value) => (<FileListButton planet={this.props.planet} key={value._id} object={value} gotoSubComponent={this.gotoSubComponent}/>))}
+          {this.props.files.map((value) => (<FileListButton planet={this.props.planet} key={value._id} object={value} gotoSubComponent={this.gotoSubComponent}/>))}
         </div>}
         {this.props.currentObject[0] && this.props.currentObject[0].type === "file" && <FileView file={this.props.currentObject[0]}/>}
       </div>

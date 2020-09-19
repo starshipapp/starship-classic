@@ -9,6 +9,8 @@ import Settings from "../imports/ui/settings/Settings";
 import Terms from "../imports/ui/legal/Terms";
 import Rules from "../imports/ui/legal/Rules";
 import Privacy from "../imports/ui/legal/Privacy";
+import GAdmin from "../imports/ui/admin/GAdmin";
+import GAdminHome from "../imports/ui/admin/GAdminHome";
 
 FlowRouter.route("/planet/:_id", {
   name: "Planets.home",
@@ -77,5 +79,12 @@ FlowRouter.route("/privacy", {
   name: "Privacy",
   action() {
     ReactDOM.render(<App component={<Privacy/>}/>, document.getElementById("react-target"));
+  }
+});
+
+FlowRouter.route("/gadmin", {
+  name: "GAdmin",
+  action() {
+    ReactDOM.render(<GAdmin component={<GAdminHome/>}/>, document.getElementById("react-target"));
   }
 });

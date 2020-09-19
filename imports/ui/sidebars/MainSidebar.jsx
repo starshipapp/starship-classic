@@ -180,6 +180,10 @@ class MainSidebar extends React.Component {
   goToPlanet(id) {
     FlowRouter.go("Planets.home", {_id: id});
   }
+  
+  goToAdmin() {
+    FlowRouter.go("GAdmin");
+  }
 
   setUsernameText(e) {
     this.setState({
@@ -283,6 +287,7 @@ class MainSidebar extends React.Component {
         <Menu className="MainSidebar-menu">
           <div className="MainSidebar-menu-logo" onClick={() => {FlowRouter.go("Home", {});}}>starship<span className="MainSidebar-version">alpha</span></div>
           {Meteor.userId() && <div>
+            {this.props.currentUser && this.props.currentUser.admin && <Menu.Item icon="warning-sign" text="Admin" onClick={this.goToAdmin}/>}
             <Menu.Divider title="MY PLANETS"/>
             {this.props.memberPlanets.map((value) => (<Menu.Item key={value._id} icon="control" onClick={() => this.goToPlanet(value._id)} text={value.name}/>))}
             <Popover position="right" className="MainSidebar-menu-popover">

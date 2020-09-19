@@ -96,3 +96,9 @@
 .FilesComponent-button-container .bp3-popover-wrapper .bp3-popover-target {
   width: 100%;
 }
+
+.FilesComponent-list-table {
+  margin-top: 0.75rem;
+  border-top: 1px #30404d solid;
+  width: 100%;
+}
