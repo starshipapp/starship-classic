@@ -118,7 +118,7 @@ Meteor.methods({
         const url = s3.getSignedUrl("getObject", {
           Bucket: Meteor.settings.bucket.bucket,
           Key: file.key,
-          Expires: 3600
+          Expires: 86400
         });
         return url;
       }
@@ -196,7 +196,7 @@ Meteor.methods({
       const url = s3.getSignedUrl("putObject", {
         Bucket: Meteor.settings.bucket.bucket,
         Key: "profilepictures/" + this.userId,
-        Expires: 120,
+        Expires: 1440,
         ContentType: mimeType,
         ACL: "public-read"
       });
