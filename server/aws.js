@@ -205,6 +205,25 @@ Meteor.methods({
 
       return url;
     }
+  },
+  "aws.markdownuploadimage"(fileSize, fileType) {
+    check(fileSize, Number);
+    check(fileType, String);
+    if(fileSize > 8000000) {
+      throw new Meteor.Error("too-big");
+    }
+    let fileUUID = uuid();
+    const url = s3.getSignedUrl("putObject", {
+      Bucket: Meteor.settings.bucket.bucket,
+      Key: "mdattachments/" + fileUUID,
+      Expires: 1440,
+      ContentType: fileType,
+      ACL: "public-read"
+    });
+    return {
+      finalUrl: Meteor.settings.bucket.endpoint + "/" + Meteor.settings.bucket.bucket + "/mdattachments/" + fileUUID,
+      uploadUrl: url
+    };
   }
 });
 

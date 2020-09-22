@@ -33,6 +33,7 @@
 .FileView-preview {
   max-width: 75vw;
   max-height: 50vh;
+  object-fit: contain;
 }
 
 .FileView-upload-info {

@@ -83,6 +83,7 @@ Meteor.methods({
 
       if(checkWritePermission(this.userId, planet) || this.userId === post.owner) {
         ForumReplies.remove(id);
+        ForumPosts.update(post.postId, {$inc: {replyCount: -1}});
       }
     }
   },

@@ -8,7 +8,8 @@ import { Button, Intent } from "@blueprintjs/core";
 import SimpleMDE from "react-simplemde-editor";
 import ForumThreadItemContainer from "./ForumThreadItemContainer";
 import ReactPaginate from "react-paginate";
-import { checkReadPermission, checkWritePermission } from "../../../../util/checkPermissions";
+import { checkWritePermission } from "../../../../util/checkPermissions";
+import editorOptions from "../../../../util/editorOptions";
 
 class ForumThread extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class ForumThread extends React.Component {
 
     this.state = {
       editingContent: "",
+      editorDemandsValueChange: false,
       forumPage: 1
     };
     
@@ -23,10 +25,21 @@ class ForumThread extends React.Component {
     this.postThread = this.postThread.bind(this);
     this.addQuote = this.addQuote.bind(this);
     this.changePage = this.changePage.bind(this);
+    this.getInstance = this.getInstance.bind(this);
+    this.instance = null;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return this.props !== nextProps || this.state !== nextState;
+  }
+
+  componentDidUpdate() {
+    if(this.state.editorDemandsValueChange) {
+      this.instance.value(this.state.editingContent);
+      this.setState({
+        editorDemandsValueChange: false
+      });
+    }
   }
 
   handleChange(value) {
@@ -35,13 +48,18 @@ class ForumThread extends React.Component {
     });
   }
 
+  getInstance(instance) {
+    this.instance = instance;
+  }
+
   postThread() {
     if(this.state.editingContent === "") {
       ErrorToaster.show({message: "Cannot create a thread with no content.", icon:"error", intent:Intent.DANGER});
     }
     let workaround = this.state.editingContent;
     this.setState({
-      editingContent: ""
+      editingContent: "",
+      editorDemandsValueChange: true
     });
     Meteor.call("forumreplies.insert", this.props.postId, workaround);
   }
@@ -53,7 +71,8 @@ class ForumThread extends React.Component {
     quote = "> " + quote;
 
     this.setState({
-      editingContent: this.state.editingContent + quote + "\n \n"
+      editingContent: this.state.editingContent + quote + "\n \n",
+      editorDemandsValueChange: true
     });
   }
 
@@ -92,7 +111,11 @@ class ForumThread extends React.Component {
         />}
         {this.props.post && Meteor.userId() && (!this.props.post.locked || checkWritePermission(Meteor.userId(), this.props.planet)) && <div className="ForumThread-reply-editor">
           <div className="ForumThread-reply">Reply</div>
-          <SimpleMDE onChange={this.handleChange} value={this.state.editingContent}/>
+          <SimpleMDE
+            onChange={this.handleChange} 
+            getMdeInstance={this.getInstance} 
+            value={this.state.editingContent} 
+            options={editorOptions}/>
           <Button text="Post" className="ForumEditor-button" onClick={this.postThread}/>
         </div>}
       </div>
