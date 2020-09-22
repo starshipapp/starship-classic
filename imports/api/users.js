@@ -29,12 +29,23 @@ if(Meteor.isServer) {
       this.ready();
     }
   });
-  Meteor.publish("user.admin", function () {
+  Meteor.publish("users.admin", function () {
     if (this.userId) {
       let user = Meteor.users.findOne(this.userId);
 
       if(user.admin) {
         return Meteor.users.find({});
+      }
+    }
+  });
+  Meteor.publish("users.admingetuser", function (userId) {
+    check(userId, String);
+
+    if (this.userId) {
+      let user = Meteor.users.findOne(this.userId);
+
+      if(user.admin) {
+        return Meteor.users.find({_id: userId}, {fields: {username: 1, admin: 1, createdAt: 1, banned: 1, profilePicture: 1, following: 1}});
       }
     }
   });

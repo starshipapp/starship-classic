@@ -4,6 +4,7 @@ import "./css/GAdmin-page.css";
 import "./css/GAdminHome.css";
 import { Classes, HTMLTable, Icon } from "@blueprintjs/core";
 import { VictoryPie, VictoryTooltip } from "victory";
+import Planets from "../../api/planets";
 
 class GAdminHome extends React.Component {
   constructor(props) {
@@ -52,18 +53,12 @@ class GAdminHome extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>william341</td>
-                    <td>Friday, August 28, 2020</td>
-                  </tr>
-                  <tr>
-                    <td>william3412</td>
-                    <td>Friday, August 28, 2020</td>
-                  </tr>
-                  <tr>
-                    <td>143mailliw</td>
-                    <td>Friday, August 28, 2020</td>
-                  </tr>
+                  {this.props.users.map((value) => (
+                    <tr key={value._id}>
+                      <td>{value.username}</td>
+                      <td>{value.createdAt && value.createdAt.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </HTMLTable>
             </div>
@@ -77,18 +72,12 @@ class GAdminHome extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>planet</td>
-                    <td>Friday, August 28, 2020</td>
-                  </tr>
-                  <tr>
-                    <td>planet</td>
-                    <td>Friday, August 28, 2020</td>
-                  </tr>
-                  <tr>
-                    <td>planet</td>
-                    <td>Friday, August 28, 2020</td>
-                  </tr>
+                  {this.props.planets.map((value) => (
+                    <tr key={value._id}>
+                      <td>{value.name}</td>
+                      <td>{value.createdAt.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </HTMLTable>
             </div>
@@ -120,9 +109,13 @@ class GAdminHome extends React.Component {
 
 export default withTracker(() => {
   Meteor.subscribe("user.currentUserData");
+  Meteor.subscribe("planets.admin");
+  Meteor.subscribe("users.admin");
 
   return {
-    user: Meteor.user()
+    user: Meteor.user(),
+    users: Meteor.users.find({}, {limit: 15, sort: {createdAt: 1}}),
+    planets: Planets.find({}, {limit: 15, sort: {createdAt: 1}})
   };
 })(GAdminHome);
 

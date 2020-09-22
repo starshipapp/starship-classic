@@ -32,14 +32,12 @@ img {
   height: 100vh;
 }
 
-.side-by-side {
-  display: none !important;
-}
-
-.fullscreen {
-  display: none !important;
-}
-
 .editor-preview-full {
   background-color: #30404d !important;
+}
+
+blockquote {
+  border-left: 5px #18202655 solid;
+  padding-left: 0.4rem;
+  margin: 0;
 }

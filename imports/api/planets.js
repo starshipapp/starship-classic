@@ -37,6 +37,15 @@ if (Meteor.isServer) {
       return Planets.find({_id: planetId});
     }
   });
+  Meteor.publish("planets.admin", function () {
+    if (this.userId) {
+      let user = Meteor.users.findOne(this.userId);
+
+      if(user.admin) {
+        return Planets.find({});
+      }
+    }
+  });
 }
 
 Meteor.methods({
