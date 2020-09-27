@@ -2,7 +2,7 @@ import React from "react";
 import {withTracker} from "meteor/react-meteor-data";
 import "./css/GAdmin-page.css";
 import "./css/GAdminHome.css";
-import { Classes, HTMLTable, Icon } from "@blueprintjs/core";
+import { Classes, HTMLTable } from "@blueprintjs/core";
 import { VictoryPie, VictoryTooltip } from "victory";
 import Planets from "../../api/planets";
 
@@ -14,13 +14,6 @@ class GAdminHome extends React.Component {
   render() {
     return (
       <div className="GAdmin-page bp3-dark">
-        <input
-          type="file"
-          ref={this.fileInput}
-          id="upload-button"
-          style={{ display: "none" }}
-          onChange={this.handleChange}
-        />
         <div className="GAdmin-page-header">
           <div className="GAdmin-page-header-text">Home</div>
         </div>

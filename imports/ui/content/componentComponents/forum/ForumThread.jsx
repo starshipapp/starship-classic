@@ -8,7 +8,7 @@ import { Button, Intent } from "@blueprintjs/core";
 import SimpleMDE from "react-simplemde-editor";
 import ForumThreadItemContainer from "./ForumThreadItemContainer";
 import ReactPaginate from "react-paginate";
-import { checkWritePermission } from "../../../../util/checkPermissions";
+import { checkWritePermission, checkReadPermission } from "../../../../util/checkPermissions";
 import editorOptions from "../../../../util/editorOptions";
 
 class ForumThread extends React.Component {
@@ -109,7 +109,7 @@ class ForumThread extends React.Component {
           previousLinkClassName="pagination-link"
           breakLinkClassName="pagination-link"
         />}
-        {this.props.post && Meteor.userId() && (!this.props.post.locked || checkWritePermission(Meteor.userId(), this.props.planet)) && <div className="ForumThread-reply-editor">
+        {this.props.post && Meteor.userId() && (!this.props.post.locked || checkReadPermission(Meteor.userId(), this.props.planet)) && <div className="ForumThread-reply-editor">
           <div className="ForumThread-reply">Reply</div>
           <SimpleMDE
             onChange={this.handleChange} 
