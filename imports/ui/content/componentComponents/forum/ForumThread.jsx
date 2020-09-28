@@ -103,7 +103,7 @@ class ForumThread extends React.Component {
           initialPage={Number(this.props.page) - 1}
           disableInitialCallback={true}
           containerClassName="pagination bp3-button-group"
-          activeClassName="active"
+          activeClassName="bp3-button bp3-disabled pagination-button"
           pageClassName="bp3-button pagination-button"
           previousClassName="bp3-button pagination-button"
           nextClassName="bp3-button pagination-button"
