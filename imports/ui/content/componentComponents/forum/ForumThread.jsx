@@ -2,7 +2,7 @@ import React from "react";
 import {ErrorToaster} from "../../../Toaster";
 import {withTracker} from "meteor/react-meteor-data";
 import "./css/ForumThread";
-import { ForumPosts, ForumReplies } from "../../../../api/collectionsStandalone";
+import { ForumPosts } from "../../../../api/collectionsStandalone";
 import ForumThreadItem from "./ForumThreadItem";
 import { Button, Intent } from "@blueprintjs/core";
 import SimpleMDE from "react-simplemde-editor";

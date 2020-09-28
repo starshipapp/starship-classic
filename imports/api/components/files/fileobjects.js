@@ -118,7 +118,7 @@ Meteor.methods({
     if(newParentId !== objectId) {
       let object = FileObjects.findOne(objectId);
       let newParent = FileObjects.findOne(newParentId);
-      if(object && (newParent || newParentId === "root")) {
+      if(object && ((newParent && newParent.type === "folder") || newParentId === "root")) {
         let planet = Planets.findOne(object.planet);
         if(checkWritePermission(this.userId, planet)) {
           if(object.type === "file") {
