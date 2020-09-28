@@ -88,12 +88,12 @@ class ForumThread extends React.Component {
           {this.props.post && (this.props.page ? Number(this.props.page) : 1) === 1 && <ForumThreadItem post={this.props.post} planet={this.props.planet} isParent={true} addQuote={this.addQuote}/>}
           <ForumThreadItemContainer page={this.props.page ? Number(this.props.page) : 1} addQuote={this.addQuote} planet={this.props.planet} postId={this.props.postId}/>
         </div>
-        {this.props.postCount > 25 && <ReactPaginate
+        {this.props.post && this.props.post.replyCount > 25 && <ReactPaginate
           previousLabel="<"
           nextLabel=">"
           breakLabel="..."
           breakClassName="bp3-button bp3-disabled pagination-button"
-          pageCount={Math.ceil(this.props.postCount / 25)}
+          pageCount={Math.ceil(this.props.post.replyCount / 25)}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={this.changePage}
@@ -125,11 +125,9 @@ class ForumThread extends React.Component {
 
 export default withTracker((props) => {
   Meteor.subscribe("forumposts.post", props.postId);
-  Meteor.subscribe("forumreplies.replies", props.postId);
 
   return {
     post: ForumPosts.findOne(props.postId),
-    postCount: ForumReplies.find({postId: props.postId}).count(),
     currentUser: Meteor.user()
   };
 })(ForumThread);

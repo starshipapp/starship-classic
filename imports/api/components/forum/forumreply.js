@@ -28,7 +28,7 @@ if (Meteor.isServer) {
     if(post) {
       const planet = Planets.findOne(post.planet);
       if (checkReadPermission(this.userId, planet)) {
-        return ForumReplies.find({postId: postId}, {fields: {postId: 1, createdAt: 1}});
+        return ForumReplies.find({postId: postId});
       }
     }
   });
