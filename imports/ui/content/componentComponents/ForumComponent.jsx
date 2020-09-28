@@ -1,6 +1,6 @@
 import React from "react";
 import {withTracker} from "meteor/react-meteor-data";
-import {Classes, ButtonGroup, Button, Divider, Callout, Popover, Menu, MenuItem, MenuDivider} from "@blueprintjs/core";
+import {Classes, ButtonGroup, Button, Divider, Popover, Menu, MenuItem, MenuDivider} from "@blueprintjs/core";
 import "./css/ForumComponent";
 import {FlowRouter} from "meteor/ostrio:flow-router-extra";
 import ForumEditor from "./forum/ForumEditor";
@@ -157,7 +157,7 @@ class ForumComponent extends React.Component {
             {this.state.creatingNewThread || this.props.subId ? <tbody>
               <tr>
                 <td>
-                  {this.props.subId ? <ForumThread planet={this.props.planet} postId={this.props.subId}/> : <ForumEditor onClose={this.dismissThread} forum={this.props.forum[0]} forumId={this.props.id}/>}
+                  {this.props.subId ? <ForumThread planet={this.props.planet} componentId={this.props.id} postId={this.props.subId} page={this.props.page}/> : <ForumEditor onClose={this.dismissThread} forum={this.props.forum[0]} forumId={this.props.id}/>}
                 </td>
               </tr>
             </tbody> : <ForumItemContainer planet={this.props.planet} id={this.props.id} postCount={this.state.postCount} loadMore={this.loadMore} sort={sortOptions[this.state.activeSort].sort} tag={this.state.activeTag}/>}

@@ -40,6 +40,13 @@ FlowRouter.route("/planet/:_id/:_cid/:_sid", {
   }
 });
 
+FlowRouter.route("/planet/:_id/:_cid/:_sid/:_page", {
+  name: "Planets.component.subid.page",
+  action(params) {
+    ReactDOM.render(<App component={<ContentSpace planetId={params._id} home={false} page={params._page} componentId={params._cid} subId={params._sid}/>}/>, document.getElementById("react-target"));
+  }
+});
+
 FlowRouter.route("/invite/:_id", {
   name: "Invites.invite",
   action(params) {

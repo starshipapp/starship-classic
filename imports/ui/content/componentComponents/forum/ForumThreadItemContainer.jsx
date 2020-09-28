@@ -22,7 +22,7 @@ export default withTracker((props) => {
   Meteor.subscribe("forumreplies.replies", props.postId);
 
   return {
-    replies: ForumReplies.find({postId: props.postId}, {sort: { createdAt: 1 }, skip: (props.page - 1) * 20 , limit: 20}).fetch(),
+    replies: ForumReplies.find({postId: props.postId}, {sort: { createdAt: 1 }, skip: (props.page - 1) * 25 , limit: 25}).fetch(),
     currentUser: Meteor.user()
   };
 })(ForumThreadItemContainer);

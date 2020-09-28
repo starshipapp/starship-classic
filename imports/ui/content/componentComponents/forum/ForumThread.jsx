@@ -8,7 +8,8 @@ import { Button, Intent } from "@blueprintjs/core";
 import SimpleMDE from "react-simplemde-editor";
 import ForumThreadItemContainer from "./ForumThreadItemContainer";
 import ReactPaginate from "react-paginate";
-import { checkWritePermission, checkReadPermission } from "../../../../util/checkPermissions";
+import {FlowRouter} from "meteor/ostrio:flow-router-extra";
+import { checkWritePermission} from "../../../../util/checkPermissions";
 import editorOptions from "../../../../util/editorOptions";
 
 class ForumThread extends React.Component {
@@ -17,8 +18,7 @@ class ForumThread extends React.Component {
 
     this.state = {
       editingContent: "",
-      editorDemandsValueChange: false,
-      forumPage: 1
+      editorDemandsValueChange: false
     };
     
     this.handleChange = this.handleChange.bind(this);
@@ -77,28 +77,31 @@ class ForumThread extends React.Component {
   }
 
   changePage(page) {
-    this.setState({
-      forumPage: page.selected + 1
-    });
+    console.log(page.selected);
+    FlowRouter.go("Planets.component.subid.page", {_id: this.props.planet._id, _cid: this.props.componentId, _sid: this.props.postId, _page: page.selected + 1});
   }
 
   render() {
+    console.log(this.props.page);
+    console.log(Number(this.props.page));
     return (
       <div className="ForumThread">
         <div className="ForumThread-name">{this.props.post && this.props.post.name}</div>
         <div className="ForumThread-container">
-          {this.props.post && this.state.forumPage === 1 && <ForumThreadItem post={this.props.post} planet={this.props.planet} isParent={true} addQuote={this.addQuote}/>}
-          <ForumThreadItemContainer page={this.state.forumPage} addQuote={this.addQuote} planet={this.props.planet} postId={this.props.postId}/>
+          {this.props.post && (this.props.page ? Number(this.props.page) : 1) === 1 && <ForumThreadItem post={this.props.post} planet={this.props.planet} isParent={true} addQuote={this.addQuote}/>}
+          <ForumThreadItemContainer page={this.props.page ? Number(this.props.page) : 1} addQuote={this.addQuote} planet={this.props.planet} postId={this.props.postId}/>
         </div>
-        {this.props.postCount > 20 && <ReactPaginate
+        {this.props.postCount > 25 && <ReactPaginate
           previousLabel="<"
           nextLabel=">"
           breakLabel="..."
           breakClassName="bp3-button bp3-disabled pagination-button"
-          pageCount={Math.ceil(this.props.postCount / 20)}
+          pageCount={Math.ceil(this.props.postCount / 25)}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={this.changePage}
+          initialPage={Number(this.props.page) - 1}
+          disableInitialCallback={true}
           containerClassName="pagination bp3-button-group"
           activeClassName="active"
           pageClassName="bp3-button pagination-button"

@@ -3,7 +3,6 @@ import React from "react";
 import WikiComponent from "./WikiComponent";
 import FilesComponent from "./FilesComponent";
 import ForumComponent from "./ForumComponent";
-import ForumAdmin from "../admin/settings/ForumAdmin";
 
 export const ComponentComponents = {
   page: PageComponent,
@@ -41,7 +40,7 @@ export const FindSettingsComponent = (id, type, planet) => {
   return <Component id={id} planet={planet} name={name}/>;
 };
 
-export const FindComponentComponent = (id, type, planet, name, subId) => {
+export const FindComponentComponent = (id, type, planet, name, subId, page) => {
   const Component = ComponentComponents[type];
-  return <Component id={id} planet={planet} name={name} subId={subId}/>;
+  return <Component id={id} planet={planet} name={name} subId={subId} page={page}/>;
 };
