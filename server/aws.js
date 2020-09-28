@@ -221,7 +221,7 @@ Meteor.methods({
       ACL: "public-read"
     });
     return {
-      finalUrl: Meteor.settings.bucket.endpoint + "/" + Meteor.settings.bucket.bucket + "/mdattachments/" + fileUUID,
+      finalUrl: "https://" + Meteor.settings.bucket.endpoint + "/" + Meteor.settings.bucket.bucket + "/mdattachments/" + fileUUID,
       uploadUrl: url
     };
   }
