@@ -7,6 +7,7 @@ import "./css/PageComponent";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import {checkWritePermission} from "../../../util/checkPermissions";
+import editorOptions from "../../../util/editorOptions";
 
 class WikiPageComponent extends React.Component {
   constructor(props) {
@@ -50,7 +51,7 @@ class WikiPageComponent extends React.Component {
     return (
       <div className="bp3-dark PageComponent">
         {this.props.page[0] && !this.state.isEditing && <ReactMarkdown>{this.props.page[0].content}</ReactMarkdown>}
-        {this.props.page[0] && this.state.isEditing && <SimpleMDE onChange={this.handleChange} value={this.state.editingContent}/>}
+        {this.props.page[0] && this.state.isEditing && <SimpleMDE onChange={this.handleChange} value={this.state.editingContent} options={editorOptions}/>}
         {(this.props.page[0] && checkWritePermission(Meteor.userId(), this.props.planet)) && (!this.state.isEditing ? <Button
           icon="edit"
           onClick={this.startEditing}
