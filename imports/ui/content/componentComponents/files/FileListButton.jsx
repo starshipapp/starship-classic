@@ -23,17 +23,20 @@ class FileListButton extends React.Component {
     this.onDragStart = this.onDragStart.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.downloadFile = this.downloadFile.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
-  delete() {
-    (e) => e.stopPropagation();
+  delete(e, stopPropagation) {
+    if(stopPropagation) {
+      e.stopPropagation();
+    }
     this.setState({
       delete: !this.state.delete
     });
   }
 
-  finishDelete() {
-    (e) => e.stopPropagation();
+  finishDelete(e) {
+    e.stopPropagation();
     Meteor.call("aws.deletefile", this.props.object._id);
     this.delete();
   }
@@ -104,6 +107,10 @@ class FileListButton extends React.Component {
     }
   }
 
+  onClick(e) {
+    e.stopPropagation();
+  }
+
   render() {
     let date = this.props.object.createdAt ? this.props.object.createdAt : new Date("2020-07-25T15:24:30+00:00");
     let fileDate = date.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
@@ -119,7 +126,7 @@ class FileListButton extends React.Component {
       >
         <div><Icon className="FileListButton-icon" icon={this.props.object.type === "folder" ? "folder-close" : "document"}/>{this.props.object.name}</div>
         <div className="FileListButton-date">{fileDate}</div>
-        <Popover isOpen={this.state.rename} position={PopoverPosition.AUTO_START}>
+        <Popover isOpen={this.state.rename} position={PopoverPosition.AUTO_START} onClick={this.onClick}>
           <div className="FilesComponent-dummytarget"></div>
           <div className="MainSidebar-menu-form" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} onKeyPress={(e) => e.stopPropagation()} onKeyUp={(e) => e.stopPropagation()}>
             <input className={Classes.INPUT + " MainSidebar-menu-input"} value={this.state.renameText} onChange={this.updateRenameText}/>
@@ -135,7 +142,8 @@ class FileListButton extends React.Component {
           cancelButtonText="Cancel"
           canOutsideClickCancel={true}
           canEscapeKeyCancel={true}
-          onCancel={this.delete}
+          onClick={this.onClick}
+          onCancel={(e) => this.delete(e, true)}
           onConfirm={this.finishDelete}
         >Are you sure you want to delete this file?<br/>&apos;{this.props.object.name}&apos; will be lost forever! (A long time!)</Alert>
       </div>

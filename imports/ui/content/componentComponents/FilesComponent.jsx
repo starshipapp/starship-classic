@@ -19,7 +19,7 @@ class FilesComponent extends React.Component {
   constructor(props) {
     super(props);
     
-    let listViewStore = window.localStorage.getItem("files.listView");
+    let listViewStore = window.localStorage.getItem("files.listView") === "true" ? true : false;
 
     this.state = {
       newFolderTextbox: "",
