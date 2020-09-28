@@ -5,6 +5,7 @@ import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { Button, Classes, Intent, Popover, Menu, MenuItem } from "@blueprintjs/core";
 import "./css/ForumEditor";
+import editorOptions from "../../../../util/editorOptions";
 
 class ForumEditor extends React.Component {
   constructor(props) {
@@ -68,7 +69,7 @@ class ForumEditor extends React.Component {
             </Menu>
           </Popover>}
         </div>
-        <SimpleMDE onChange={this.handleChange} value={this.state.editingContent}/>
+        <SimpleMDE onChange={this.handleChange} value={this.state.editingContent} options={editorOptions}/>
         <Button text="Post" className="ForumEditor-button" onClick={this.postThread}/>
         <Button text="Cancel" className="ForumEditor-button" onClick={this.props.onClose}/>
       </div>
