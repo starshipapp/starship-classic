@@ -20,6 +20,7 @@ class ForumThreadItemContainer extends React.Component {
 
 export default withTracker((props) => {
   Meteor.subscribe("forumreplies.replies", props.postId);
+  Meteor.subscribe("forumreplies.page", props.postId, props.page);
 
   return {
     replies: ForumReplies.find({postId: props.postId}, {sort: { createdAt: 1 }, skip: (props.page - 1) * 25 , limit: 25}).fetch(),

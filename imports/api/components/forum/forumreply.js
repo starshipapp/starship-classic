@@ -28,7 +28,19 @@ if (Meteor.isServer) {
     if(post) {
       const planet = Planets.findOne(post.planet);
       if (checkReadPermission(this.userId, planet)) {
-        return ForumReplies.find({postId: postId});
+        return ForumReplies.find({postId: postId}, {fields: {postId: 1, createdAt: 1}});
+      }
+    }
+  });
+  Meteor.publish("forumreplies.page", function findreplies(postId, page) {
+    check(postId, String);
+    check(page, Number);
+
+    const post = ForumPosts.findOne(postId);
+    if(post) {
+      const planet = Planets.findOne(post.planet);
+      if (checkReadPermission(this.userId, planet)) {
+        return ForumReplies.find({postId: postId}, {sort: { createdAt: 1 }, skip: (page - 1) * 25 , limit: 25});
       }
     }
   });

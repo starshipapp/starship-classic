@@ -77,13 +77,10 @@ class ForumThread extends React.Component {
   }
 
   changePage(page) {
-    console.log(page.selected);
     FlowRouter.go("Planets.component.subid.page", {_id: this.props.planet._id, _cid: this.props.componentId, _sid: this.props.postId, _page: page.selected + 1});
   }
 
   render() {
-    console.log(this.props.page);
-    console.log(Number(this.props.page));
     return (
       <div className="ForumThread">
         <div className="ForumThread-name">{this.props.post && this.props.post.name}</div>

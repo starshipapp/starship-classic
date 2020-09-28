@@ -179,7 +179,7 @@ class ForumThreadItem extends React.Component {
               {this.props.isParent && checkWritePermission(Meteor.userId(), this.props.planet) && <Button small={true} icon="lock" text={this.props.post.locked ? "Unlock" : "Lock"} minimal={true} onClick={this.lock} alignText="left" intent={Intent.WARNING}/>}
             </ButtonGroup>
             <ButtonGroup className="ForumThreadItem-reactions">
-              {this.props.post.reactions.map((value) => (<Button key={value.emoji} onClick={() => this.selectEmoji({native: value.emoji})} minimal={!value.reactors.includes(Meteor.userId())} small={true} icon={Object.keys(DefaultCustom).includes(value.emoji) ? <img src={DefaultCustom[value.emoji]} className="ForumThreadItem-customemoji"/> : <Twemoji className="ForumThreadItem-twemoji">{value.emoji}</Twemoji>} text={value.reactors.length}/>))}
+              {this.props.reactions && this.props.post.reactions.map((value) => (<Button key={value.emoji} onClick={() => this.selectEmoji({native: value.emoji})} minimal={!value.reactors.includes(Meteor.userId())} small={true} icon={Object.keys(DefaultCustom).includes(value.emoji) ? <img src={DefaultCustom[value.emoji]} className="ForumThreadItem-customemoji"/> : <Twemoji className="ForumThreadItem-twemoji">{value.emoji}</Twemoji>} text={value.reactors.length}/>))}
               <Popover isOpen={this.state.showEmojiPrompt} onClose={this.closePrompt}>
                 <Button minimal={true} small={true} icon="new-object" onClick={this.toggleEmojiPrompt}/>
                 <div>
