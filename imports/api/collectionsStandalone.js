@@ -10,3 +10,4 @@ export const FileObjects = new Mongo.Collection("fileobjects");
 export const Forums = new Mongo.Collection("forums");
 export const ForumPosts = new Mongo.Collection("forumposts");
 export const ForumReplies = new Mongo.Collection("forumreplies");
+export const Reports = new Mongo.Collection("reports");
