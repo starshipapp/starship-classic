@@ -20,3 +20,7 @@
   height: 1fr;
   gap: 1rem;
 }
+
+.GAdminHome-clickable-table {
+  cursor: pointer;
+}

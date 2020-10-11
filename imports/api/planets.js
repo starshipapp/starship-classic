@@ -46,6 +46,15 @@ if (Meteor.isServer) {
       }
     }
   });
+  Meteor.publish("planets.adminrecent", function () {
+    if (this.userId) {
+      let user = Meteor.users.findOne(this.userId);
+
+      if(user.admin) {
+        return Planets.find({}, {sort: { createdAt: -1 }, limit: 15});
+      }
+    }
+  });
 }
 
 Meteor.methods({

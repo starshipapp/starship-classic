@@ -38,6 +38,15 @@ if(Meteor.isServer) {
       }
     }
   });
+  Meteor.publish("users.adminrecent", function () {
+    if (this.userId) {
+      let user = Meteor.users.findOne(this.userId);
+
+      if(user.admin) {
+        return Meteor.users.find({}, {sort: { createdAt: -1 }, limit: 15});
+      }
+    }
+  });
   Meteor.publish("users.admingetuser", function (userId) {
     check(userId, String);
 

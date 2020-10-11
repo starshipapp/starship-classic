@@ -5,20 +5,38 @@ import "./css/GAdminHome.css";
 import { Classes, HTMLTable } from "@blueprintjs/core";
 import { VictoryPie, VictoryTooltip } from "victory";
 import Planets from "../../api/planets";
+import {FlowRouter} from "meteor/ostrio:flow-router-extra";
+import Profile from "../profile/Profile";
 
 class GAdminHome extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      profile: ""
+    };
+  }
+
+  goToPlanet(id) {
+    FlowRouter.go("Planets.home", {_id: id});
+  }
+
+  setProfile(profile) {
+    this.setState({
+      profile
+    });
   }
 
   render() {
     return (
       <div className="GAdmin-page bp3-dark">
+        
+        <Profile isOpen={this.state.profile !== ""} userId={this.state.profile} onClose={() => (this.setProfile(""))}/>
         <div className="GAdmin-page-header">
           <div className="GAdmin-page-header-text">Home</div>
         </div>
         <div className="GAdmin-page-container">
-          <div className="GAdminHome-stats">
+          {/*<div className="GAdminHome-stats">
             <div className="GAdminHome-stat">
               <h2>Users</h2>
               <div><b>Total: </b> 3</div>
@@ -34,7 +52,7 @@ class GAdminHome extends React.Component {
               <div><b>Total: </b> 3</div>
               <div><b>New (today): </b> 1</div>
             </div>
-          </div>
+          </div>*/}
           <div className="GAdminHome-big-stats">
             <div className="GAdminHome-stat">
               <h2>Newest Users</h2>
@@ -47,8 +65,8 @@ class GAdminHome extends React.Component {
                 </thead>
                 <tbody>
                   {this.props.users.map((value) => (
-                    <tr key={value._id}>
-                      <td>{value.username}</td>
+                    <tr className="GAdminHome-clickable-table" key={value._id} onClick={() => (this.setProfile(value._id))}>
+                      <td>{value.username && value.username}</td>
                       <td>{value.createdAt && value.createdAt.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</td>
                     </tr>
                   ))}
@@ -66,9 +84,9 @@ class GAdminHome extends React.Component {
                 </thead>
                 <tbody>
                   {this.props.planets.map((value) => (
-                    <tr key={value._id}>
-                      <td>{value.name}</td>
-                      <td>{value.createdAt.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</td>
+                    <tr className="GAdminHome-clickable-table" key={value._id} onClick={() => this.goToPlanet(value._id)}>
+                      <td>{value.name && value.name}</td>
+                      <td>{value.createdAt && value.createdAt.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -102,13 +120,13 @@ class GAdminHome extends React.Component {
 
 export default withTracker(() => {
   Meteor.subscribe("user.currentUserData");
-  Meteor.subscribe("planets.admin");
-  Meteor.subscribe("users.admin");
+  Meteor.subscribe("planets.adminrecent");
+  Meteor.subscribe("users.adminrecent");
 
   return {
     user: Meteor.user(),
-    users: Meteor.users.find({}, {limit: 15, sort: {createdAt: 1}}),
-    planets: Planets.find({}, {limit: 15, sort: {createdAt: 1}})
+    users: Meteor.users.find({}, {limit: 15, sort: {createdAt: -1}}),
+    planets: Planets.find({}, {limit: 15, sort: {createdAt: -1}})
   };
 })(GAdminHome);
 

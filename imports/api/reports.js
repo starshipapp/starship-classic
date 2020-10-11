@@ -18,7 +18,7 @@ if (Meteor.isServer) {
     check(page, Number);
     
     if(checkAdminPermission(this.userId)) {
-      return Reports.find({}, {sort: { createdAt: 0 }, skip: (page - 1) * 25 , limit: 25});
+      return Reports.find({}, {sort: { createdAt: -1 }, skip: (page - 1) * 25 , limit: 100});
     }
   });
   Meteor.publish("reports.owner", function findReports(owner) {
