@@ -9,7 +9,7 @@ import { checkWritePermission } from "../../../../util/checkPermissions";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import Twemoji from "react-twemoji";
-import { PickerEmojis, DefaultCustom } from "../../../assets/emojis/customemojis.jsx";
+import { PickerEmojis, DefaultCustom } from "../../../assets/emojis/customemojis";
 import Profile from "../../../profile/Profile";
 
 class ForumThreadItem extends React.Component {
@@ -179,7 +179,7 @@ class ForumThreadItem extends React.Component {
               {this.props.isParent && checkWritePermission(Meteor.userId(), this.props.planet) && <Button small={true} icon="lock" text={this.props.post.locked ? "Unlock" : "Lock"} minimal={true} onClick={this.lock} alignText="left" intent={Intent.WARNING}/>}
             </ButtonGroup>
             <ButtonGroup className="ForumThreadItem-reactions">
-              {this.props.reactions && this.props.post.reactions.map((value) => (<Button key={value.emoji} onClick={() => this.selectEmoji({native: value.emoji})} minimal={!value.reactors.includes(Meteor.userId())} small={true} icon={Object.keys(DefaultCustom).includes(value.emoji) ? <img src={DefaultCustom[value.emoji]} className="ForumThreadItem-customemoji"/> : <Twemoji className="ForumThreadItem-twemoji">{value.emoji}</Twemoji>} text={value.reactors.length}/>))}
+              {this.props.post.reactions && this.props.post.reactions.map((value) => (<Button key={value.emoji} onClick={() => this.selectEmoji({native: value.emoji})} minimal={!value.reactors.includes(Meteor.userId())} small={true} icon={Object.keys(DefaultCustom).includes(value.emoji) ? <img src={DefaultCustom[value.emoji]} className="ForumThreadItem-customemoji"/> : <Twemoji className="ForumThreadItem-twemoji">{value.emoji}</Twemoji>} text={value.reactors.length}/>))}
               <Popover isOpen={this.state.showEmojiPrompt} onClose={this.closePrompt}>
                 <Button minimal={true} small={true} icon="new-object" onClick={this.toggleEmojiPrompt}/>
                 <div>

@@ -4,6 +4,7 @@ import {check} from "meteor/check";
 import {Forums, Planets, ForumPosts, ForumReplies} from "../../collectionsStandalone";
 import {checkReadPermission, checkWritePermission} from "../../../util/checkPermissions";
 
+import {DefaultCustom} from "../../../ui/assets/emojis/customemojis";
 import emoji from "node-emoji-new";
 
 export default ForumPosts;
@@ -129,10 +130,11 @@ Meteor.methods({
     check(reactEmoji, String);
     check(id, String);
 
+
     if(this.userId) {
       const post = ForumPosts.findOne(id);
       const planet = Planets.findOne(post.planet);
-      if(checkReadPermission(this.userId, planet) && (emoji.hasEmoji(reactEmoji) || reactEmoji === "largecrushed")) {
+      if(checkReadPermission(this.userId, planet) && (emoji.hasEmoji(reactEmoji) || Object.keys(DefaultCustom).includes(reactEmoji))) {
         let reaction = post.reactions.find(value => value.emoji === reactEmoji);
         if(reaction) {
           if(reaction.reactors.includes(this.userId)) {
