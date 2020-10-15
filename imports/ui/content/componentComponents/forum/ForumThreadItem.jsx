@@ -11,6 +11,8 @@ import { Picker } from "emoji-mart";
 import Twemoji from "react-twemoji";
 import { PickerEmojis, DefaultCustom } from "../../../assets/emojis/customemojis";
 import Profile from "../../../profile/Profile";
+import ReportDialog from "../../ReportDialog";
+import { ReportObjectType } from "../../../../util/reportConsts";
 
 class ForumThreadItem extends React.Component {
   constructor(props) {
@@ -21,7 +23,8 @@ class ForumThreadItem extends React.Component {
       editor: false,
       alert: false,
       showEmojiPrompt: false,
-      showProfile: false
+      showProfile: false,
+      showReport: false
     };
 
     this.edit = this.edit.bind(this);
@@ -36,6 +39,8 @@ class ForumThreadItem extends React.Component {
     this.closePrompt = this.closePrompt.bind(this);
     this.showProfile = this.showProfile.bind(this);
     this.closeProfile = this.closeProfile.bind(this);
+    this.closeReport = this.closeReport.bind(this);
+    this.showReport = this.showReport.bind(this);
   }
 
   edit() {
@@ -122,6 +127,18 @@ class ForumThreadItem extends React.Component {
     });
   }
 
+  closeReport() {
+    this.setState({
+      showReport: false
+    });
+  }
+
+  showReport() {
+    this.setState({
+      showReport: true
+    });
+  }
+
   render() {
     let creationDate = this.props.post.createdAt ? this.props.post.createdAt : new Date("2020-07-25T15:24:30+00:00");
     let creationDateText = creationDate.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
@@ -131,6 +148,7 @@ class ForumThreadItem extends React.Component {
     return (
       <div className="ForumThreadItem">
         <Profile isOpen={this.state.showProfile} planet={this.props.planet} userId={this.props.post.owner} onClose={this.closeProfile}/>
+        <ReportDialog isOpen={this.state.showReport} onClose={this.closeReport} objectId={this.props.post._id} objectType={this.props.isParent ? ReportObjectType.FORUMPOST : ReportObjectType.FORUMREPLY} userId={this.props.post.owner}/>
         <Alert
           isOpen={this.state.alert}
           className="bp3-dark"
@@ -172,6 +190,7 @@ class ForumThreadItem extends React.Component {
           </div>
           <div className="ForumThreadItem-bottom">
             <ButtonGroup>
+              <Button small={true} icon="flag" text="Report" alignText="left" minimal={true} onClick={this.showReport}/>
               <Button small={true} icon="comment" text="Quote" onClick={() => this.props.addQuote(this.props.post)} minimal={true} alignText="left"/>
               {canEdit && <Button small={true} icon="edit" text="Edit" onClick={this.toggleEditor} minimal={true} alignText="left"/>}
               {canEdit && <Button small={true} icon="trash" text="Delete" minimal={true} onClick={this.toggleAlert} alignText="left" intent={Intent.DANGER}/>}

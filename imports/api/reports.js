@@ -38,8 +38,7 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  "reports.insert"(planetId, objectType, objectId, reportType, details, userId) {
-    check(planetId, String);
+  "reports.insert"(objectType, objectId, reportType, details, userId) {
     check(objectType, Number);
     check(objectId, String);
     check(reportType, Number);
@@ -47,7 +46,6 @@ Meteor.methods({
     check(userId, String);
 
     Reports.insert({
-      planet: planetId,
       owner: this.userId,
       createdAt: new Date(),
       objectType,
@@ -55,7 +53,7 @@ Meteor.methods({
       reportType,
       details,
       userId,
-      solved: true
+      solved: false
     });
   },
   "reports.solve"(reportId) {

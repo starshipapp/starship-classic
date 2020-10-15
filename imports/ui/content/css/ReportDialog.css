@@ -1,0 +1,10 @@
+.ReportDialog-textarea {
+  width: 100%;
+  resize: none;
+  height: 10rem !important;
+}
+
+.ReportDialog-reasonlabel {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+}

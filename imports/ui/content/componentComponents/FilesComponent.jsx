@@ -11,9 +11,10 @@ import axios from "axios";
 import FileView from "./files/FileView";
 import FileButton from "./files/FileButton";
 import {uuid} from "uuidv4";
-import MimeTypes from "../../../util/validMimes";
 import {ErrorToaster} from "../../Toaster";
 import FileListButton from "./files/FileListButton";
+import { ReportObjectType } from "../../../util/reportConsts";
+import ReportDialog from "../ReportDialog";
 
 class FilesComponent extends React.Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class FilesComponent extends React.Component {
     let listViewStore = window.localStorage.getItem("files.listView") === "true" ? true : false;
 
     this.state = {
+      showReport: false,
       newFolderTextbox: "",
       uploadUpdateCounter: 0,
       createFolderPrompt: false,
@@ -40,7 +42,9 @@ class FilesComponent extends React.Component {
     this.toggleCreateFolderPrompt = this.toggleCreateFolderPrompt.bind(this);
     this.hideCreateFolderPrompt = this.hideCreateFolderPrompt.bind(this);
     this.switchListView = this.switchListView.bind(this);
-    
+    this.closeReport = this.closeReport.bind(this);
+    this.showReport = this.showReport.bind(this);
+
     this.uploading = {};
 
     this.fileInput = React.createRef();
@@ -224,9 +228,22 @@ class FilesComponent extends React.Component {
     window.localStorage.setItem("files.listView", newListState);
   }
 
+  closeReport() {
+    this.setState({
+      showReport: false
+    });
+  }
+
+  showReport() {
+    this.setState({
+      showReport: true
+    });
+  }
+
   render() {
     return (
       <div className="bp3-dark FilesComponent" onDrop={this.dropHandler} onDragOver={this.onDragOver} onDragEnd={this.onDragOver}>
+        {this.props.currentObject[0] && <ReportDialog isOpen={this.state.showReport} onClose={this.closeReport} objectId={this.props.currentObject[0]._id} objectType={ReportObjectType.FILE} userId={this.props.currentObject[0].owner}/>}
         <div className="FilesComponent-top">
           <input
             type="file"
@@ -253,8 +270,9 @@ class FilesComponent extends React.Component {
             </div>}
           </div>
           <Divider/>
-          {this.props.currentObject[0] && this.props.currentObject[0].type === "file" && MimeTypes.previewTypes.includes(this.props.currentObject[0].fileType) && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
+          {this.props.currentObject[0] && this.props.currentObject[0].type === "file" && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
             <Button text="Download" icon="download" onClick={this.downloadFile}/>
+            <Button text="Report" icon="flag" onClick={this.showReport}/>
           </ButtonGroup>}
           {checkWritePermission(Meteor.userId(), this.props.planet) && (!this.props.currentObject[0] || this.props.currentObject[0].type === "folder") && <ButtonGroup minimal={true} vertical={vertical} className="FilesComponent-top-actions">
             <Button text="Upload Files" icon="upload" onClick={this.onFileUploadClick}/>

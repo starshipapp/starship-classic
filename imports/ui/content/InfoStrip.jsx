@@ -6,19 +6,24 @@ import Profile from "../profile/Profile";
 
 import "./css/InfoStrip.css";
 import { checkWritePermission, checkAdminPermission } from "../../util/checkPermissions";
+import ReportDialog from "./ReportDialog";
+import { ReportObjectType } from "../../util/reportConsts";
 
 class InfoStrip extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      showProfile: false
+      showProfile: false,
+      showReport: false
     };
 
     this.toggleFollow = this.toggleFollow.bind(this);
     this.goToAdmin = this.goToAdmin.bind(this);
     this.showProfile = this.showProfile.bind(this);
     this.closeProfile = this.closeProfile.bind(this);
+    this.closeReport = this.closeReport.bind(this);
+    this.showReport = this.showReport.bind(this);
   }
 
   toggleFollow() {
@@ -45,9 +50,22 @@ class InfoStrip extends React.Component {
     });
   }
 
+  closeReport() {
+    this.setState({
+      showReport: false
+    });
+  }
+
+  showReport() {
+    this.setState({
+      showReport: true
+    });
+  }
+
   render() {
     return (
       <div className="InfoStrip">
+        <ReportDialog isOpen={this.state.showReport} onClose={this.closeReport} objectId={this.props.planet._id} objectType={ReportObjectType.PLANET} userId={this.props.planet.owner}/>
         <Profile isOpen={this.state.showProfile} userId={this.props.planet.owner} planet={this.props.planet} onClose={this.closeProfile}/>
         {this.props.planet.verified && <Tooltip content="Verified" className="InfoStrip-icon bp3-dark"><Icon icon="tick-circle"/></Tooltip>}
         {this.props.planet.partnered && <Tooltip content="Partnered" className="InfoStrip-icon bp3-dark"><Icon icon="unresolve"/></Tooltip>}
@@ -58,7 +76,10 @@ class InfoStrip extends React.Component {
         {(this.props.planet.followerCount === null || this.props.planet.followerCount === undefined) && <div className="InfoStrip-followers">0 Followers</div>}
         {Meteor.userId() && <div className="InfoStrip">
           <Divider/>
-          <Button text={(Meteor.user() && Meteor.user().following && Meteor.user().following.includes(this.props.planet._id) ) ? "Unfollow" : "Follow"} onClick={this.toggleFollow}/>  
+          <Button text={(Meteor.user() && Meteor.user().following && Meteor.user().following.includes(this.props.planet._id) ) ? "Unfollow" : "Follow"} onClick={this.toggleFollow}/>
+          <Tooltip content="Report">
+            <Button icon="flag" minimal={true} onClick={this.showReport}/>
+          </Tooltip>
         </div>}
         {checkWritePermission(Meteor.userId(), this.props.planet) && <div className="InfoStrip">
           <Divider/>
